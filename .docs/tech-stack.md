@@ -17,9 +17,9 @@
 
 ## 3. Backend & Infrastructure
 
-- **Database**: PostgreSQL via **Neon.tech** (Serverless Postgres with autoscaling)
-- **ORM**: Prisma 6.x (With optimized Edge runtime support)
-- **Authentication**: Auth.js v5 (NextAuth) using Google Provider
+- **Database & Auth**: **Supabase** (PostgreSQL with built-in authentication)
+- **ORM**: Prisma 7.x (With optimized TypeScript support)
+- **Authentication**: Supabase Auth (Google OAuth)
 - **Deployment**: Vercel (Optimized for Next.js 16 PPR)
 
 ## 4. Data Fetching & State Management
@@ -28,13 +28,16 @@
 - **Client Side**: TanStack Query v6 (For optimistic updates and infinite scroll caching).
 - **Validation**: Zod (For schema-based URL and form validation).
 
-## 5. Database Schema (Prisma)
+## 5. Database Schema (Prisma + Supabase)
 
-- **User**: ID, Email, Name, Avatar, Auth Metadata.
+- **Profile** (extends Supabase auth.users): ID, Email, FullName, AvatarURL, CreatedAt
 - **Bookmark**:
-  - ID, TweetURL, ContentType (Tweet/Article), Metadata (JSON).
-  - FolderID (Relation), ReadingList (Boolean), CreatedAt.
-- **Folder**: ID, Name, Color, UserID (Relation).
+  - ID, URL, ContentType (Tweet/Article), Metadata (JSON)
+  - FolderID (Relation), UserID (Relation), ReadingList (Boolean), CreatedAt
+- **Folder**:
+  - ID, Name, Color, UserID (Relation), CreatedAt
+
+**Note**: Profile model extends Supabase's auth.users table with additional fields. Row Level Security (RLS) ensures users can only access their own data.
 
 ## 6. Development Tools
 

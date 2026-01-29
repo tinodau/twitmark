@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Profile model - extends Supabase auth.users
+model Profile {
+  id        String   @id @default(dbgenerated("auth.uid()")) @db.Text
+  email     String?  @db.Text
+  fullName   String?  @map("full_name") @db.Text
+  avatarUrl String?  @map("avatar_url") @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  folders   Folder[]
+  bookmarks Bookmark[]
+
+  @@map("profiles")
+  @@ignore
+}
+
+// Folder model - user-created bookmark folders
+model Folder {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  name      String   @db.Text
+  color     String   @default("#1D9BF0") @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user      Profile   @relation(fields: [userId], references: [id], onDelete: Cascade) @ignore
+  bookmarks Bookmark[]
+
+  @@index([userId])
+  @@map("folders")
+}
+
+// Bookmark model - saved X links
+model Bookmark {
+  id          String   @id @default(uuid()) @db.Uuid
+  url         String   @db.Text
+  contentType  String   @default("tweet") @map("content_type") @db.Text // 'tweet' or 'article'
+  metadata    Json?    @db.JsonB
+  folderId    String?  @map("folder_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  readingList Boolean  @default(false) @map("reading_list") @db.Boolean
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  folder      Folder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  user        Profile   @relation(fields: [userId], references: [id], onDelete: Cascade) @ignore
+
+  @@index([userId])
+  @@index([folderId])
+  @@index([readingList])
+  @@index([createdAt(sort: Desc)])
+  @@map("bookmarks")
+}
