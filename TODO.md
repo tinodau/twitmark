@@ -1,0 +1,272 @@
+# TODO: Twitmark MVP Roadmap
+
+## 🚀 Phase 1: Project Setup & Foundation ✅ COMPLETED
+
+### 1.1 Project Initialization
+
+- [x] Initialize Next.js 16 project with Turbopack
+- [x] Configure TypeScript (strict mode) and ESLint
+- [x] Set up Tailwind CSS 4.x with custom design system
+- [x] Install and configure Shadcn/UI components
+- [x] Install Magic UI components (bento grids, aurora effects)
+- [x] Configure Framer Motion 12 for animations
+
+### 1.2 Database & Backend Setup
+
+- [ ] Set up Neon.tech PostgreSQL database
+- [ ] Initialize Prisma 6.x and configure schema
+- [ ] Create database schema (User, Folder, Bookmark)
+- [ ] Run Prisma migrations
+- [ ] Configure Supabase client for connection
+
+### 1.3 Authentication Setup
+
+- [ ] Install and configure Auth.js v5 (NextAuth)
+- [ ] Set up Google OAuth provider
+- [ ] Create authentication pages (`/login`, `/register`)
+- [ ] Implement protected route middleware
+- [ ] Test sign-in/sign-out flow
+
+---
+
+## 🎨 Phase 2: Landing Page (The "Hook") ✅ COMPLETED
+
+### 2.1 Core Layout
+
+- [x] Create base layout component with glassmorphism styling
+- [x] Implement responsive navigation bar
+- [x] Set up dark mode as default
+
+### 2.2 Hero Section
+
+- [x] Design high-impact hero with Magic UI aurora effects
+- [x] Add clear value proposition copy
+- [x] Create "Get Started" CTA button
+
+### 2.3 Feature Highlights
+
+- [x] Build bento grid layout for features
+- [x] Create 3-4 feature cards (Folders, Reading List, Article Mode)
+- [x] Add smooth hover animations with Framer Motion
+
+### 2.4 Testimonials
+
+- [x] Implement scrolling marquee of placeholder X posts
+- [x] Style testimonial cards with glassmorphism
+
+### 2.5 Landing Polish
+
+- [x] Add footer component
+- [x] Ensure full responsiveness (mobile & desktop)
+- [ ] Optimize images and assets
+
+---
+
+## 📊 Phase 3: Dashboard Core (The "Engine")
+
+### 3.1 Dashboard Layout
+
+- [ ] Create dashboard layout with sidebar navigation
+- [ ] Implement collapsible folder sidebar
+- [ ] Set up main content area
+- [ ] Add "Add Bookmark" prominent button with modal
+
+### 3.2 Bookmark Card Component
+
+- [ ] Design bookmark card with glassmorphism style
+- [ ] Integrate `react-tweet` for rendering
+- [ ] Display metadata (Date added, Folder name)
+- [ ] Add hover micro-interactions
+
+### 3.3 Add Bookmark Flow
+
+- [ ] Create modal component for URL input
+- [ ] Implement URL validation (x.com/twitter.com only)
+- [ ] Build server action to fetch tweet metadata
+- [ ] Save bookmark to database
+- [ ] Add loading states and error handling
+
+### 3.4 Bookmark Management
+
+- [ ] Implement delete bookmark action
+- [ ] Create "Move to Folder" dropdown
+- [ ] Add "Add to Reading List" toggle
+- [ ] Show success notifications (toast)
+
+### 3.5 Performance
+
+- [ ] Implement pagination or infinite scroll
+- [ ] Optimize database queries with Prisma
+- [ ] Add loading skeletons
+
+---
+
+## 📁 Phase 4: Folder System
+
+### 4.1 Folder CRUD
+
+- [ ] Create "New Folder" modal/form
+- [ ] Implement create folder server action
+- [ ] Build folder card component with color picker
+- [ ] Add edit folder (rename, change color)
+- [ ] Implement delete folder with confirmation
+
+### 4.2 Folder Navigation
+
+- [ ] Display folders in sidebar
+- [ ] Implement folder filtering on dashboard
+- [ ] Show bookmark count per folder
+- [ ] Add active folder state styling
+
+### 4.3 Bookmark Assignment
+
+- [ ] Move bookmark to folder on creation
+- [ ] Update bookmark's folder via dropdown
+- [ ] Handle bookmark count updates
+
+---
+
+## 📖 Phase 5: Reading List Feature
+
+### 5.1 Reading List Toggle
+
+- [ ] Add "To Read" indicator to bookmark cards
+- [ ] Implement toggle action (add/remove from Reading List)
+- [ ] Show distinct UI for Reading List items
+
+### 5.2 Reading List View
+
+- [ ] Create dedicated Reading List tab/view
+- [ ] Filter bookmarks by `readingList: true`
+- [ ] Add "Mark as Read" action
+- [ ] Remove from Reading List after completion
+
+### 5.3 Visual Feedback
+
+- [ ] Add badges/icons for Reading List status
+- [ ] Show empty state when list is empty
+- [ ] Add progress tracking (optional)
+
+---
+
+## 📄 Phase 6: Advanced Reading Mode (Article View)
+
+### 6.1 URL Detection
+
+- [ ] Detect "X Article" URLs vs. standard tweets
+- [ ] Set `contentType` field on bookmark creation
+- [ ] Handle edge cases and invalid URLs
+
+### 6.2 Optimized Article UI
+
+- [ ] Create article modal with serif typography
+- [ ] Optimize line height and readability
+- [ ] Hide sidebar/clutter in article view
+- [ ] Add "Open on X" button
+
+### 6.3 Metadata Scraping
+
+- [ ] Build server utility to fetch Open Graph data
+- [ ] Extract article title, author, preview text
+- [ ] Store metadata in JSON field
+- [ ] Handle scraping errors gracefully
+
+### 6.4 Modal Overlay
+
+- [ ] Create high-fidelity modal component
+- [ ] Animate open/close with Framer Motion
+- [ ] Ensure mobile responsiveness
+- [ ] Add backdrop blur effect
+
+---
+
+## ✅ Phase 7: Polish & Testing
+
+### 7.1 UI/UX Refinement
+
+- [ ] Audit all components for consistent glassmorphism styling
+- [ ] Ensure all animations are smooth (60fps)
+- [ ] Check accessibility (ARIA labels, keyboard navigation)
+- [ ] Verify dark mode contrast ratios
+
+### 7.2 State Management
+
+- [ ] Integrate TanStack Query v6 for caching
+- [ ] Implement optimistic updates for all mutations
+- [ ] Handle loading and error states globally
+- [ ] Add proper revalidation strategies
+
+### 7.3 Error Handling
+
+- [ ] Add global error boundaries
+- [ ] Create user-friendly error pages
+- [ ] Implement retry logic for failed requests
+- [ ] Add toast notifications for all actions
+
+### 7.4 Testing
+
+- [ ] Write Vitest unit tests for utilities
+- [ ] Create Playwright E2E tests for critical flows:
+  - [ ] Authentication flow
+  - [ ] Add bookmark flow
+  - [ ] Folder CRUD
+  - [ ] Reading List toggle
+- [ ] Test responsive design on various screen sizes
+
+### 7.5 Performance Optimization
+
+- [ ] Run Lighthouse audit
+- [ ] Optimize images and assets
+- [ ] Implement code splitting
+- [ ] Add proper caching headers
+- [ ] Ensure PPR (Partial Prerendering) benefits
+
+---
+
+## 🚢 Phase 8: Deployment
+
+### 8.1 Deployment Prep
+
+- [ ] Configure environment variables (`.env.local`)
+- [ ] Set up Vercel project
+- [ ] Configure custom domain (if needed)
+- [ ] Set up Neon.tech production database
+
+### 8.2 Deploy
+
+- [ ] Deploy to Vercel
+- [ ] Run database migrations on production
+- [ ] Configure authentication providers in production
+- [ ] Test all features in production environment
+
+### 8.3 Post-Deploy
+
+- [ ] Set up monitoring (Vercel Analytics)
+- [ ] Configure error tracking (Sentry optional)
+- [ ] Document any known issues
+- [ ] Plan for v1.1 features
+
+---
+
+## 📊 Progress Tracking
+
+**Current Phase**: Phase 3 - Dashboard Core (Next)  
+**Overall Progress**: 22% (19/87 tasks)
+
+---
+
+## 🎯 MVP Success Criteria
+
+- [ ] User can sign in with Google
+- [ ] User can add an X bookmark URL
+- [ ] Bookmark renders correctly with `react-tweet`
+- [ ] User can create and manage folders
+- [ ] User can toggle bookmarks to/from Reading List
+- [ ] Articles open in optimized reading mode
+- [ ] Full mobile responsiveness
+- [ ] All animations are smooth (60fps)
+- [ ] Loading states and error handling are robust
+
+---
+
+_Last Updated: 2026-01-29_
