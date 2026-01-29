@@ -10,12 +10,6 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - **Intentionality** - Reading List feature for "read-it-later" workflow
 - **Superior Reading** - Optimized Article Mode with clean typography
 
-### Target Audience
-
-- Power users of X who consume high-value threads and articles
-- Researchers, developers, and creators who need structured "Digital Asset" management
-- Users looking for a distraction-free reading experience
-
 ## 🛠️ Tech Stack
 
 ### Core Framework
@@ -48,29 +42,6 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - **Vitest** - Unit testing framework
 - **Playwright** - E2E UI testing
 - **Cline/Cursor with MCP** - AI-powered development workflow
-
-## 🎨 Design System
-
-### Visual Identity
-
-- **Aesthetic**: "Cyber-Minimalism" - Clean, dark, high-contrast
-- **Background**: `#050505` (Deep Black)
-- **Primary**: `#1D9BF0` (X-Blue)
-- **Accent**: Linear gradient from `#1D9BF0` to `#8E2DE2`
-- **Typography**: Geist Sans (Sans) + Serif for Reading Mode
-
-### Glassmorphism 2.0
-
-- Frosted glass effects with `backdrop-filter: blur(12px) saturate(180%)`
-- Subtle 1px borders with `rgba(255, 255, 255, 0.1)`
-- Depth through layered transparency
-
-### Component Patterns
-
-- **Bento Grid** - Responsive grid layout for features and dashboard
-- **Aurora Background** - Animated gradient effects for hero sections
-- **Hover Effects** - Scale animations (1.02), micro-interactions
-- **Modal Animations** - Zoom-in spring from center with backdrop blur
 
 ## 📁 Project Structure
 
@@ -130,87 +101,6 @@ npm run build
 npm start
 ```
 
-## 📊 Current Progress
-
-### Completed Phases
-
-✅ **Phase 1: Project Setup & Foundation** (6/6 tasks)
-
-- Next.js 16 with Turbopack initialized
-- TypeScript strict mode configured
-- Tailwind CSS 4.x custom design system
-- Shadcn/UI components installed
-- Magic UI components created (bento grid, aurora background)
-- Framer Motion 12 configured
-
-✅ **Phase 2: Landing Page** (13/13 tasks)
-
-- High-impact hero with aurora effects
-- Feature highlights with bento grid
-- Scrolling testimonials marquee
-- Responsive navigation with mobile menu
-- Call-to-action sections
-- Footer component
-- Full responsiveness (mobile & desktop)
-
-### In Progress
-
-🚧 **Phase 3: Dashboard Core** (0/19 tasks)
-
-- Database setup (Neon.tech + Prisma)
-- Authentication (Auth.js v5 + Google OAuth)
-- Dashboard layout with sidebar
-- Bookmark card component with react-tweet
-- Add bookmark modal with URL validation
-
-### Remaining Phases
-
-- **Phase 4**: Folder System (11 tasks)
-- **Phase 5**: Reading List Feature (7 tasks)
-- **Phase 6**: Advanced Reading Mode (12 tasks)
-- **Phase 7**: Polish & Testing (15 tasks)
-- **Phase 8**: Deployment (9 tasks)
-
-**Overall Progress**: 22% (19/87 tasks)
-
-See [TODO.md](TODO.md) for detailed roadmap.
-
-## 🎯 MVP Features
-
-### Authentication & Onboarding
-
-- [x] Google OAuth via Auth.js v5
-- [ ] User profile management
-- [ ] Empty-state onboarding flow
-
-### Bookmark Management
-
-- [ ] Manual URL input with modal
-- [ ] Tweet rendering with react-tweet
-- [ ] Metadata display (date, folder)
-- [ ] Delete, move, and reading list actions
-
-### Folder System
-
-- [ ] Create, edit, delete folders
-- [ ] Color picker for folder organization
-- [ ] Folder-based filtering
-- [ ] Bookmark count per folder
-
-### Reading List
-
-- [ ] Toggle "To Read" status
-- [ ] Dedicated Reading List view
-- [ ] Mark as read functionality
-- [ ] Progress tracking
-
-### Article Mode
-
-- [ ] URL detection for X Articles
-- [ ] Optimized serif typography
-- [ ] Full-screen modal overlay
-- [ "Open on X" button
-
 ## 🧪 Testing
 
 ### Unit Testing
@@ -249,64 +139,6 @@ NEXTAUTH_URL="http://localhost:3000"
 OG_SCRAPER_API_KEY="..."
 ```
 
-## 📚 Documentation
-
-- [Architecture](.docs/architecture.md) - System design and data flow
-- [Design System](.docs/design-system.md) - UI/UX guidelines and patterns
-- [Specification](.docs/spec.md) - Functional requirements and user stories
-- [Tech Stack](.docs/tech-stack.md) - Technology choices and rationale
-- [Testing Plan](.docs/testing-plan.md) - Testing strategy and coverage
-- [TODO](TODO.md) - MVP roadmap and progress tracking
-
-## 🤖 AI Development Workflow
-
-This project uses Cline/Cursor with Model Context Protocol (MCP) for AI-assisted development:
-
-1. **Context Awareness** - AI reads `.clinerules` for behavior guidelines
-2. **Documentation-First** - All decisions reference `.docs/` specifications
-3. **Clean Code** - Adheres to `.skills/clean-code.md` principles
-4. **Type Safety** - Strict TypeScript with Prisma-generated types
-5. **Performance** - React Server Components by default, client only when needed
-
-## 🌐 Deployment
-
-The project is optimized for Vercel deployment:
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. Configure environment variables
-4. Deploy (Vercel handles the rest)
-
-Vercel automatically:
-
-- Enables Edge Runtime where applicable
-- Optimizes images and assets
-- Configures caching headers
-- Scales globally
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. Read [`.clinerules`](.clinerules) for coding standards
-2. Check [`.docs/spec.md`](.docs/spec.md) for feature requirements
-3. Follow [`.docs/design-system.md`](.docs/design-system.md) for UI consistency
-4. Ensure TypeScript strict mode compliance
-5. Test changes before submitting PRs
-
 ## 📄 License
 
 MIT License - see LICENSE file for details
-
-## 🙏 Acknowledgments
-
-- **Next.js Team** - For the amazing framework
-- **Vercel** - For hosting and deployment platform
-- **Shadcn** - For beautiful component primitives
-- **Framer Motion** - For smooth animations
-- **Lucide** - For premium icon set
-- **X/Twitter** - For the platform we're building on
-
----
-
-**Built with Next.js 16, Tailwind CSS 4, and Framer Motion** ❤️
