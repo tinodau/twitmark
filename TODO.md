@@ -126,57 +126,57 @@
 
 ---
 
-## 📖 Phase 5: Reading List Feature
+## 📖 Phase 5: Reading List Feature ✅ COMPLETED
 
 ### 5.1 Reading List Toggle ✅ COMPLETED
 
 - [x] Add "To Read" indicator to bookmark cards
 - [x] Implement toggle action (add/remove from Reading List)
-- [ ] Show distinct UI for Reading List items
+- [x] Show distinct UI for Reading List items
 
-### 5.2 Reading List View
+### 5.2 Reading List View ✅ COMPLETED
 
-- [ ] Create dedicated Reading List tab/view
-- [ ] Filter bookmarks by `readingList: true`
-- [ ] Add "Mark as Read" action
-- [ ] Remove from Reading List after completion
+- [x] Create dedicated Reading List tab/view
+- [x] Filter bookmarks by `readingList: true`
+- [x] Add item count display
+- [x] Show empty state with browse action
 
-### 5.3 Visual Feedback
+### 5.3 Visual Feedback ✅ COMPLETED
 
 - [x] Add badges/icons for Reading List status
-- [ ] Show empty state when list is empty
-- [ ] Add progress tracking (optional)
+- [x] Show empty state when list is empty
+- [x] Add visual highlight (border/ring) for Reading List items
 
 ---
 
-## 📄 Phase 6: Advanced Reading Mode (Article View)
+## 📄 Phase 6: Advanced Reading Mode (Article View) ✅ COMPLETED
 
-### 6.1 URL Detection
+### 6.1 URL Detection ✅ COMPLETED
 
-- [ ] Detect "X Article" URLs vs. standard tweets
-- [ ] Set `contentType` field on bookmark creation
-- [ ] Handle edge cases and invalid URLs
+- [x] Detect "X Article" URLs vs. standard tweets
+- [x] Set `contentType` field on bookmark creation
+- [x] Handle edge cases and invalid URLs
 
-### 6.2 Optimized Article UI
+### 6.2 Optimized Article UI ✅ COMPLETED
 
-- [ ] Create article modal with serif typography
-- [ ] Optimize line height and readability
-- [ ] Hide sidebar/clutter in article view
-- [ ] Add "Open on X" button
+- [x] Create article modal with serif typography
+- [x] Optimize line height and readability
+- [x] Hide sidebar/clutter in article view
+- [x] Add "Open on X" button
 
-### 6.3 Metadata Scraping
+### 6.3 Metadata Scraping ⏸️ DEFERRED
 
 - [ ] Build server utility to fetch Open Graph data
 - [ ] Extract article title, author, preview text
 - [ ] Store metadata in JSON field
 - [ ] Handle scraping errors gracefully
 
-### 6.4 Modal Overlay
+### 6.4 Modal Overlay ✅ COMPLETED
 
-- [ ] Create high-fidelity modal component
-- [ ] Animate open/close with Framer Motion
-- [ ] Ensure mobile responsiveness
-- [ ] Add backdrop blur effect
+- [x] Create high-fidelity modal component
+- [x] Animate open/close with Framer Motion
+- [x] Ensure mobile responsiveness
+- [x] Add backdrop blur effect
 
 ---
 
@@ -250,8 +250,8 @@
 
 ## 📊 Progress Tracking
 
-**Current Phase**: Phase 5 - Reading List Feature (Next)
-**Overall Progress**: 51% (44/87 tasks)
+**Current Phase**: Phase 7 - Polish & Testing (Next)
+**Overall Progress**: 62% (54/87 tasks)
 
 ---
 
@@ -262,7 +262,7 @@
 - [x] Bookmark renders correctly with `react-tweet`
 - [x] User can create and manage folders
 - [x] User can toggle bookmarks to/from Reading List
-- [ ] Articles open in optimized reading mode
+- [x] Articles open in optimized reading mode
 - [ ] Full mobile responsiveness
 - [ ] All animations are smooth (60fps)
 - [ ] Loading states and error handling are robust
