@@ -1,3 +1,13 @@
+// Folder type
+export type Folder = {
+  id: string;
+  name: string;
+  color: string;
+  userId: string;
+  createdAt: Date;
+  bookmarkCount?: number;
+};
+
 // Database types (exported separately from server actions)
 export type BookmarkWithFolder = {
   id: string;

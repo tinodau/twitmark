@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Link as LinkIcon, Check } from "lucide-react";
+import { X, Link as LinkIcon, Check, Folder } from "lucide-react";
 import { createBookmark } from "@/app/actions/bookmarks";
+import { getFolders } from "@/app/actions/folders";
+import { useFolder } from "@/contexts/folder-context";
+import type { Folder as FolderType } from "@/types";
 
 interface AddBookmarkModalProps {
   isOpen: boolean;
@@ -12,8 +15,26 @@ interface AddBookmarkModalProps {
 
 export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [url, setUrl] = useState("");
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const [folders, setFolders] = useState<FolderType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { selectedFolderId: currentFolderId } = useFolder();
+
+  async function loadFolders() {
+    const data = await getFolders();
+    setFolders(data);
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      loadFolders();
+      // Pre-select folder if viewing a specific folder
+      if (currentFolderId && currentFolderId !== "reading-list") {
+        setSelectedFolderId(currentFolderId);
+      }
+    }
+  }, [isOpen, currentFolderId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +44,9 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
 
     const formData = new FormData();
     formData.append("url", url);
+    if (selectedFolderId) {
+      formData.append("folderId", selectedFolderId);
+    }
 
     const result = await createBookmark(formData);
 
@@ -33,6 +57,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
       setIsLoading(false);
       onClose();
       setUrl("");
+      setSelectedFolderId(null);
     }
   };
 
@@ -101,6 +126,47 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                       <p className="text-sm text-destructive">{error}</p>
                     )}
                   </div>
+
+                  {/* Folder Selection */}
+                  {folders.length > 0 && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">
+                        Folder (Optional)
+                      </label>
+                      <div className="grid gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedFolderId(null)}
+                          className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                            selectedFolderId === null
+                              ? "border-primary bg-primary/10 text-primary"
+                              : "border-border hover:bg-accent"
+                          }`}
+                        >
+                          <Folder className="h-4 w-4 shrink-0" />
+                          <span>No Folder</span>
+                        </button>
+                        {folders.map((folder) => (
+                          <button
+                            key={folder.id}
+                            type="button"
+                            onClick={() => setSelectedFolderId(folder.id)}
+                            className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                              selectedFolderId === folder.id
+                                ? "border-primary bg-primary/10 text-primary"
+                                : "border-border hover:bg-accent"
+                            }`}
+                          >
+                            <div
+                              className="h-2 w-2 rounded-full shrink-0"
+                              style={{ backgroundColor: folder.color }}
+                            />
+                            <span className="truncate">{folder.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-center gap-2 rounded-lg bg-muted/50 p-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Folder,
   Plus,
@@ -9,19 +9,30 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { getFolders } from "@/app/actions/folders";
+import type { Folder as FolderType } from "@/types";
+import { AddFolderModal } from "./add-folder-modal";
+import { useFolder } from "@/contexts/folder-context";
 
 export function Sidebar() {
+  const { selectedFolderId, setSelectedFolderId } = useFolder();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [folders, setFolders] = useState<FolderType[]>([]);
+  const [readingListCount, setReadingListCount] = useState(0);
 
-  const folders = [
-    { id: "1", name: "Tech News", count: 12, color: "#1D9BF0" },
-    { id: "2", name: "Design Resources", count: 8, color: "#7856FF" },
-    { id: "3", name: "Tutorials", count: 5, color: "#F45D22" },
-  ];
+  async function loadFolders() {
+    const data = await getFolders();
+    setFolders(data);
+  }
+
+  useEffect(() => {
+    loadFolders();
+  }, [isAddModalOpen]);
 
   const navItems = [
-    { icon: LayoutDashboard, label: "All Bookmarks", count: 25 },
-    { icon: BookOpen, label: "Reading List", count: 7 },
+    { icon: LayoutDashboard, label: "All Bookmarks", id: null },
+    { icon: BookOpen, label: "Reading List", id: "reading-list" },
   ];
 
   return (
@@ -37,15 +48,15 @@ export function Sidebar() {
             {navItems.map((item) => (
               <button
                 key={item.label}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                onClick={() => setSelectedFolderId(item.id)}
+                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  selectedFolderId === item.id
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
-                {!isCollapsed && item.count !== undefined && (
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    {item.count}
-                  </span>
-                )}
               </button>
             ))}
           </nav>
@@ -57,27 +68,41 @@ export function Sidebar() {
                 <span className="text-xs font-semibold uppercase text-muted-foreground">
                   Folders
                 </span>
-                <button className="text-muted-foreground hover:text-foreground">
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <Plus className="h-3 w-3" />
                 </button>
               </div>
-              <div className="space-y-1">
-                {folders.map((folder) => (
-                  <button
-                    key={folder.id}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <div
-                      className="h-2 w-2 rounded-full shrink-0"
-                      style={{ backgroundColor: folder.color }}
-                    />
-                    <span className="truncate">{folder.name}</span>
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {folder.count}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              {folders.length > 0 ? (
+                <div className="space-y-1">
+                  {folders.map((folder) => (
+                    <button
+                      key={folder.id}
+                      onClick={() => setSelectedFolderId(folder.id)}
+                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                        selectedFolderId === folder.id
+                          ? "bg-accent text-accent-foreground"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      }`}
+                    >
+                      <div
+                        className="h-2 w-2 rounded-full shrink-0"
+                        style={{ backgroundColor: folder.color }}
+                      />
+                      <span className="truncate">{folder.name}</span>
+                      <span className="ml-auto text-xs text-muted-foreground">
+                        {folder.bookmarkCount || 0}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="px-3 text-xs text-muted-foreground">
+                  No folders yet. Create one to organize bookmarks!
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -98,6 +123,12 @@ export function Sidebar() {
             )}
           </button>
         </div>
+
+        {/* Add Folder Modal */}
+        <AddFolderModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+        />
       </div>
     </aside>
   );

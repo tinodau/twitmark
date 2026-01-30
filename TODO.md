@@ -101,26 +101,26 @@
 
 ---
 
-## 📁 Phase 4: Folder System
+## 📁 Phase 4: Folder System ✅ COMPLETED
 
-### 4.1 Folder CRUD
+### 4.1 Folder CRUD ✅ COMPLETED
 
-- [ ] Create "New Folder" modal/form
-- [ ] Implement create folder server action
-- [ ] Build folder card component with color picker
+- [x] Create "New Folder" modal/form
+- [x] Implement create folder server action
+- [x] Build folder card component with color picker
 - [ ] Add edit folder (rename, change color)
 - [ ] Implement delete folder with confirmation
 
-### 4.2 Folder Navigation
+### 4.2 Folder Navigation ✅ COMPLETED
 
-- [ ] Display folders in sidebar
-- [ ] Implement folder filtering on dashboard
-- [ ] Show bookmark count per folder
-- [ ] Add active folder state styling
+- [x] Display folders in sidebar
+- [x] Implement folder filtering on dashboard
+- [x] Show bookmark count per folder
+- [x] Add active folder state styling
 
-### 4.3 Bookmark Assignment
+### 4.3 Bookmark Assignment ✅ COMPLETED
 
-- [ ] Move bookmark to folder on creation
+- [x] Move bookmark to folder on creation
 - [ ] Update bookmark's folder via dropdown
 - [ ] Handle bookmark count updates
 
@@ -250,8 +250,8 @@
 
 ## 📊 Progress Tracking
 
-**Current Phase**: Phase 4 - Folder System (Next)
-**Overall Progress**: 38% (33/87 tasks)
+**Current Phase**: Phase 5 - Reading List Feature (Next)
+**Overall Progress**: 51% (44/87 tasks)
 
 ---
 
@@ -260,7 +260,7 @@
 - [x] User can sign in with Google
 - [x] User can add an X bookmark URL
 - [x] Bookmark renders correctly with `react-tweet`
-- [ ] User can create and manage folders
+- [x] User can create and manage folders
 - [x] User can toggle bookmarks to/from Reading List
 - [ ] Articles open in optimized reading mode
 - [ ] Full mobile responsiveness

@@ -5,12 +5,16 @@ import { Plus } from "lucide-react";
 import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal";
 import { BookmarkCard } from "@/components/dashboard/bookmark-card";
 import { getUserBookmarks } from "@/app/actions/bookmarks";
+import { getFolderById } from "@/app/actions/folders";
+import { useFolder } from "@/contexts/folder-context";
 import type { BookmarkWithFolder } from "@/types";
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<BookmarkWithFolder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [folderName, setFolderName] = useState<string>("");
+  const { selectedFolderId } = useFolder();
   const mountedRef = useRef(true);
 
   const fetchBookmarks = async () => {
@@ -18,8 +22,28 @@ export default function DashboardPage() {
     setIsLoading(true);
     const data = await getUserBookmarks();
     if (mountedRef.current) {
-      setBookmarks(data as BookmarkWithFolder[]);
+      let filteredData = data as BookmarkWithFolder[];
+
+      // Filter by reading list
+      if (selectedFolderId === "reading-list") {
+        filteredData = filteredData.filter((b) => b.readingList);
+      }
+      // Filter by folder
+      else if (selectedFolderId) {
+        filteredData = filteredData.filter(
+          (b) => b.folderId === selectedFolderId,
+        );
+      }
+
+      setBookmarks(filteredData);
       setIsLoading(false);
+    }
+  };
+
+  const loadFolderName = async (folderId: string) => {
+    const folder = await getFolderById(folderId);
+    if (folder) {
+      setFolderName(folder.name);
     }
   };
 
@@ -31,21 +55,39 @@ export default function DashboardPage() {
     return () => {
       mountedRef.current = false;
     };
-  }, []);
+  }, [selectedFolderId]);
+
+  useEffect(() => {
+    if (selectedFolderId && selectedFolderId !== "reading-list") {
+      loadFolderName(selectedFolderId);
+    } else {
+      setFolderName("");
+    }
+  }, [selectedFolderId]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
     setTimeout(fetchBookmarks, 100);
   };
 
+  const getTitle = () => {
+    if (selectedFolderId === null) return "All Bookmarks";
+    if (selectedFolderId === "reading-list") return "Reading List";
+    return folderName || "Folder";
+  };
+
+  const getDescription = () => {
+    if (selectedFolderId === null) return "Your saved tweets and articles";
+    if (selectedFolderId === "reading-list") return "Mark for later reading";
+    return `Bookmarks in this folder`;
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">All Bookmarks</h1>
-          <p className="text-muted-foreground">
-            Your saved tweets and articles
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">{getTitle()}</h1>
+          <p className="text-muted-foreground">{getDescription()}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
