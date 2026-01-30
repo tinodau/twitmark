@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.folders (
 CREATE TABLE IF NOT EXISTS public.bookmarks (
   id UUID DEFAULT generate_uuid() PRIMARY KEY,
   url TEXT NOT NULL,
-  content_type TEXT DEFAULT 'tweet', -- 'tweet' or 'article'
+  content_type TEXT DEFAULT 'tweet', -- currently only 'tweet' is used
   metadata JSONB,
   folder_id UUID REFERENCES public.folders(id) ON DELETE SET NULL,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,

@@ -8,12 +8,17 @@ export type Folder = {
   bookmarkCount?: number;
 };
 
+// Tweet metadata
+export type TweetMetadata = {
+  tweetId?: string;
+};
+
 // Database types (exported separately from server actions)
 export type BookmarkWithFolder = {
   id: string;
   url: string;
-  contentType: "tweet" | "article";
-  metadata: Record<string, unknown> | null;
+  contentType: "tweet";
+  metadata: TweetMetadata | null;
   folderId: string | null;
   userId: string;
   readingList: boolean;

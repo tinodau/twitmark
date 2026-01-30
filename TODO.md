@@ -46,7 +46,7 @@
 ### 2.3 Feature Highlights
 
 - [x] Build bento grid layout for features
-- [x] Create 3-4 feature cards (Folders, Reading List, Article Mode)
+- [x] Create 3-4 feature cards (Folders, Reading List)
 - [x] Add smooth hover animations with Framer Motion
 
 ### 2.4 Testimonials
@@ -149,37 +149,6 @@
 
 ---
 
-## 📄 Phase 6: Advanced Reading Mode (Article View) ✅ COMPLETED
-
-### 6.1 URL Detection ✅ COMPLETED
-
-- [x] Detect "X Article" URLs vs. standard tweets
-- [x] Set `contentType` field on bookmark creation
-- [x] Handle edge cases and invalid URLs
-
-### 6.2 Optimized Article UI ✅ COMPLETED
-
-- [x] Create article modal with serif typography
-- [x] Optimize line height and readability
-- [x] Hide sidebar/clutter in article view
-- [x] Add "Open on X" button
-
-### 6.3 Metadata Scraping ⏸️ DEFERRED
-
-- [ ] Build server utility to fetch Open Graph data
-- [ ] Extract article title, author, preview text
-- [ ] Store metadata in JSON field
-- [ ] Handle scraping errors gracefully
-
-### 6.4 Modal Overlay ✅ COMPLETED
-
-- [x] Create high-fidelity modal component
-- [x] Animate open/close with Framer Motion
-- [x] Ensure mobile responsiveness
-- [x] Add backdrop blur effect
-
----
-
 ## ✅ Phase 7: Polish & Testing
 
 ### 7.1 UI/UX Refinement
@@ -251,7 +220,7 @@
 ## 📊 Progress Tracking
 
 **Current Phase**: Phase 7 - Polish & Testing (Next)
-**Overall Progress**: 62% (54/87 tasks)
+**Overall Progress**: 72% (62/86 tasks)
 
 ---
 
@@ -262,11 +231,12 @@
 - [x] Bookmark renders correctly with `react-tweet`
 - [x] User can create and manage folders
 - [x] User can toggle bookmarks to/from Reading List
-- [x] Articles open in optimized reading mode
 - [ ] Full mobile responsiveness
 - [ ] All animations are smooth (60fps)
 - [ ] Loading states and error handling are robust
 
 ---
 
-_Last Updated: 2026-01-30 10:14 AM (Asia/Jakarta, UTC+7:00)_
+**Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
+
+_Last Updated: 2026-01-30 10:39 PM (Asia/Jakarta, UTC+7:00)_

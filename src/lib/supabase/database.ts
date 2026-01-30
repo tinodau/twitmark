@@ -62,10 +62,11 @@ export function isValidTwitterUrl(url: string): boolean {
   }
 }
 
-// Extract tweet ID from URL
+// Extract tweet/article ID from URL
 export function extractTweetId(url: string): string | null {
   const patterns = [
-    /x\.com\/\w+\/status\/(\d+)/,
+    /x\.com\/i\/article\/(\d+)/, // Article ID
+    /x\.com\/\w+\/status\/(\d+)/, // Tweet ID
     /twitter\.com\/\w+\/status\/(\d+)/,
     /mobile\.twitter\.com\/\w+\/status\/(\d+)/,
   ];
@@ -75,11 +76,6 @@ export function extractTweetId(url: string): string | null {
     if (match) return match[1];
   }
   return null;
-}
-
-// Detect if URL is an X Article
-export function isXArticle(url: string): boolean {
-  return url.includes("/article/");
 }
 
 // Create a new bookmark
@@ -101,13 +97,12 @@ export async function createBookmark(url: string, folderId: string | null) {
   }
 
   const tweetId = extractTweetId(url);
-  const isArticle = isXArticle(url);
 
   const { data, error } = await supabase
     .from("bookmarks")
     .insert({
       url,
-      content_type: isArticle ? "article" : "tweet",
+      content_type: "tweet",
       user_id: user.id,
       folder_id: folderId,
       metadata: tweetId ? { tweetId } : null,
