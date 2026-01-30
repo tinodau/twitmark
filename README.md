@@ -30,9 +30,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 ### Backend & Infrastructure
 
 - **Supabase** - PostgreSQL database with built-in authentication
-- **Prisma 7.x** - Type-safe ORM with optimized TypeScript support
 - **Supabase Auth** - Google OAuth provider with secure session management
-- **TanStack Query 5.90.20** - Optimistic updates and caching
 - **Zod 4.3.6** - Schema-based validation
 - **react-tweet 3.3.0** - Optimized tweet rendering for Next.js 16
 
@@ -55,25 +53,28 @@ twitmark/
 │   └── testing-plan.md      # Testing strategy
 ├── src/
 │   ├── app/                 # Next.js App Router
+│   │   ├── actions/        # Server Actions
+│   │   │   └── bookmarks.ts
+│   │   ├── dashboard/      # Dashboard pages
 │   │   ├── globals.css      # Tailwind + custom utilities
 │   │   ├── layout.tsx       # Root layout with dark mode
 │   │   └── page.tsx        # Landing page
 │   ├── components/
+│   │   ├── dashboard/       # Dashboard components
 │   │   ├── ui/             # Base UI components
 │   │   │   ├── aurora-background.tsx
 │   │   │   └── bento-grid.tsx
 │   │   ├── navbar.tsx       # Responsive navigation
 │   │   └── testimonials-marquee.tsx
 │   └── lib/               # Utility functions
-│       ├── prisma.ts       # Prisma client singleton
 │       ├── supabase/
-│       │   ├── server.ts   # Supabase server client
-│       │   └── client.ts   # Supabase client client
-│       └── utils.ts
+│       │   ├── database.ts  # Database operations
+│       │   ├── server.ts    # Supabase server client
+│       │   └── client.ts    # Supabase client client
+│       └── types/          # TypeScript types
+│           └── index.ts
 ├── .clinerules             # AI development behavior
 ├── TODO.md                # MVP roadmap & progress
-├── prisma/                # Database schema & migrations
-│   └── schema.prisma      # Prisma schema definition
 ├── supabase/              # Supabase configuration
 │   └── schema.sql         # SQL schema for setup
 └── package.json
@@ -89,7 +90,7 @@ twitmark/
 ### Installation
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/yourusername/twitmark.git
 cd twitmark
 
@@ -138,9 +139,6 @@ Create a `.env.local` file:
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
 SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET="https://your-project.supabase.co/auth/v1/callback"
-
-# Database (Prisma)
-DATABASE_URL="postgresql://postgres:[password]@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
 
 # Application
 NODE_ENV="development"

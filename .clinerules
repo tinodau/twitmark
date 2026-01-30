@@ -10,9 +10,9 @@ You are an expert Full-Stack Senior Software Engineer and Vibe-Coder. Your goal 
 
 ## 2. Coding Principles (The "Senior" Way)
 
-- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS, Shadcn UI, Magic UI, Supabase, and Prisma.
+- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS, Shadcn UI, Magic UI, and Supabase.
 - **Clean Code**: Follow principles in `.skills/clean-code.md`. Prioritize readability, modularity, and DRY.
-- **Type Safety**: No `any`. Use strict TypeScript types. Use Prisma-generated types for database entities.
+- **Type Safety**: No `any`. Use strict TypeScript types. Use custom types in `src/types/` for database entities.
 - **Performance**: Use React Server Components (RSC) by default. Use `"use client"` only when necessary for interactivity or Framer Motion.
 - **UI/UX**: Every component must follow the glassmorphism/bento-grid aesthetic defined in `.docs/design-system.md`. Use Framer Motion for all transitions.
 

@@ -9,7 +9,7 @@ Twitmark is a high-end personal bookmark manager for X (Twitter) content. It sol
 ### 1. The "Brain" (.docs/)
 
 - `spec.md`: Detailed business logic and user flows.
-- `tech-stack.md`: The 2026 tech stack (Next.js 16, Supabase, Prisma, Magic UI).
+- `tech-stack.md`: The 2026 tech stack (Next.js 16, Supabase, Magic UI).
 - `architecture.md`: Data flow and folder structure conventions.
 - `design-system.md`: Visual guidelines (Bento Grid, Glassmorphism 2.0).
 
@@ -22,7 +22,7 @@ Twitmark is a high-end personal bookmark manager for X (Twitter) content. It sol
 
 - `app/`: Next.js App Router (Landing page, Auth, Dashboard).
 - `components/`: UI components (Atomic design).
-- `lib/`: Shared utilities, Prisma client, and Supabase config.
+- `lib/`: Shared utilities and Supabase config.
 
 ### 4. The "State" (Source of Truth)
 
@@ -33,8 +33,8 @@ Twitmark is a high-end personal bookmark manager for X (Twitter) content. It sol
 
 - **Strategy**: Manual Link Entry (Copy-Paste URL).
 - **Rendering**: Using `react-tweet` for standard tweets and custom optimized view for "X Articles".
-- **Database**: Supabase + Prisma ORM.
-- **Auth**: Auth.js with Google Provider.
+- **Database**: Supabase (PostgreSQL with direct client access).
+- **Auth**: Supabase Auth with Google OAuth.
 
 ## 🚀 Getting Started for AI
 

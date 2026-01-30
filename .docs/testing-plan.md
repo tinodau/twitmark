@@ -5,7 +5,7 @@
 We use a pyramid testing strategy to ensure reliability while maintaining high development speed.
 
 - **Unit Testing**: Testing individual logic (URL Parsers, Metadata Extractors).
-- **Integration Testing**: Testing the interaction between Prisma, Supabase, and Server Actions.
+- **Integration Testing**: Testing to interaction between Supabase, Server Actions, and React components.
 - **E2E Testing**: Testing critical user journeys (Login -> Add Link -> View in Folder).
 
 ## 2. Testing Stack (2026 Standards)
@@ -25,22 +25,22 @@ We use a pyramid testing strategy to ensure reliability while maintaining high d
 ### 3.2 Link Processing (The Core Logic)
 
 - [ ] **Valid URL**: Test with standard `x.com` and `twitter.com` status links.
-- [ ] **Invalid URL**: Ensure the system rejects non-X links (e.g., Facebook, YouTube) with a clear error message.
-- [ ] **Article Detection**: Verify that links following the `/article/` pattern trigger the "Article Reading Mode" UI.
+- [ ] **Invalid URL**: Ensure to system rejects non-X links (e.g., Facebook, YouTube) with a clear error message.
+- [ ] **Article Detection**: Verify that links following to `/article/` pattern trigger "Article Reading Mode" UI.
 - [ ] **Metadata Fetching**: Ensure titles, descriptions, and images are correctly scraped from X Articles.
 
 ### 3.3 Dashboard & CRUD
 
 - [ ] **Create Bookmark**: Verify a new card appears immediately after pasting a link (Optimistic UI check).
 - [ ] **Folder Management**: Test creating a folder and moving a bookmark into it.
-- [ ] **Reading List**: Toggle a bookmark to "To Read" and verify it appears in the Reading List view.
+- [ ] **Reading List**: Toggle a bookmark to "To Read" and verify it appears in Reading List view.
 - [ ] **Delete**: Ensure bookmarks are removed from the database and UI simultaneously.
 
 ### 3.4 UI/UX & Responsiveness
 
 - [ ] **Modal Interactivity**: Verify "Article Modal" opens smoothly and "Open on X" button works.
-- [ ] **Mobile View**: Ensure the Bento Grid layout stacks correctly on small screens.
-- [ ] **Infinite Scroll**: Verify that more bookmarks load when the user reaches the bottom of the page.
+- [ ] **Mobile View**: Ensure to Bento Grid layout stacks correctly on small screens.
+- [ ] **Infinite Scroll**: Verify that more bookmarks load when user reaches bottom of page.
 
 ## 4. Performance Benchmarks (QA Acceptance)
 
@@ -52,6 +52,6 @@ We use a pyramid testing strategy to ensure reliability while maintaining high d
 
 When a bug is found:
 
-1. Document the issue in `.memory/lessons-learned.md`.
-2. Add a regression test in the `tests/` folder.
-3. Update `TODO.md` to track the fix.
+1. Document issue in `.memory/lessons-learned.md`.
+2. Add a regression test in: `tests/` folder.
+3. Update `TODO.md` to track fix.

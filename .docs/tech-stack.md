@@ -17,30 +17,60 @@
 
 ## 3. Backend & Infrastructure
 
-- **Database & Auth**: **Supabase** (PostgreSQL with built-in authentication)
-- **ORM**: Prisma 7.x (With optimized TypeScript support)
+- **Database**: **Supabase** (PostgreSQL with built-in authentication)
 - **Authentication**: Supabase Auth (Google OAuth)
+- **Real-time**: Supabase Realtime (For live updates)
+- **Storage**: Supabase Storage (For future avatar/file uploads)
 - **Deployment**: Vercel (Optimized for Next.js 16 PPR)
 
 ## 4. Data Fetching & State Management
 
-- **Server Side**: Next.js Server Actions for all mutations (Folder CRUD, Saving Links).
-- **Client Side**: TanStack Query v6 (For optimistic updates and infinite scroll caching).
-- **Validation**: Zod (For schema-based URL and form validation).
+- **Server Side**: Next.js Server Actions for all mutations (Bookmark CRUD, Folder CRUD)
+- **Database Access**: Direct Supabase client (TypeScript SDK) in Server Components
+- **Client Side**: React hooks for state management
+- **Validation**: Custom URL validation for X/Twitter links
 
-## 5. Database Schema (Prisma + Supabase)
+## 5. Database Schema (Supabase PostgreSQL)
 
-- **Profile** (extends Supabase auth.users): ID, Email, FullName, AvatarURL, CreatedAt
-- **Bookmark**:
-  - ID, URL, ContentType (Tweet/Article), Metadata (JSON)
-  - FolderID (Relation), UserID (Relation), ReadingList (Boolean), CreatedAt
-- **Folder**:
-  - ID, Name, Color, UserID (Relation), CreatedAt
+### Tables
 
-**Note**: Profile model extends Supabase's auth.users table with additional fields. Row Level Security (RLS) ensures users can only access their own data.
+**profiles**
+
+- `id` (UUID, PRIMARY KEY, REFERENCES auth.users)
+- `email` (TEXT)
+- `full_name` (TEXT)
+- `avatar_url` (TEXT)
+- `created_at` (TIMESTAMP)
+
+**folders**
+
+- `id` (UUID, PRIMARY KEY)
+- `user_id` (UUID, REFERENCES profiles, ON DELETE CASCADE)
+- `name` (TEXT, NOT NULL)
+- `color` (TEXT, DEFAULT '#1D9BF0')
+- `created_at` (TIMESTAMP)
+
+**bookmarks**
+
+- `id` (UUID, PRIMARY KEY)
+- `url` (TEXT, NOT NULL)
+- `content_type` (TEXT, DEFAULT 'tweet') - 'tweet' or 'article'
+- `metadata` (JSONB) - Tweet ID, OpenGraph data, etc.
+- `folder_id` (UUID, REFERENCES folders, ON DELETE SET NULL)
+- `user_id` (UUID, REFERENCES profiles, ON DELETE CASCADE)
+- `reading_list` (BOOLEAN, DEFAULT false)
+- `created_at` (TIMESTAMP)
+
+### Security
+
+- **Row Level Security (RLS)**: Enabled on all tables
+- **Policies**: Users can only access their own data
+- **Trigger**: Auto-creates profile on user signup via Supabase Auth
 
 ## 6. Development Tools
 
 - **Linter**: ESLint 10+
 - **Testing**: Vitest + Playwright (For E2E UI testing)
-- **AI Tools**: Cursor/Cline with MCP (Model Context Protocol) enabled.
+- **AI Tools**: Cursor/Cline with MCP (Model Context Protocol) enabled
+- **Database Management**: Supabase SQL Editor
+- **Environment**: Supabase Local (for local development - optional)

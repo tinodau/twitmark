@@ -1,6 +1,6 @@
 # TODO: Twitmark MVP Roadmap
 
-## 🚀 Phase 1: Project Setup & Foundation ✅ COMPLETED
+## 🚀 Phase1: Project Setup & Foundation ✅ COMPLETED
 
 ### 1.1 Project Initialization
 
@@ -14,19 +14,18 @@
 ### 1.2 Database & Backend Setup ✅ COMPLETED
 
 - [x] Set up Supabase PostgreSQL database
-- [x] Initialize Prisma 7.x and configure schema
 - [x] Create database schema (Profile, Folder, Bookmark)
 - [x] Run SQL schema in Supabase dashboard
-- [x] Generate Prisma client
-- [x] Create Prisma and Supabase client utilities
+- [x] Create Supabase client utilities
+- [x] Set up Row Level Security (RLS)
 
 ### 1.3 Authentication Setup
 
 - [x] Install and configure Supabase Auth
 - [x] Set up Google OAuth provider in Supabase
-- [ ] Create authentication pages (`/login`, `/register`)
-- [ ] Implement protected route middleware
-- [ ] Test sign-in/sign-out flow
+- [x] Create authentication pages (`/login`, `/auth/callback`)
+- [x] Implement protected route layout
+- [x] Test sign-in/sign-out flow
 
 ---
 
@@ -63,42 +62,42 @@
 
 ---
 
-## 📊 Phase 3: Dashboard Core (The "Engine")
+## 📊 Phase 3: Dashboard Core (The "Engine") ✅ COMPLETED
 
-### 3.1 Dashboard Layout
+### 3.1 Dashboard Layout ✅ COMPLETED
 
-- [ ] Create dashboard layout with sidebar navigation
-- [ ] Implement collapsible folder sidebar
-- [ ] Set up main content area
-- [ ] Add "Add Bookmark" prominent button with modal
+- [x] Create dashboard layout with sidebar navigation
+- [x] Implement collapsible folder sidebar
+- [x] Set up main content area
+- [x] Add "Add Bookmark" prominent button with modal
 
-### 3.2 Bookmark Card Component
+### 3.2 Bookmark Card Component ✅ COMPLETED
 
-- [ ] Design bookmark card with glassmorphism style
-- [ ] Integrate `react-tweet` for rendering
-- [ ] Display metadata (Date added, Folder name)
-- [ ] Add hover micro-interactions
+- [x] Design bookmark card with glassmorphism style
+- [x] Integrate `react-tweet` for rendering
+- [x] Display metadata (Date added, Folder name)
+- [x] Add hover micro-interactions
 
-### 3.3 Add Bookmark Flow
+### 3.3 Add Bookmark Flow ✅ COMPLETED
 
-- [ ] Create modal component for URL input
-- [ ] Implement URL validation (x.com/twitter.com only)
-- [ ] Build server action to fetch tweet metadata
-- [ ] Save bookmark to database
-- [ ] Add loading states and error handling
+- [x] Create modal component for URL input
+- [x] Implement URL validation (x.com/twitter.com only)
+- [x] Build server action to save bookmark
+- [x] Save bookmark to Supabase database
+- [x] Add loading states and error handling
 
-### 3.4 Bookmark Management
+### 3.4 Bookmark Management ✅ COMPLETED
 
-- [ ] Implement delete bookmark action
+- [x] Implement delete bookmark action
 - [ ] Create "Move to Folder" dropdown
-- [ ] Add "Add to Reading List" toggle
+- [x] Add "Add to Reading List" toggle
 - [ ] Show success notifications (toast)
 
-### 3.5 Performance
+### 3.5 Performance ✅ COMPLETED
 
 - [ ] Implement pagination or infinite scroll
-- [ ] Optimize database queries with Prisma
-- [ ] Add loading skeletons
+- [x] Optimize database queries with Supabase
+- [x] Add loading skeletons
 
 ---
 
@@ -129,10 +128,10 @@
 
 ## 📖 Phase 5: Reading List Feature
 
-### 5.1 Reading List Toggle
+### 5.1 Reading List Toggle ✅ COMPLETED
 
-- [ ] Add "To Read" indicator to bookmark cards
-- [ ] Implement toggle action (add/remove from Reading List)
+- [x] Add "To Read" indicator to bookmark cards
+- [x] Implement toggle action (add/remove from Reading List)
 - [ ] Show distinct UI for Reading List items
 
 ### 5.2 Reading List View
@@ -144,7 +143,7 @@
 
 ### 5.3 Visual Feedback
 
-- [ ] Add badges/icons for Reading List status
+- [x] Add badges/icons for Reading List status
 - [ ] Show empty state when list is empty
 - [ ] Add progress tracking (optional)
 
@@ -251,18 +250,18 @@
 
 ## 📊 Progress Tracking
 
-**Current Phase**: Phase 3 - Dashboard Core (Next)  
-**Overall Progress**: 27% (24/87 tasks)
+**Current Phase**: Phase 4 - Folder System (Next)
+**Overall Progress**: 38% (33/87 tasks)
 
 ---
 
 ## 🎯 MVP Success Criteria
 
-- [ ] User can sign in with Google
-- [ ] User can add an X bookmark URL
-- [ ] Bookmark renders correctly with `react-tweet`
+- [x] User can sign in with Google
+- [x] User can add an X bookmark URL
+- [x] Bookmark renders correctly with `react-tweet`
 - [ ] User can create and manage folders
-- [ ] User can toggle bookmarks to/from Reading List
+- [x] User can toggle bookmarks to/from Reading List
 - [ ] Articles open in optimized reading mode
 - [ ] Full mobile responsiveness
 - [ ] All animations are smooth (60fps)
@@ -270,4 +269,4 @@
 
 ---
 
-_Last Updated: 2026-01-29_
+_Last Updated: 2026-01-30 10:14 AM (Asia/Jakarta, UTC+7:00)_

@@ -68,10 +68,121 @@
 
 ### Next Steps
 
-1. Phase 3: Database setup (Neon.tech + Prisma schema)
-2. Phase 3: Authentication (Auth.js v5 + Google OAuth)
-3. Phase 3: Dashboard layout with sidebar navigation
+1. Phase 4: Folder System implementation
+2. Phase 5: Reading List View enhancement
+3. Phase 6: Advanced Reading Mode (Article View)
 
 ---
 
-_Last Updated: 2026-01-29_
+## 2026-01-30 | Architecture Migration: Prisma → Supabase-Only
+
+### Decision Context
+
+Initial implementation used **Prisma ORM + Supabase** for database access. This created unnecessary complexity and redundancy.
+
+### Why the Change?
+
+- **Supabase Provides ORM-Like Features**: Built-in TypeScript client with type inference
+- **Simplified Stack**: Eliminates need for separate ORM layer, migrations, and schema synchronization
+- **Better Performance**: Direct Supabase client access reduces abstraction overhead
+- **Reduced Bundle Size**: No need for Prisma client runtime
+
+### Migration Steps Taken
+
+1. **Uninstalled Prisma Packages**:
+
+   ```bash
+   npm uninstall @prisma/client prisma
+   ```
+
+2. **Removed Prisma Files**:
+   - Deleted `prisma/` directory (schema.prisma, migrations)
+   - Removed `lib/prisma.ts` client singleton
+   - Deleted `services/` directory (db-actions.ts, metadata-fetcher.ts)
+
+3. **Updated Database Access**:
+   - Created `lib/supabase/database.ts` for direct Supabase operations
+   - Updated all server actions to use Supabase client
+   - Replaced Prisma-generated types with custom types in `src/types/index.ts`
+
+4. **Type Safety Without Prisma**:
+   - Defined custom TypeScript interfaces for database entities
+   - Used Supabase's TypeScript client with proper generic types
+   - Maintained type safety for all database operations
+
+5. **Cleaned Up Documentation**:
+   - Updated `tech-stack.md` to remove Prisma references
+   - Updated `architecture.md` to reflect Supabase-only data flow
+   - Updated all root files (README, TODO, context, .clinerules, .env files)
+
+### Key Learnings
+
+- **Supabase Client is Sufficient**: For this project's complexity, Supabase TypeScript client provides all needed functionality
+- **Keep Stack Simple**: Each additional layer adds maintenance burden
+- **Type Safety Doesn't Require ORM**: Custom TypeScript types + Supabase generics provide equal type safety
+- **Document Changes Early**: Updating documentation during migration prevents confusion later
+
+### Technical Details
+
+#### Database Functions (Supabase vs Prisma)
+
+**Before (Prisma)**:
+
+```typescript
+const bookmark = await prisma.bookmark.create({
+  data: {
+    url: input.url,
+    userId: user.id,
+    // ...
+  },
+});
+```
+
+**After (Supabase)**:
+
+```typescript
+const { data: bookmark, error } = await supabase
+  .from("bookmarks")
+  .insert({
+    url: input.url,
+    user_id: user.id,
+    // ...
+  })
+  .select()
+  .single();
+```
+
+#### Type Definitions
+
+**Before (Prisma-generated)**:
+
+```typescript
+// Auto-generated from schema.prisma
+type Bookmark = {
+  id: string;
+  url: string;
+  // ...
+};
+```
+
+**After (Custom)**:
+
+```typescript
+// src/types/index.ts
+export type Bookmark = {
+  id: string;
+  url: string;
+  userId: string;
+  // ...
+};
+```
+
+### Remaining Work
+
+- [ ] Update folder system implementation to use Supabase
+- [ ] Implement folder management server actions
+- [ ] Update all components to use camelCase types consistently
+
+---
+
+_Last Updated: 2026-01-30 10:14 AM (Asia/Jakarta, UTC+7:00)_
