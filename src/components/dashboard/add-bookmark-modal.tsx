@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Link as LinkIcon, Check } from "lucide-react";
+import { createBookmark } from "@/app/actions/bookmarks";
 
 interface AddBookmarkModalProps {
   isOpen: boolean;
@@ -18,20 +19,21 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
     e.preventDefault();
     setError("");
 
-    // Validate URL
-    const urlPattern = /^https?:\/\/(x\.com|twitter\.com)\//;
-    if (!urlPattern.test(url)) {
-      setError("Please enter a valid X/Twitter URL");
-      return;
-    }
-
     setIsLoading(true);
-    // TODO: Implement bookmark saving logic
-    setTimeout(() => {
+
+    const formData = new FormData();
+    formData.append("url", url);
+
+    const result = await createBookmark(formData);
+
+    if (result.error) {
+      setError(result.error);
+      setIsLoading(false);
+    } else {
       setIsLoading(false);
       onClose();
       setUrl("");
-    }, 1000);
+    }
   };
 
   if (!isOpen) return null;
