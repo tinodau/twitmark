@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, FolderPlus } from "lucide-react";
 import { createFolder } from "@/app/actions/folders";
+import { useToast } from "@/contexts/toast-context";
 
 interface AddFolderModalProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
   const lastFocusableRef = useRef<HTMLButtonElement>(null);
+  const { success, error: showError } = useToast();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,7 +49,9 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
 
     if (result.error) {
       setError(result.error);
+      showError("Failed to create folder", result.error);
     } else {
+      success(`Folder "${name}" created`);
       setName("");
       setColor(FOLDER_COLORS[0]);
       onClose();

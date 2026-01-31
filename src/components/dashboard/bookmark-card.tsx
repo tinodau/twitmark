@@ -12,6 +12,7 @@ import {
 import { Tweet } from "react-tweet";
 import type { BookmarkWithFolder } from "@/types";
 import { deleteBookmark, toggleReadingList } from "@/app/actions/bookmarks";
+import { useToast } from "@/contexts/toast-context";
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithFolder;
@@ -19,18 +20,33 @@ interface BookmarkCardProps {
 }
 
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
+  const { success, error: showError } = useToast();
+
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you want to delete this bookmark?")) {
-      await deleteBookmark(bookmark.id);
-      onUpdate?.();
+      const result = await deleteBookmark(bookmark.id);
+      if (result.error) {
+        showError("Failed to delete bookmark", result.error);
+      } else {
+        success("Bookmark deleted");
+        onUpdate?.();
+      }
     }
   };
 
   const handleToggleReadingList = async (e: React.MouseEvent) => {
     e.preventDefault();
-    await toggleReadingList(bookmark.id);
-    onUpdate?.();
+    const result = await toggleReadingList(bookmark.id);
+    if (result.error) {
+      showError("Failed to update reading list", result.error);
+    } else {
+      const message = bookmark.readingList
+        ? "Removed from Reading List"
+        : "Added to Reading List";
+      success(message);
+      onUpdate?.();
+    }
   };
 
   const extractTweetId = (url: string): string | null => {

@@ -6,6 +6,7 @@ import { X, Link as LinkIcon, Check, Folder } from "lucide-react";
 import { createBookmark } from "@/app/actions/bookmarks";
 import { getFolders } from "@/app/actions/folders";
 import { useFolder } from "@/contexts/folder-context";
+import { useToast } from "@/contexts/toast-context";
 import type { Folder as FolderType } from "@/types";
 
 interface AddBookmarkModalProps {
@@ -20,6 +21,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { selectedFolderId: currentFolderId } = useFolder();
+  const { success, error: showError } = useToast();
   const modalRef = useRef<HTMLDivElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
@@ -120,8 +122,10 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
 
     if (result.error) {
       setError(result.error);
+      showError("Failed to save bookmark", result.error);
       setIsLoading(false);
     } else {
+      success("Bookmark saved successfully");
       setIsLoading(false);
       onClose();
       setUrl("");
