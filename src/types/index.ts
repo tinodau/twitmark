@@ -8,9 +8,10 @@ export type Folder = {
   bookmarkCount?: number;
 };
 
-// Tweet metadata
+// Tweet metadata - Raw Twitter oEmbed response
 export type TweetMetadata = {
   tweetId?: string;
+  [key: string]: unknown; // Allow any field from oEmbed
 };
 
 // Database types (exported separately from server actions)

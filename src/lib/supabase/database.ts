@@ -78,8 +78,28 @@ export function extractTweetId(url: string): string | null {
   return null;
 }
 
+// Fetch tweet metadata using Twitter oEmbed API
+async function fetchTweetMetadata(url: string) {
+  try {
+    const response = await fetch(
+      `https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`,
+    );
+    if (!response.ok) {
+      return null;
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
 // Create a new bookmark
-export async function createBookmark(url: string, folderId: string | null) {
+export async function createBookmark(
+  url: string,
+  folderId: string | null,
+  title?: string,
+) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -98,6 +118,24 @@ export async function createBookmark(url: string, folderId: string | null) {
 
   const tweetId = extractTweetId(url);
 
+  // Fetch tweet metadata (raw oEmbed response)
+  const tweetMetadata = await fetchTweetMetadata(url);
+
+  // Determine title: use provided title, or default to "<author>'s tweet"
+  const bookmarkTitle =
+    title ||
+    (tweetMetadata?.author_name
+      ? `${tweetMetadata.author_name}'s tweet`
+      : "Tweet");
+
+  const metadata: Record<string, unknown> = {
+    tweetId,
+    title: bookmarkTitle,
+  };
+  if (tweetMetadata) {
+    Object.assign(metadata, tweetMetadata);
+  }
+
   const { data, error } = await supabase
     .from("bookmarks")
     .insert({
@@ -105,7 +143,7 @@ export async function createBookmark(url: string, folderId: string | null) {
       content_type: "tweet",
       user_id: user.id,
       folder_id: folderId,
-      metadata: tweetId ? { tweetId } : null,
+      metadata,
     })
     .select()
     .single();

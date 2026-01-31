@@ -13,9 +13,10 @@ import {
 // Create a new bookmark
 export async function createBookmark(formData: FormData) {
   const url = formData.get("url") as string;
+  const title = formData.get("title") as string | null;
   const folderId = formData.get("folderId") as string | null;
 
-  const result = await dbCreateBookmark(url, folderId);
+  const result = await dbCreateBookmark(url, folderId, title || undefined);
 
   if (result.error) {
     return result;

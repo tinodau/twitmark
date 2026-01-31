@@ -141,19 +141,30 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
 
         {/* Tweet Content */}
         <div
-          className={`flex-1 w-full min-h-0 ${
+          className={`flex-1 w-full min-h-0 flex-col ${
             tweetId ? "" : "flex items-center justify-center"
           }`}
         >
           {tweetId ? (
-            <Tweet
-              id={tweetId}
-              fallback={
-                <div className="p-8 text-center text-sm text-muted-foreground">
-                  Loading tweet...
-                </div>
-              }
-            />
+            <>
+              {/* Metadata Preview */}
+              {bookmark.metadata?.title &&
+                typeof bookmark.metadata.title === "string" && (
+                  <div className="border-b border-border/40 px-4 py-3">
+                    <p className="text-sm text-foreground line-clamp-2">
+                      {bookmark.metadata.title}
+                    </p>
+                  </div>
+                )}
+              <Tweet
+                id={tweetId}
+                fallback={
+                  <div className="p-8 text-center text-sm text-muted-foreground">
+                    Loading tweet...
+                  </div>
+                }
+              />
+            </>
           ) : (
             <div className="p-8 text-center text-sm text-muted-foreground">
               Could not load tweet

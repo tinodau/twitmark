@@ -15,6 +15,7 @@ interface AddBookmarkModalProps {
 }
 
 export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
+  const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [folders, setFolders] = useState<FolderType[]>([]);
@@ -119,6 +120,9 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
 
     const formData = new FormData();
     formData.append("url", url);
+    if (title) {
+      formData.append("title", title);
+    }
     if (selectedFolderId) {
       formData.append("folderId", selectedFolderId);
     }
@@ -133,6 +137,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
       success("Bookmark saved successfully");
       setIsLoading(false);
       onClose();
+      setTitle("");
       setUrl("");
       setSelectedFolderId(null);
     }
@@ -189,6 +194,24 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
               {/* Form */}
               <form onSubmit={handleSubmit} className="p-6">
                 <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="title"
+                      className="text-sm font-medium text-foreground"
+                    >
+                      Title (Optional)
+                    </label>
+                    <input
+                      id="title"
+                      type="text"
+                      placeholder="Add a custom title..."
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={isLoading}
+                    />
+                  </div>
+
                   <div className="space-y-2">
                     <label
                       htmlFor="url"
