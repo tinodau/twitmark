@@ -19,6 +19,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [folders, setFolders] = useState<FolderType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFoldersLoading, setIsFoldersLoading] = useState(false);
   const [error, setError] = useState("");
   const { selectedFolderId: currentFolderId } = useFolder();
   const { success, error: showError } = useToast();
@@ -36,17 +37,21 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   useEffect(() => {
     let isMounted = true;
 
-    if (isOpen) {
-      (async () => {
-        if (isMounted) {
-          const data = await getFolders();
-          if (isMounted) setFolders(data);
-          // Pre-select folder if viewing a specific folder
-          if (currentFolderId && currentFolderId !== "reading-list") {
-            setSelectedFolderId(currentFolderId);
-          }
+    const loadFoldersAsync = async () => {
+      setIsFoldersLoading(true);
+      const data = await getFolders();
+      if (isMounted) {
+        setFolders(data);
+        setIsFoldersLoading(false);
+        // Pre-select folder if viewing a specific folder
+        if (currentFolderId && currentFolderId !== "reading-list") {
+          setSelectedFolderId(currentFolderId);
         }
-      })();
+      }
+    };
+
+    if (isOpen) {
+      loadFoldersAsync();
 
       // Focus on URL input when modal opens
       setTimeout(() => {
@@ -221,11 +226,18 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                   </div>
 
                   {/* Folder Selection */}
-                  {folders.length > 0 && (
-                    <fieldset className="space-y-2">
-                      <legend className="text-sm font-medium text-foreground">
-                        Folder (Optional)
-                      </legend>
+                  <fieldset className="space-y-2">
+                    <legend className="text-sm font-medium text-foreground">
+                      Folder (Optional)
+                    </legend>
+                    {isFoldersLoading ? (
+                      <div className="flex items-center gap-2 rounded-lg border border-border/40 bg-muted/50 px-4 py-3">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                        <span className="text-sm text-muted-foreground">
+                          Loading folders...
+                        </span>
+                      </div>
+                    ) : folders.length > 0 ? (
                       <div
                         className="grid gap-2"
                         role="radiogroup"
@@ -235,7 +247,8 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                           type="button"
                           onClick={() => setSelectedFolderId(null)}
                           aria-pressed={selectedFolderId === null}
-                          className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+                          disabled={isLoading}
+                          className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
                             selectedFolderId === null
                               ? "border-primary bg-primary/10 text-primary"
                               : "border-border hover:bg-accent"
@@ -253,7 +266,8 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                             type="button"
                             onClick={() => setSelectedFolderId(folder.id)}
                             aria-pressed={selectedFolderId === folder.id}
-                            className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+                            disabled={isLoading}
+                            className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
                               selectedFolderId === folder.id
                                 ? "border-primary bg-primary/10 text-primary"
                                 : "border-border hover:bg-accent"
@@ -268,11 +282,19 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                           </button>
                         ))}
                       </div>
-                    </fieldset>
-                  )}
+                    ) : (
+                      <div className="rounded-lg border border-dashed border-border/40 bg-muted/30 px-4 py-3 text-center">
+                        <p className="text-sm text-muted-foreground">
+                          No folders created yet
+                        </p>
+                      </div>
+                    )}
+                  </fieldset>
 
                   <div
-                    className="flex items-center gap-2 rounded-lg bg-muted/50 p-3"
+                    className={`flex items-center gap-2 rounded-lg bg-muted/50 p-3 ${
+                      isLoading ? "opacity-50" : ""
+                    }`}
                     role="note"
                     aria-label="Tip"
                   >
@@ -294,7 +316,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                     type="button"
                     onClick={onClose}
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    disabled={isLoading}
+                    disabled={isLoading || isFoldersLoading}
                   >
                     Cancel
                   </button>
@@ -302,7 +324,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                     ref={lastFocusableRef}
                     type="submit"
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    disabled={isLoading || !url}
+                    disabled={isLoading || isFoldersLoading || !url}
                     aria-busy={isLoading}
                   >
                     {isLoading ? (
