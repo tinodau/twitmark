@@ -93,7 +93,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4 }}
-        className={`group relative flex flex-col overflow-hidden rounded-xl border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 ${
+        className={`group relative flex h-fit min-h-[300px] flex-col overflow-hidden rounded-xl border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 ${
           bookmark.readingList
             ? "border-primary/40 ring-2 ring-primary/10"
             : "border-border/40"
@@ -140,7 +140,11 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         </div>
 
         {/* Tweet Content */}
-        <div className="w-full">
+        <div
+          className={`flex-1 w-full min-h-0 ${
+            tweetId ? "" : "flex items-center justify-center"
+          }`}
+        >
           {tweetId ? (
             <Tweet
               id={tweetId}
