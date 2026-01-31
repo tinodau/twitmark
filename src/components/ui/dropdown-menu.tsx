@@ -44,7 +44,9 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
 
   return (
     <div className="relative" ref={menuRef}>
-      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+        {trigger}
+      </div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -78,10 +80,10 @@ export function DropdownMenuItem({
       }}
       disabled={disabled}
       role="menuitem"
-      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+      className={`cursor-pointer flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
         variant === "danger"
-          ? "text-destructive hover:bg-destructive/10"
-          : "text-foreground hover:bg-accent"
+          ? "text-destructive hover:bg-red-500/10"
+          : "text-foreground hover:bg-gray-900"
       }`}
     >
       {icon && <span className="h-4 w-4">{icon}</span>}

@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  BookMarked,
   Trash2,
   Folder,
   BookOpen,
@@ -22,6 +21,15 @@ import { useState } from "react";
 interface BookmarkCardProps {
   bookmark: BookmarkWithFolder;
   onUpdate?: () => void;
+}
+
+// Helper function to convert hex to rgba with opacity
+function hexToRgba(hex: string, opacity: number): string {
+  const cleanHex = hex.replace("#", "");
+  const r = Number.parseInt(cleanHex.substring(0, 2), 16);
+  const g = Number.parseInt(cleanHex.substring(2, 4), 16);
+  const b = Number.parseInt(cleanHex.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
@@ -62,7 +70,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
     setEditedTitle(
       (bookmark.metadata?.title as string) ||
         ((bookmark.metadata?.author_name as string)
-          ? `${bookmark.metadata.author_name}'s tweet`
+          ? `${bookmark.metadata?.author_name}'s tweet`
           : "Tweet"),
     );
     setIsEditingTitle(true);
@@ -106,7 +114,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
       minute: "2-digit",
       hour12: false,
     });
-    return `${formattedDate} ${formattedTime}`;
+    return `${formattedDate} at ${formattedTime}`;
   };
 
   return (
@@ -134,7 +142,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         }`}
       >
         {/* Header */}
-        <div className="flex items-start justify-between px-4 py-3">
+        <div className="flex items-start justify-between px-4 pt-3">
           {/* Title */}
           <div className="flex-1 pr-4">
             {isEditingTitle ? (
@@ -168,7 +176,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
           <DropdownMenu
             trigger={
               <button
-                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="cursor-pointer rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 aria-label="More options"
               >
                 <MoreVertical className="h-5 w-5" />
@@ -205,37 +213,36 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
           </DropdownMenu>
         </div>
 
-        {/* Metadata Bar */}
-        <div className="flex items-center gap-3 border-b border-border/40 px-4 py-2 text-xs text-muted-foreground">
-          {/* Reading List Status */}
-          <span className="flex items-center gap-1.5">
-            {bookmark.readingList ? (
-              <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-            ) : (
-              <BookMarked className="h-3.5 w-3.5" />
-            )}
-            {bookmark.readingList ? "In Reading List" : "Bookmark"}
-          </span>
-
-          {/* Folder */}
-          {bookmark.folder && (
-            <>
-              <span className="text-muted-foreground/50">•</span>
-              <span className="flex items-center gap-1.5">
-                <Folder className="h-3.5 w-3.5" />
-                {bookmark.folder.name}
-              </span>
-            </>
-          )}
-
-          {/* Spacer */}
-          <span className="flex-1" />
-
-          {/* Timestamp */}
+        {/* Metadata Bar - Row 1: Time & Reading List */}
+        <div className="flex items-center justify-between px-4 pt-2 text-xs text-muted-foreground z-10">
+          {/* Time (Left) */}
           <time dateTime={bookmark.createdAt.toISOString()}>
             {formatDateTime(bookmark.createdAt)}
           </time>
+
+          {/* Reading List Icon (Right) - Only show if in reading list */}
+          {bookmark.readingList && (
+            <span className="flex items-center gap-1.5 text-primary">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              <span>In Reading List</span>
+            </span>
+          )}
         </div>
+
+        {/* Metadata Bar - Row 2: Folders */}
+        {bookmark.folder && (
+          <div className="px-4 py-2 z-10">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+              style={{
+                backgroundColor: hexToRgba(bookmark.folder.color, 0.15),
+                color: bookmark.folder.color,
+              }}
+            >
+              {bookmark.folder.name}
+            </span>
+          </div>
+        )}
 
         {/* Tweet Content */}
         <div className="flex-1 -my-6 p-4">
