@@ -39,3 +39,53 @@
 ## 6. Icons
 
 - Use **Lucide React** icons with `stroke-width={1.5}` for a thin, premium look.
+- **Accessibility**: Decorative icons must have `aria-hidden="true"`, interactive icons need `aria-label`
+
+## 7. Accessibility (WCAG 2.1 AA)
+
+### Keyboard Navigation
+
+- **Tab Order**: Logical focus flow from top-left to bottom-right
+- **Focus Visible**: All interactive elements must show `focus:ring-2 focus:ring-primary/50` on keyboard focus
+- **Escape Key**: All modals must close on Escape key press
+- **Enter Key**: Buttons and links activate on Enter key
+
+### Semantic HTML
+
+- **Landmarks**: Use proper semantic elements (`<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`)
+- **Headings**: Proper heading hierarchy (`h1` → `h2` → `h3`) without skipping levels
+- **Buttons**: Use `<button>` elements, not `<div>` with click handlers
+- **Forms**: Every input must have associated `<label>` or `aria-label`
+
+### ARIA Attributes
+
+- **Navigation**: `role="navigation"` with `aria-label` describing purpose
+- **Dialogs**: `role="dialog"` with `aria-modal="true"` and `aria-labelledby`
+- **Forms**: `fieldset` with `legend` for grouping related controls
+- **States**: `aria-expanded` for toggles, `aria-pressed` for buttons
+- **Live Regions**: `aria-live="polite"` for error messages
+- **Loading**: `aria-busy="true"` during async operations
+
+### Focus Management
+
+- **Skip Links**: "Skip to main content" link at top of page (`sr-only`, visible on focus)
+- **Auto-focus**: Modal inputs receive focus when opened
+- **Focus Trap**: Modals must keep focus within dialog boundaries
+- **Focus Restoration**: Return focus to trigger element after modal closes
+- **Body Scroll**: Prevent body scroll when modals are open (`overflow: hidden`)
+
+### Color & Contrast
+
+- **Text Contrast**: Minimum 4.5:1 for normal text, 3:1 for large text
+- **Interactive Elements**: Minimum 3:1 contrast ratio for focus indicators
+- **Color-Only**: Never use color alone to convey meaning (use icons, labels, patterns)
+
+### Testing Checklist
+
+- [ ] Navigate entire interface with Tab key
+- [ ] All interactive elements visible when focused
+- [ ] Escape key closes all modals
+- [ ] Forms announce errors to screen readers
+- [ ] All images have alt text or are decorative
+- [ ] Skip navigation link works
+- [ ] Focus order is logical

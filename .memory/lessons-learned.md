@@ -257,10 +257,194 @@ Removed all `min-tweet` related classes from `globals.css`:
 
 ### Design Principles Applied
 
-1. **Content First**: Design around the content (tweets), not around arbitrary dimensions
+1. **Content First**: Design around content (tweets), not around arbitrary dimensions
 2. **Simplicity Over Control**: Don't force design patterns that fight the medium
 3. **Library Integration**: Trust the library's design decisions unless there's a clear reason to override
 
 ---
 
-_Last Updated: 2026-01-31 3:25 PM (Asia/Jakarta, UTC+7:00)_
+## 2026-01-31 | Accessibility Implementation (WCAG 2.1 AA)
+
+### Problem Statement
+
+Initial implementation lacked accessibility features, making the app difficult to use with keyboard navigation and screen readers.
+
+### Solution Applied
+
+Implemented comprehensive accessibility features across all components to meet WCAG 2.1 AA standards.
+
+### Key Implementations
+
+#### Skip Navigation
+
+- Added "Skip to main content" links on all pages
+- Hidden by default (`sr-only`), visible on focus
+- Allows keyboard users to bypass navigation
+
+#### Keyboard Navigation
+
+- **Escape key**: Closes all modals
+- **Enter key**: Activates buttons and links
+- **Tab navigation**: Logical focus order throughout
+- **Focus trapping**: In modals to keep focus within dialog
+
+#### ARIA Attributes
+
+- **Landmarks**: `role="navigation"`, `role="dialog"`, `role="contentinfo"`, `role="main"`, `role="section"`
+- **Labels**: `aria-label` for icons without text, `aria-labelledby` for form sections
+- **States**: `aria-expanded` for mobile menu, `aria-pressed` for toggle buttons
+- **Live regions**: `aria-live="polite"` for error announcements
+- **Busy states**: `aria-busy` for loading indicators
+- **Hidden decorative**: `aria-hidden="true"` for purely visual icons
+
+#### Focus Management
+
+- **Auto-focus**: Modal inputs focused when opened
+- **Focus trapping**: Tab cycles within modal boundaries
+- **Focus restoration**: Returns focus to trigger element after modal close
+- **Visible indicators**: `focus-visible` rings on all interactive elements
+
+#### Forms & Inputs
+
+- **Proper labeling**: All inputs have associated `<label>` elements
+- **Fieldsets**: Grouped related form controls with `<fieldset>` and `<legend>`
+- **Error states**: `aria-invalid` with `aria-describedby` pointing to error messages
+- **Disabled states**: `disabled` attribute on buttons during loading
+
+### Technical Patterns
+
+#### Focus Trap Implementation
+
+```tsx
+useEffect(() => {
+  const modal = modalRef.current;
+  if (!modal || !isOpen) return;
+
+  const focusableElements = modal.querySelectorAll<HTMLElement>(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+  );
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  const handleTab = (e: KeyboardEvent) => {
+    if (e.key !== "Tab") return;
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement?.focus();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement?.focus();
+      }
+    }
+  };
+
+  modal.addEventListener("keydown", handleTab);
+  return () => modal.removeEventListener("keydown", handleTab);
+}, [isOpen]);
+```
+
+#### Escape Key Handler
+
+```tsx
+useEffect(() => {
+  const handleEscape = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && isOpen) {
+      onClose();
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+  return () => document.removeEventListener("keydown", handleEscape);
+}, [isOpen, onClose]);
+```
+
+#### Skip-to-Content Link
+
+```tsx
+<a
+  href="#main-content"
+  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 rounded-lg bg-primary px-4 py-2 text-primary-foreground"
+>
+  Skip to main content
+</a>
+<main id="main-content" className="...">
+```
+
+### Key Learnings
+
+- **Accessibility is Part of UX**: Good accessibility = good UX for everyone
+- **Keyboard-First Design**: If it works with keyboard, it's likely accessible
+- **ARIA Completes the Picture**: Semantic HTML + ARIA = screen reader understanding
+- **Focus is Critical**: Users need to know where they are in the interface
+- **Test with Keyboard**: Try navigating without mouse to catch issues early
+- **Progressive Enhancement**: Build for keyboard, add mouse enhancements
+
+### Components Updated
+
+1. **Landing Page** (`src/app/page.tsx`)
+   - Skip navigation link
+   - Section landmarks
+   - ARIA labels on decorative icons
+   - Focus indicators on all CTAs
+
+2. **Navbar** (`src/components/navbar.tsx`)
+   - Proper navigation role
+   - Mobile menu with aria-expanded/controls
+   - List structure for links
+   - Body scroll lock when menu open
+
+3. **Login Page** (`src/app/login/page.tsx`)
+   - Form with proper labels
+   - Error announcements
+   - Loading state with aria-busy
+   - Focus management on mount
+
+4. **Add Bookmark Modal** (`src/components/dashboard/add-bookmark-modal.tsx`)
+   - Full focus trap
+   - Dialog role
+   - Folder selection with aria-pressed
+   - Character counter with aria-live
+
+5. **Add Folder Modal** (`src/components/dashboard/add-folder-modal.tsx`)
+   - Focus trap
+   - Color buttons with aria-label
+   - Live region for preview
+   - Form fieldsets
+
+### Testing Checklist
+
+- [x] Tab through entire interface - logical order
+- [x] Escape key closes modals
+- [x] Enter activates buttons
+- [x] Focus visible on all interactive elements
+- [x] All images have alt text or are decorative
+- [x] Forms have proper labels
+- [x] Error messages are announced
+- [x] Skip navigation works
+- [x] Mobile menu works with keyboard
+- [x] Loading states announced
+
+### Best Practices Established
+
+1. **Semantic HTML First**: Use proper elements (`<nav>`, `<main>`, `<section>`, `<button>`)
+2. **ARIA as Supplement**: Only use when semantic HTML isn't enough
+3. **Visible Focus States**: Always show keyboard focus
+4. **Error Accessibility**: Use `role="alert"` and `aria-live` for errors
+5. **Icon Accessibility**: Decorative icons get `aria-hidden`, interactive icons get `aria-label`
+6. **Form Validation**: Always provide `aria-describedby` for error messages
+7. **Modal Patterns**: Always implement focus trap and escape handler
+
+### Common Pitfalls Avoided
+
+- **Hidden text**: Don't use `display: none` for screen readers
+- **Fake buttons**: Don't use `<div>` with click handler - use `<button>`
+- **Missing labels**: Every input needs a label or `aria-label`
+- **Color-only indicators**: Don't rely on color alone to convey meaning
+- **No keyboard trap**: Don't prevent keyboard navigation
+
+---
+
+_Last Updated: 2026-01-31 4:20 PM (Asia/Jakarta, UTC+7:00)_
