@@ -1,14 +1,15 @@
 # Twitmark 📌
 
-Your personal X bookmark manager. Save tweets, read later, never lose gems.
+Your personal X bookmark manager. Save tweets, organize with folders, read later.
 
 ## 🌟 Overview
 
-Twitmark is a premium personal bookmark manager for X (Twitter) content, designed for power users who find the native X bookmarking system cluttered and hard to navigate. It focuses on:
+Twitmark is a premium personal bookmark manager for X (Twitter) content, designed for power users who find native X bookmarking system cluttered and hard to navigate. It focuses on:
 
-- **Organization** - Smart folder system for structured curation
+- **Organization** - Smart folder system for structured curation with color coding
 - **Intentionality** - Reading List feature for "read-it-later" workflow
-- **Superior Reading** - Optimized Article Mode with clean typography
+- **Visual Experience** - Clean, glassmorphic design with smooth animations
+- **Simplicity** - Paste X link, save, done. No scraping, no clutter.
 
 ## 🛠️ Tech Stack
 
@@ -39,7 +40,6 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - **ESLint 9+** - Code quality and consistency
 - **Vitest** - Unit testing framework
 - **Playwright** - E2E UI testing
-- **Cline/Cursor with MCP** - AI-powered development workflow
 
 ## 📁 Project Structure
 
@@ -54,27 +54,42 @@ twitmark/
 ├── src/
 │   ├── app/                 # Next.js App Router
 │   │   ├── actions/        # Server Actions
-│   │   │   └── bookmarks.ts
+│   │   │   ├── bookmarks.ts # Bookmark operations
+│   │   │   └── folders.ts  # Folder operations
+│   │   ├── auth/           # Auth routes
+│   │   │   └── callback/  # OAuth callback handler
 │   │   ├── dashboard/      # Dashboard pages
+│   │   │   ├── layout.tsx   # Dashboard shell
+│   │   │   └── page.tsx    # Main dashboard
 │   │   ├── globals.css      # Tailwind + custom utilities
 │   │   ├── layout.tsx       # Root layout with dark mode
+│   │   ├── login/          # Login page
 │   │   └── page.tsx        # Landing page
 │   ├── components/
 │   │   ├── dashboard/       # Dashboard components
+│   │   │   ├── add-bookmark-modal.tsx
+│   │   │   ├── add-folder-modal.tsx
+│   │   │   ├── bookmark-card.tsx
+│   │   │   ├── header.tsx
+│   │   │   └── sidebar.tsx
 │   │   ├── ui/             # Base UI components
 │   │   │   ├── aurora-background.tsx
 │   │   │   └── bento-grid.tsx
 │   │   ├── navbar.tsx       # Responsive navigation
 │   │   └── testimonials-marquee.tsx
-│   └── lib/               # Utility functions
-│       ├── supabase/
-│       │   ├── database.ts  # Database operations
-│       │   ├── server.ts    # Supabase server client
-│       │   └── client.ts    # Supabase client client
-│       └── types/          # TypeScript types
-│           └── index.ts
+│   ├── contexts/           # React contexts
+│   │   └── folder-context.tsx
+│   ├── lib/               # Utility functions
+│   │   ├── supabase/
+│   │   │   ├── database.ts  # Database operations
+│   │   │   ├── server.ts    # Supabase server client
+│   │   │   └── client.ts    # Supabase client client
+│   │   └── utils.ts       # General utilities
+│   └── types/             # TypeScript types
+│       └── index.ts
 ├── .clinerules             # AI development behavior
 ├── TODO.md                # MVP roadmap & progress
+├── context.md             # Project context & memory
 ├── supabase/              # Supabase configuration
 │   └── schema.sql         # SQL schema for setup
 └── package.json
@@ -110,25 +125,27 @@ npm run build
 npm start
 ```
 
-## 🧪 Testing
+## 🎯 Features
 
-### Unit Testing
+### Bookmark Management
 
-```bash
-npm run test
-```
+- **Save tweets** - Paste any X/Twitter URL to save
+- **Folder organization** - Create color-coded folders for categorization
+- **Reading List** - Mark tweets to read later with visual indicator
+- **Quick actions** - Delete, move, or toggle reading status on hover
 
-### E2E Testing
+### Dashboard
 
-```bash
-npm run test:e2e
-```
+- **Responsive design** - Works on desktop, tablet, and mobile
+- **Real-time updates** - Instant feedback on all actions
+- **Folder filtering** - View bookmarks by folder
+- **Reading List view** - Dedicated view for to-read items
 
-### Linting
+### Authentication
 
-```bash
-npm run lint
-```
+- **Google OAuth** - Secure sign-in with Google account
+- **Protected routes** - Dashboard requires authentication
+- **Session management** - Automatic token refresh
 
 ## 🔐 Environment Variables
 

@@ -26,8 +26,6 @@ We use a pyramid testing strategy to ensure reliability while maintaining high d
 
 - [ ] **Valid URL**: Test with standard `x.com` and `twitter.com` status links.
 - [ ] **Invalid URL**: Ensure to system rejects non-X links (e.g., Facebook, YouTube) with a clear error message.
-- [ ] **Article Detection**: Verify that links following to `/article/` pattern trigger "Article Reading Mode" UI.
-- [ ] **Metadata Fetching**: Ensure titles, descriptions, and images are correctly scraped from X Articles.
 
 ### 3.3 Dashboard & CRUD
 
@@ -38,7 +36,7 @@ We use a pyramid testing strategy to ensure reliability while maintaining high d
 
 ### 3.4 UI/UX & Responsiveness
 
-- [ ] **Modal Interactivity**: Verify "Article Modal" opens smoothly and "Open on X" button works.
+- [ ] **Tweet Rendering**: Verify `react-tweet` renders tweets correctly at natural dimensions.
 - [ ] **Mobile View**: Ensure to Bento Grid layout stacks correctly on small screens.
 - [ ] **Infinite Scroll**: Verify that more bookmarks load when user reaches bottom of page.
 

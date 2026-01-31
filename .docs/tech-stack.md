@@ -54,12 +54,12 @@
 
 - `id` (UUID, PRIMARY KEY)
 - `url` (TEXT, NOT NULL)
-- `content_type` (TEXT, DEFAULT 'tweet') - 'tweet' or 'article'
-- `metadata` (JSONB) - Tweet ID, OpenGraph data, etc.
 - `folder_id` (UUID, REFERENCES folders, ON DELETE SET NULL)
 - `user_id` (UUID, REFERENCES profiles, ON DELETE CASCADE)
 - `reading_list` (BOOLEAN, DEFAULT false)
 - `created_at` (TIMESTAMP)
+
+**Note**: `content_type` and `metadata` columns have been removed. The app now focuses exclusively on tweet bookmarking with `react-tweet` for rendering.
 
 ### Security
 

@@ -6,7 +6,7 @@ We follow a strict modular structure to ensure AI can locate files efficiently.
 
 ```text
 twitmark/
-├── .cursorrules          # AI Behavior filters
+├── .clinerules           # AI Behavior filters
 ├── context.md            # Main entry point
 ├── TODO.md               # Progress tracker
 ├── .docs/                # Specifications
@@ -15,32 +15,43 @@ twitmark/
 │   ├── architecture.md   # <--- You are here
 │   ├── design-system.md
 │   └── testing-plan.md
-├── .skills/              # Expertise logic
-├── .memory/              # Learning log
+├── .memory/              # Lessons learned
 ├── src/
-│   ├── app/              # Next.js 16 App Router
-│   │   ├── (auth)/       # Auth routes (login, callback)
-│   │   ├── dashboard/    # Main app (layout with sidebar)
-│   │   │   ├── folders/  # Folder-specific views
-│   │   │   ├── reading/  # Reading list view
-│   │   │   └── page.tsx  # Main feed
-│   │   ├── login/         # Login page (Google OAuth)
-│   │   ├── layout.tsx    # Root layout (Providers)
-│   │   └── page.tsx      # Landing page (Marketing)
-│   ├── actions/          # Next.js Server Actions
-│   │   └── bookmarks.ts  # Bookmark CRUD operations
-│   ├── components/       # React Components
-│   │   ├── ui/           # Shadcn/Magic UI primitives
-│   │   ├── dashboard/    # Sidebar, Header, BookmarkCard, AddBookmark
-│   │   ├── shared/       # Navbar, LoadingStates
-│   │   └── tweet/        # TweetCard (react-tweet)
-│   ├── lib/              # Shared logic (supabase/, utils.ts, types/)
-│   │   ├── supabase/     # Supabase client setup
-│   │   └── types/        # TypeScript type definitions
-│   └── styles/           # Global CSS and Tailwind configs
-├── public/               # Static assets (logos, images)
-├── supabase/             # Database schema & migrations
-└── tests/                # Unit & E2E Tests
+│   ├── app/               # Next.js 16 App Router
+│   │   ├── actions/      # Next.js Server Actions
+│   │   │   ├── bookmarks.ts # Bookmark CRUD operations
+│   │   │   └── folders.ts  # Folder CRUD operations
+│   │   ├── auth/         # Auth routes (callback)
+│   │   ├── dashboard/    # Main app (layout, page)
+│   │   ├── login/        # Login page (Google OAuth)
+│   │   ├── globals.css   # Tailwind + custom styles
+│   │   ├── layout.tsx    # Root layout
+│   │   └── page.tsx      # Landing page
+│   ├── components/     # React Components
+│   │   ├── dashboard/  # Dashboard-specific components
+│   │   │   ├── add-bookmark-modal.tsx
+│   │   │   ├── add-folder-modal.tsx
+│   │   │   ├── bookmark-card.tsx
+│   │   │   ├── header.tsx
+│   │   │   └── sidebar.tsx
+│   │   ├── ui/         # Shadcn/Magic UI primitives
+│   │   │   ├── aurora-background.tsx
+│   │   │   └── bento-grid.tsx
+│   │   ├── navbar.tsx   # Main navigation
+│   │   └── testimonials-marquee.tsx
+│   ├── contexts/       # React Context providers
+│   │   └── folder-context.tsx
+│   ├── lib/           # Shared logic
+│   │   ├── supabase/
+│   │   │   ├── client.ts
+│   │   │   ├── database.ts
+│   │   │   └── server.ts
+│   │   └── utils.ts
+│   └── types/         # TypeScript type definitions
+│       └── index.ts
+├── public/            # Static assets
+├── supabase/          # Database schema
+│   └── schema.sql
 ```
 
 ## 2. Component Design Pattern
@@ -50,21 +61,23 @@ twitmark/
   - **Interactive Modals (Magic UI)**.
   - **Forms (Server Actions)**.
   - **Real-time animations (Framer Motion)**.
+  - **Context Providers** (FolderContext).
   - **Colocation**: Keep components close to where they are used. If a component is only used in Dashboard, put it in `components/dashboard`.
 
 ## 3. Data Flow Strategy
 
-- **Input**: User pastes link in `AddBookmark` component.
+- **Input**: User pastes X/Twitter link in `AddBookmarkModal` component.
 - **Action**: Invokes a Server Action in `actions/bookmarks.ts`.
-- **Processing**: Server extracts tweet ID from URL.
+- **Validation**: Server validates URL format (x.com/twitter.com only).
 - **Persistence**: Saved to Supabase directly via Supabase client.
+- **Rendering**: `BookmarkCard` component uses `react-tweet` to render tweet embed.
 - **Update**: Server action revalidates path, triggering UI refresh.
 
 ## 4. State Management
 
 - **Server State**: Managed by Next.js 16 cache and Server Actions.
-- **UI State**: Local `useState` for modals and simple toggles.
-- **Persistent UI**: Use URL params for folder filtering (e.g., `/dashboard?folder=tech`).
+- **UI State**: Local `useState` for modals and React Context for folder state.
+- **Persistent UI**: URL state for folder filtering (`/dashboard?folder=id`).
 
 ## 5. Database Layer
 
@@ -88,3 +101,10 @@ twitmark/
 - **Policies**: Users can only CRUD their own data
 - **Auth**: Supabase Auth handles JWT verification
 - **Type Safety**: No `any` types, strict TypeScript mode
+
+## 8. Key Design Decisions
+
+- **No ORM**: Direct Supabase client access instead of Prisma/TypeORM
+- **Tweet-Only**: Removed article/metadata scraping - focuses on `react-tweet` embeds
+- **Natural Card Size**: Bookmark cards follow tweet dimensions, no fixed sizing
+- **Context for Folders**: React Context for folder state across dashboard components

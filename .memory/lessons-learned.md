@@ -179,10 +179,88 @@ export type Bookmark = {
 
 ### Remaining Work
 
-- [ ] Update folder system implementation to use Supabase
-- [ ] Implement folder management server actions
-- [ ] Update all components to use camelCase types consistently
+- [x] Update folder system implementation to use Supabase
+- [x] Implement folder management server actions
+- [x] Update all components to use camelCase types consistently
 
 ---
 
-_Last Updated: 2026-01-30 10:14 AM (Asia/Jakarta, UTC+7:00)_
+## 2026-01-31 | Bookmark Card Design Iteration
+
+### Problem Statement
+
+Initial bookmark card implementation attempted to force a fixed size (320px × 200px) with minimal tweet styling using custom CSS. This approach:
+
+1. Required complex CSS overrides for `react-tweet` classes
+2. Cropped tweet content (media, footer, actions)
+3. Created inconsistent card heights
+4. Overall poor visual result
+
+### Solution Applied
+
+Simplified to natural card sizing:
+
+1. **Removed fixed dimensions**: Cards now grow/shrink to fit tweet content
+2. **Eliminated custom CSS**: Let `react-tweet` render at its natural dimensions
+3. **Simplified structure**: Header bar + Tweet content + Footer bar
+4. **Cleaner layout**: Borders separate sections naturally
+
+### Key Learnings
+
+- **Don't Fight Library Defaults**: `react-tweet` is designed to display tweets naturally. Forcing custom styling creates complexity without clear benefit.
+- **Natural Size is Better UX**: Users expect tweet embeds to look like they do on Twitter. Custom sizing breaks that mental model.
+- **CSS Global Pollution**: Adding library-specific overrides to `globals.css` is fragile - library updates can break styles.
+- **Iterative Feedback**: If a design feels "ridiculous" or overly complex, step back and simplify.
+
+### Technical Details
+
+#### Before (Fixed Size + Custom CSS)
+
+```tsx
+// Fixed card dimensions
+className="h-[200px] w-[320px] flex-col overflow-hidden rounded-xl"
+
+// CSS in globals.css
+.min-tweet {
+  max-width: 280px !important;
+  max-height: 180px !important;
+}
+.min-tweet .react-tweet-media { display: none !important; }
+```
+
+#### After (Natural Size)
+
+```tsx
+// Natural dimensions
+className="flex flex-col overflow-hidden rounded-xl"
+
+// No custom CSS needed
+<Tweet id={tweetId} />
+```
+
+### CSS Cleanup
+
+Removed all `min-tweet` related classes from `globals.css`:
+
+- Max-width/max-height constraints
+- Media hiding
+- Footer/action button hiding
+- Verified badge hiding
+- Custom font sizes
+
+### Impact
+
+- **Better visual result**: Tweets display as expected
+- **Simpler code**: Removed ~30 lines of CSS
+- **More maintainable**: No fragile class overrides
+- **Better accessibility**: Users see full tweet content
+
+### Design Principles Applied
+
+1. **Content First**: Design around the content (tweets), not around arbitrary dimensions
+2. **Simplicity Over Control**: Don't force design patterns that fight the medium
+3. **Library Integration**: Trust the library's design decisions unless there's a clear reason to override
+
+---
+
+_Last Updated: 2026-01-31 3:25 PM (Asia/Jakarta, UTC+7:00)_

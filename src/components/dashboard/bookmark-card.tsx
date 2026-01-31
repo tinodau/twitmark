@@ -71,12 +71,13 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         <div className="pointer-events-auto flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
             onClick={handleToggleReadingList}
-            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-            title={
+            aria-label={
               bookmark.readingList
                 ? "Remove from Reading List"
                 : "Add to Reading List"
             }
+            aria-pressed={bookmark.readingList}
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             style={{
               color: bookmark.readingList
                 ? bookmark.folder?.color || "#1D9BF0"
@@ -84,17 +85,17 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
             }}
           >
             {bookmark.readingList ? (
-              <CheckCircle2 className="h-4 w-4" />
+              <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <BookOpen className="h-4 w-4" />
+              <BookOpen className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
           <button
             onClick={handleDelete}
-            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-            title="Delete bookmark"
+            aria-label="Delete bookmark"
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-destructive/50"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -118,20 +119,26 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
       </div>
 
       {/* Footer Bar */}
-      <div className="flex items-center justify-between border-t border-border/40 bg-muted/30 px-4 py-2">
+      <footer
+        className="flex items-center justify-between border-t border-border/40 bg-muted/30 px-4 py-2"
+        role="contentinfo"
+      >
         {bookmark.folder && (
           <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Folder className="h-3.5 w-3.5" />
+            <Folder className="h-3.5 w-3.5" aria-hidden="true" />
             {bookmark.folder.name}
           </span>
         )}
-        <span className="text-xs text-muted-foreground">
+        <time
+          className="text-xs text-muted-foreground"
+          dateTime={bookmark.createdAt.toISOString()}
+        >
           {bookmark.createdAt.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
           })}
-        </span>
-      </div>
+        </time>
+      </footer>
 
       {/* Action Button */}
       <div className="pointer-events-auto absolute bottom-3 right-3 opacity-0 transition-opacity group-hover:opacity-100">
@@ -140,10 +147,10 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1 rounded-lg bg-muted/50 px-2 py-1 text-xs font-medium transition-colors hover:bg-accent"
-          title="Open on X"
+          aria-label="Open tweet on X (opens in new tab)"
+          className="flex items-center gap-1 rounded-lg bg-muted/50 px-2 py-1 text-xs font-medium transition-colors hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
-          <ExternalLink className="h-3.5 w-3.5" />
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
         </a>
       </div>
 

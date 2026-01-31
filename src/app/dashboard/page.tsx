@@ -40,29 +40,26 @@ export default function DashboardPage() {
     }
   };
 
-  const loadFolderName = async (folderId: string) => {
-    const folder = await getFolderById(folderId);
-    if (folder) {
-      setFolderName(folder.name);
-    }
-  };
-
   useEffect(() => {
     mountedRef.current = true;
     (async () => {
       await fetchBookmarks();
+
+      // Load folder name when a folder is selected
+      if (selectedFolderId && selectedFolderId !== "reading-list") {
+        const folder = await getFolderById(selectedFolderId);
+        if (mountedRef.current && folder) {
+          setFolderName(folder.name);
+        }
+      } else {
+        if (mountedRef.current) {
+          setFolderName("");
+        }
+      }
     })();
     return () => {
       mountedRef.current = false;
     };
-  }, [selectedFolderId]);
-
-  useEffect(() => {
-    if (selectedFolderId && selectedFolderId !== "reading-list") {
-      loadFolderName(selectedFolderId);
-    } else {
-      setFolderName("");
-    }
   }, [selectedFolderId]);
 
   const handleModalClose = () => {
@@ -109,21 +106,46 @@ export default function DashboardPage() {
     }
   };
 
+  // Accessibility keyboard handler
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape" && isModalOpen) {
+      setIsModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          handleModalClose();
+        }
+      });
+    }
+    return () => {
+      document.removeEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          handleModalClose();
+        }
+      });
+    };
+  }, [isModalOpen]);
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6" onKeyDown={handleKeyDown}>
+      <header className="flex items-center justify-between" role="banner">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{getTitle()}</h1>
           <p className="text-muted-foreground">{getDescription()}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          aria-label="Add new bookmark"
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4" aria-hidden="true" />
           Add Bookmark
         </button>
-      </div>
+      </header>
 
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -135,7 +157,11 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : bookmarks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-16">
+        <div
+          className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-16"
+          role="status"
+          aria-live="polite"
+        >
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
             {selectedFolderId === "reading-list" ? (
               <BookOpen className="h-8 w-8 text-muted-foreground" />
@@ -149,7 +175,12 @@ export default function DashboardPage() {
           </p>
           <button
             onClick={handleEmptyStateClick}
-            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            aria-label={
+              selectedFolderId === "reading-list"
+                ? "Browse all bookmarks"
+                : "Add your first bookmark"
+            }
+            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             {selectedFolderId === "reading-list" ? (
               <>
@@ -165,7 +196,10 @@ export default function DashboardPage() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <section
+          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          aria-label="Bookmarks grid"
+        >
           {bookmarks.map((bookmark) => (
             <BookmarkCard
               key={bookmark.id}
@@ -173,7 +207,7 @@ export default function DashboardPage() {
               onUpdate={fetchBookmarks}
             />
           ))}
-        </div>
+        </section>
       )}
 
       <AddBookmarkModal isOpen={isModalOpen} onClose={handleModalClose} />

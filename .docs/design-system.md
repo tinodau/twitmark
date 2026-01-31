@@ -22,23 +22,19 @@
 
 - **Headings**: Sans-serif, Bold (Inter or Geist Sans).
 - **Body**: Sans-serif, Regular (Geist Sans).
-- **Reading Mode (Special)**: Switch to **Serif font** (e.g., Playfair Display or Charter) with increased line-height (1.8) and narrower container (65ch) for maximum readability.
 
 ## 4. Components & Motion (Magic UI / Framer Motion)
 
 - **Buttons**: Shiny effects on hover, slight scale-down on click (`0.95`).
-- **Modals**: "Zoom-in" spring animation from the center. Background overlay should be a heavy blur.
-- **Cards**: "Tilt" effect on hover using Framer Motion.
-- **Landing Page**: Use `AuroraBackground` or `AnimatedBeam` from Magic UI for the Hero section.
+- **Modals**: "Zoom-in" spring animation from center. Background overlay should be a heavy blur.
+- **Cards**: Hover lift effect using Framer Motion (`y: -4`).
+- **Landing Page**: Use `AuroraBackground` from Magic UI for Hero section.
 
 ## 5. Specific Feature UI
 
-- **Tweet Cards**: Maintain the familiar X layout but stripped of "Noise" (no reply/retweet counts unless hovered).
-- **Article Modal**:
-  - Full-screen or large-center modal.
-  - Large cover image from metadata.
-  - Clean typography focus.
-  - "Reading Progress Bar" at the top.
+- **Tweet Cards**: Use `react-tweet` at natural dimensions with familiar X layout.
+- **Card Structure**: Header bar (folder badge + actions) + Tweet embed + Footer bar (folder name + date).
+- **Reading List**: Distinct border/ring highlight for bookmarks marked as "To Read".
 
 ## 6. Icons
 
