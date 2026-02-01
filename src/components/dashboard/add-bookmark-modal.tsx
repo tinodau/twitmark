@@ -190,7 +190,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                   ref={firstFocusableRef}
                   onClick={onClose}
                   aria-label="Close modal"
-                  className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                 >
                   <X className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -295,7 +295,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                               }}
                               aria-pressed={isSelected}
                               disabled={isLoading}
-                              className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+                              className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer ${
                                 isSelected
                                   ? "border-primary bg-primary/10 text-primary"
                                   : "border-border hover:bg-accent"
@@ -360,7 +360,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                     disabled={isLoading || isFoldersLoading}
                   >
                     Cancel
@@ -368,7 +368,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                   <button
                     ref={lastFocusableRef}
                     type="submit"
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                     disabled={isLoading || isFoldersLoading || !url}
                     aria-busy={isLoading}
                   >

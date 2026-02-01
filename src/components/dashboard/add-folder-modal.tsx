@@ -175,7 +175,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                     ref={firstFocusableRef}
                     onClick={onClose}
                     aria-label="Close modal"
-                    className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
                   >
                     <X className="w-4 h-4 text-white/60" aria-hidden="true" />
                   </button>
@@ -230,7 +230,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                             onClick={() => setColor(c)}
                             aria-pressed={color === c}
                             aria-label={`Color ${c}`}
-                            className={`w-9 h-9 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-white/50 ${
+                            className={`w-9 h-9 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer ${
                               color === c
                                 ? "ring-2 ring-white ring-offset-2 ring-offset-[rgba(18,18,18,0.8)] scale-110"
                                 : "hover:scale-110"
@@ -275,7 +275,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                      className="flex-1 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 hover:cursor-pointer text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                     >
                       Cancel
                     </button>
@@ -283,7 +283,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                       ref={lastFocusableRef}
                       type="submit"
                       disabled={isSubmitting || !name.trim()}
-                      className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                      className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 hover:cursor-pointer focus:ring-blue-500/50"
                       aria-busy={isSubmitting}
                     >
                       {isSubmitting ? "Creating..." : "Create Folder"}

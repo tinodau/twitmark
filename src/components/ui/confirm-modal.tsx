@@ -168,7 +168,7 @@ export function ConfirmModal({
               onClick={isLoading ? undefined : onClose}
               aria-label="Close modal"
               disabled={isLoading}
-              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -180,7 +180,7 @@ export function ConfirmModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
             >
               {cancelText}
             </button>
@@ -189,7 +189,7 @@ export function ConfirmModal({
               type="button"
               onClick={onConfirm}
               disabled={isLoading}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer ${
                 variant === "danger"
                   ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                   : "bg-primary hover:bg-primary/90 text-primary-foreground"
