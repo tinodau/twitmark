@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   Folder,
   Plus,
@@ -11,12 +11,12 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-} from "lucide-react";
-import { getFolders } from "@/app/actions/folders";
-import type { Folder as FolderType } from "@/types";
-import { AddFolderModal } from "./add-folder-modal";
-import { useFolder } from "@/contexts/folder-context";
-import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+} from "lucide-react"
+import { getFolders } from "@/app/actions/folders"
+import type { Folder as FolderType } from "@/types"
+import { AddFolderModal } from "./add-folder-modal"
+import { useFolder } from "@/contexts/folder-context"
+import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 export function Sidebar() {
   const {
@@ -28,28 +28,28 @@ export function Sidebar() {
     setIsEditModalOpen,
     isAddModalOpen,
     setIsAddModalOpen,
-  } = useFolder();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [folders, setFolders] = useState<FolderType[]>([]);
+  } = useFolder()
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [folders, setFolders] = useState<FolderType[]>([])
 
   async function loadFolders() {
-    const data = await getFolders();
-    setFolders(data);
+    const data = await getFolders()
+    setFolders(data)
   }
 
   useEffect(() => {
-    loadFolders();
+    loadFolders()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAddModalOpen, isEditModalOpen]);
+  }, [isAddModalOpen, isEditModalOpen])
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", id: null },
     { icon: BookOpen, label: "Reading List", id: "reading-list" },
-  ];
+  ]
 
   return (
     <aside
-      className={`border-r border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-all duration-300 ${
+      className={`border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 border-r backdrop-blur transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
       }`}
       aria-label="Main navigation sidebar"
@@ -68,7 +68,7 @@ export function Sidebar() {
                   selectedFolderId === item.id
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                } focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer`}
+                } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
               >
                 <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {!isCollapsed && <span>{item.label}</span>}
@@ -80,13 +80,11 @@ export function Sidebar() {
           {!isCollapsed && (
             <div className="mt-6 px-3">
               <div className="mb-2 flex items-center justify-between px-3">
-                <h2 className="text-xs font-semibold uppercase text-muted-foreground">
-                  Folders
-                </h2>
+                <h2 className="text-muted-foreground text-xs font-semibold uppercase">Folders</h2>
                 <button
                   onClick={() => setIsAddModalOpen(true)}
                   aria-label="Add new folder"
-                  className="text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg p-1 cursor-pointer"
+                  className="text-muted-foreground hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
                 >
                   <Plus className="h-3 w-3" aria-hidden="true" />
                 </button>
@@ -99,20 +97,20 @@ export function Sidebar() {
                         <button
                           onClick={() => setSelectedFolderId(folder.id)}
                           aria-pressed={selectedFolderId === folder.id}
-                          className={`flex-1 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          className={`flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                             selectedFolderId === folder.id
                               ? "bg-accent text-accent-foreground"
                               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                          } focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer`}
+                          } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
                         >
                           <div
-                            className="h-2 w-2 rounded-full shrink-0"
+                            className="h-2 w-2 shrink-0 rounded-full"
                             style={{ backgroundColor: folder.color }}
                             aria-hidden="true"
                           />
                           <span className="truncate">{folder.name}</span>
                           <span
-                            className="ml-auto text-xs text-muted-foreground"
+                            className="text-muted-foreground ml-auto text-xs"
                             aria-label={`${folder.bookmarkCount || 0} bookmarks`}
                           >
                             {folder.bookmarkCount || 0}
@@ -121,20 +119,17 @@ export function Sidebar() {
                         <DropdownMenu
                           trigger={
                             <button
-                              className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                              className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
                               aria-label="Folder options"
                             >
-                              <MoreVertical
-                                className="h-4 w-4"
-                                aria-hidden="true"
-                              />
+                              <MoreVertical className="h-4 w-4" aria-hidden="true" />
                             </button>
                           }
                         >
                           <DropdownMenuItem
                             onClick={() => {
-                              setEditingFolder(folder);
-                              setIsEditModalOpen(true);
+                              setEditingFolder(folder)
+                              setIsEditModalOpen(true)
                             }}
                             icon={<Edit2 className="h-4 w-4" />}
                           >
@@ -142,8 +137,8 @@ export function Sidebar() {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => {
-                              setEditingFolder(folder);
-                              setIsEditModalOpen(true);
+                              setEditingFolder(folder)
+                              setIsEditModalOpen(true)
                             }}
                             icon={<Trash2 className="h-4 w-4" />}
                             variant="danger"
@@ -156,7 +151,7 @@ export function Sidebar() {
                   ))}
                 </ul>
               ) : (
-                <p className="px-3 text-xs text-muted-foreground" role="status">
+                <p className="text-muted-foreground px-3 text-xs" role="status">
                   No folders yet. Create one to organize bookmarks!
                 </p>
               )}
@@ -165,12 +160,12 @@ export function Sidebar() {
         </div>
 
         {/* Collapse Toggle */}
-        <div className="border-t border-border/40 p-3">
+        <div className="border-border/40 border-t p-3">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             aria-expanded={!isCollapsed}
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             {isCollapsed ? (
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -184,5 +179,5 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
-  );
+  )
 }

@@ -1,60 +1,60 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { motion } from "framer-motion";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
+import { motion } from "framer-motion"
+import { ArrowLeft, Loader2 } from "lucide-react"
 
 export default function LoginPage() {
-  const router = useRouter();
-  const supabase = createClient();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter()
+  const supabase = createClient()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const submitButtonRef = useRef<HTMLButtonElement>(null)
 
   // Focus management on mount
   useEffect(() => {
     setTimeout(() => {
-      submitButtonRef.current?.focus();
-    }, 100);
-  }, []);
+      submitButtonRef.current?.focus()
+    }, 100)
+  }, [])
 
   const handleGoogleSignIn = async () => {
-    setError("");
-    setIsLoading(true);
+    setError("")
+    setIsLoading(true)
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
         },
-      });
+      })
 
       if (error) {
-        console.error("Error signing in:", error);
-        setError("Error signing in. Please try again.");
+        console.error("Error signing in:", error)
+        setError("Error signing in. Please try again.")
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("An unexpected error occurred. Please try again.");
+      console.error("Error:", error)
+      setError("An unexpected error occurred. Please try again.")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <>
       {/* Skip to main content link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 rounded-lg bg-primary px-4 py-2 text-primary-foreground"
+        className="bg-primary text-primary-foreground sr-only z-50 rounded-lg px-4 py-2 focus:not-sr-only focus:absolute focus:top-4 focus:left-4"
       >
         Skip to main content
       </a>
       <main
         id="main-content"
-        className="flex min-h-screen items-center justify-center bg-background"
+        className="bg-background flex min-h-screen items-center justify-center"
       >
         <section className="w-full max-w-md px-4">
           <motion.div
@@ -66,7 +66,7 @@ export default function LoginPage() {
             {/* Back Button */}
             <button
               onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg px-2 py-1"
+              className="text-muted-foreground hover:text-foreground focus:ring-primary/50 flex items-center gap-2 rounded-lg px-2 py-1 text-sm transition-colors focus:ring-2 focus:outline-none"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Back to home
@@ -75,28 +75,21 @@ export default function LoginPage() {
             {/* Header */}
             <div className="text-center">
               <div
-                className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary"
+                className="bg-primary mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
                 aria-hidden="true"
               >
-                <span className="text-2xl font-bold text-primary-foreground">
-                  T
-                </span>
+                <span className="text-primary-foreground text-2xl font-bold">T</span>
               </div>
-              <h1
-                id="login-title"
-                className="text-3xl font-bold tracking-tight"
-              >
+              <h1 id="login-title" className="text-3xl font-bold tracking-tight">
                 Welcome back
               </h1>
-              <p className="mt-2 text-muted-foreground">
-                Sign in to access your bookmarks
-              </p>
+              <p className="text-muted-foreground mt-2">Sign in to access your bookmarks</p>
             </div>
 
             {/* Error Message */}
             {error && (
               <div
-                className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive"
+                className="bg-destructive/10 border-destructive/20 text-destructive rounded-lg border px-4 py-3 text-sm"
                 role="alert"
                 aria-live="polite"
               >
@@ -107,8 +100,8 @@ export default function LoginPage() {
             {/* Sign In Form */}
             <form
               onSubmit={(e) => {
-                e.preventDefault();
-                handleGoogleSignIn();
+                e.preventDefault()
+                handleGoogleSignIn()
               }}
               noValidate
             >
@@ -117,7 +110,7 @@ export default function LoginPage() {
                   ref={submitButtonRef}
                   type="submit"
                   disabled={isLoading}
-                  className="flex w-full items-center justify-center gap-3 rounded-lg border border-border/40 bg-background px-4 py-3 text-sm font-medium transition-all hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="border-border/40 bg-background hover:bg-accent focus:ring-primary/50 flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-all focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   aria-busy={isLoading}
                 >
                   {isLoading ? (
@@ -127,11 +120,7 @@ export default function LoginPage() {
                     </>
                   ) : (
                     <>
-                      <svg
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
+                      <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                         <path
                           fill="#4285F4"
                           d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -157,13 +146,12 @@ export default function LoginPage() {
             </form>
 
             {/* Footer */}
-            <p className="text-center text-sm text-muted-foreground">
-              By signing in, you agree to our Terms of Service and Privacy
-              Policy
+            <p className="text-muted-foreground text-center text-sm">
+              By signing in, you agree to our Terms of Service and Privacy Policy
             </p>
           </motion.div>
         </section>
       </main>
     </>
-  );
+  )
 }

@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, XCircle, AlertCircle, Info, X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion"
+import { CheckCircle, XCircle, AlertCircle, Info, X } from "lucide-react"
+import { useEffect, useRef } from "react"
 
-export type ToastType = "success" | "error" | "info" | "warning";
+export type ToastType = "success" | "error" | "info" | "warning"
 
 export interface Toast {
-  id: string;
-  type: ToastType;
-  title: string;
-  description?: string;
-  duration?: number;
+  id: string
+  type: ToastType
+  title: string
+  description?: string
+  duration?: number
 }
 
 interface ToastProps {
-  toast: Toast;
-  onClose: (id: string) => void;
+  toast: Toast
+  onClose: (id: string) => void
 }
 
 const toastIcons = {
@@ -24,32 +24,32 @@ const toastIcons = {
   error: <XCircle className="h-5 w-5" />,
   info: <Info className="h-5 w-5" />,
   warning: <AlertCircle className="h-5 w-5" />,
-};
+}
 
 const toastColors = {
   success: "bg-green-500/10 border-green-500/20 text-green-400",
   error: "bg-red-500/10 border-red-500/20 text-red-400",
   info: "bg-blue-500/10 border-blue-500/20 text-blue-400",
   warning: "bg-yellow-500/10 border-yellow-500/20 text-yellow-400",
-};
+}
 
 function ToastItem({ toast, onClose }: ToastProps) {
-  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   useEffect(() => {
-    const duration = toast.duration ?? 4000;
+    const duration = toast.duration ?? 4000
     if (duration > 0) {
       timerRef.current = setTimeout(() => {
-        onClose(toast.id);
-      }, duration);
+        onClose(toast.id)
+      }, duration)
     }
 
     return () => {
       if (timerRef.current) {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
       }
-    };
-  }, [toast.id, toast.duration, onClose]);
+    }
+  }, [toast.id, toast.duration, onClose])
 
   return (
     <motion.div
@@ -64,36 +64,34 @@ function ToastItem({ toast, onClose }: ToastProps) {
       <div className="flex-shrink-0 pt-0.5">{toastIcons[toast.type]}</div>
 
       <div className="flex flex-1 flex-col gap-1">
-        <p className="font-semibold text-sm">{toast.title}</p>
-        {toast.description && (
-          <p className="text-sm opacity-90">{toast.description}</p>
-        )}
+        <p className="text-sm font-semibold">{toast.title}</p>
+        {toast.description && <p className="text-sm opacity-90">{toast.description}</p>}
       </div>
 
       <button
         onClick={() => onClose(toast.id)}
-        className="flex-shrink-0 rounded-lg p-1 transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+        className="focus:ring-primary/50 flex-shrink-0 cursor-pointer rounded-lg p-1 transition-opacity hover:opacity-80 focus:ring-2 focus:outline-none"
         aria-label="Close notification"
       >
         <X className="h-4 w-4" />
       </button>
     </motion.div>
-  );
+  )
 }
 
 interface ToastContainerProps {
-  toasts: Toast[];
-  onDismiss: (id: string) => void;
+  toasts: Toast[]
+  onDismiss: (id: string) => void
 }
 
 export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   return (
-    <div className="fixed right-4 top-4 z-[100] flex flex-col gap-2 sm:right-6 sm:top-6">
+    <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 sm:top-6 sm:right-6">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <ToastItem key={toast.id} toast={toast} onClose={onDismiss} />
         ))}
       </AnimatePresence>
     </div>
-  );
+  )
 }

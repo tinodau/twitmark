@@ -135,7 +135,7 @@ const bookmark = await prisma.bookmark.create({
     userId: user.id,
     // ...
   },
-});
+})
 ```
 
 **After (Supabase)**:
@@ -149,7 +149,7 @@ const { data: bookmark, error } = await supabase
     // ...
   })
   .select()
-  .single();
+  .single()
 ```
 
 #### Type Definitions
@@ -159,10 +159,10 @@ const { data: bookmark, error } = await supabase
 ```typescript
 // Auto-generated from schema.prisma
 type Bookmark = {
-  id: string;
-  url: string;
+  id: string
+  url: string
   // ...
-};
+}
 ```
 
 **After (Custom)**:
@@ -170,11 +170,11 @@ type Bookmark = {
 ```typescript
 // src/types/index.ts
 export type Bookmark = {
-  id: string;
-  url: string;
-  userId: string;
+  id: string
+  url: string
+  userId: string
   // ...
-};
+}
 ```
 
 ### Remaining Work
@@ -317,34 +317,34 @@ Implemented comprehensive accessibility features across all components to meet W
 
 ```tsx
 useEffect(() => {
-  const modal = modalRef.current;
-  if (!modal || !isOpen) return;
+  const modal = modalRef.current
+  if (!modal || !isOpen) return
 
   const focusableElements = modal.querySelectorAll<HTMLElement>(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-  );
-  const firstElement = focusableElements[0];
-  const lastElement = focusableElements[focusableElements.length - 1];
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )
+  const firstElement = focusableElements[0]
+  const lastElement = focusableElements[focusableElements.length - 1]
 
   const handleTab = (e: KeyboardEvent) => {
-    if (e.key !== "Tab") return;
+    if (e.key !== "Tab") return
 
     if (e.shiftKey) {
       if (document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement?.focus();
+        e.preventDefault()
+        lastElement?.focus()
       }
     } else {
       if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement?.focus();
+        e.preventDefault()
+        firstElement?.focus()
       }
     }
-  };
+  }
 
-  modal.addEventListener("keydown", handleTab);
-  return () => modal.removeEventListener("keydown", handleTab);
-}, [isOpen]);
+  modal.addEventListener("keydown", handleTab)
+  return () => modal.removeEventListener("keydown", handleTab)
+}, [isOpen])
 ```
 
 #### Escape Key Handler
@@ -353,12 +353,12 @@ useEffect(() => {
 useEffect(() => {
   const handleEscape = (e: KeyboardEvent) => {
     if (e.key === "Escape" && isOpen) {
-      onClose();
+      onClose()
     }
-  };
-  document.addEventListener("keydown", handleEscape);
-  return () => document.removeEventListener("keydown", handleEscape);
-}, [isOpen, onClose]);
+  }
+  document.addEventListener("keydown", handleEscape)
+  return () => document.removeEventListener("keydown", handleEscape)
+}, [isOpen, onClose])
 ```
 
 #### Skip-to-Content Link

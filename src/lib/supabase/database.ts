@@ -1,71 +1,71 @@
-import { createClient } from "@/lib/supabase/server";
-import type { BookmarkWithFolders } from "@/types";
+import { createClient } from "@/lib/supabase/server"
+import type { BookmarkWithFolders } from "@/types"
 
 // Database types (snake_case from Supabase)
 type Bookmark = {
-  id: string;
-  url: string;
-  content_type: "tweet" | "article";
-  metadata: Record<string, unknown> | null;
-  user_id: string;
-  reading_list: boolean;
-  created_at: string;
+  id: string
+  url: string
+  content_type: "tweet" | "article"
+  metadata: Record<string, unknown> | null
+  user_id: string
+  reading_list: boolean
+  created_at: string
   bookmark_folders?: Array<{
     folders: {
-      name: string;
-      color: string;
-    };
-  }>;
-};
+      name: string
+      color: string
+    }
+  }>
+}
 
 type BookmarkFolder = {
-  bookmark_id: string;
-  folder_id: string;
-  created_at: string;
-};
+  bookmark_id: string
+  folder_id: string
+  created_at: string
+}
 
 type Folder = {
-  id: string;
-  user_id: string;
-  name: string;
-  color: string;
-  created_at: string;
-};
+  id: string
+  user_id: string
+  name: string
+  color: string
+  created_at: string
+}
 
 // Ensure user has a profile
 async function ensureUserProfile(userId: string, email: string) {
-  const supabase = await createClient();
+  const supabase = await createClient()
 
   // Check if profile exists
   const { data: existingProfile } = await supabase
     .from("profiles")
     .select("id")
     .eq("id", userId)
-    .single();
+    .single()
 
   // If profile doesn't exist, create it
   if (!existingProfile) {
     await supabase.from("profiles").insert({
       id: userId,
       email: email,
-    });
+    })
   }
 }
 
 // Validate X/Twitter URL
 export function isValidTwitterUrl(url: string): boolean {
   try {
-    const parsedUrl = new URL(url);
-    const hostname = parsedUrl.hostname.toLowerCase();
+    const parsedUrl = new URL(url)
+    const hostname = parsedUrl.hostname.toLowerCase()
     return (
       hostname === "x.com" ||
       hostname === "www.x.com" ||
       hostname === "twitter.com" ||
       hostname === "www.twitter.com" ||
       hostname === "mobile.twitter.com"
-    );
+    )
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -76,71 +76,64 @@ export function extractTweetId(url: string): string | null {
     /x\.com\/\w+\/status\/(\d+)/, // Tweet ID
     /twitter\.com\/\w+\/status\/(\d+)/,
     /mobile\.twitter\.com\/\w+\/status\/(\d+)/,
-  ];
+  ]
 
   for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
+    const match = url.match(pattern)
+    if (match) return match[1]
   }
-  return null;
+  return null
 }
 
 // Fetch tweet metadata using Twitter oEmbed API
 async function fetchTweetMetadata(url: string) {
   try {
     const response = await fetch(
-      `https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`,
-    );
+      `https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`
+    )
     if (!response.ok) {
-      return null;
+      return null
     }
-    const data = await response.json();
-    return data;
+    const data = await response.json()
+    return data
   } catch (error) {
-    return null;
+    return null
   }
 }
 
 // Create a new bookmark
-export async function createBookmark(
-  url: string,
-  folderIds: string[] | null,
-  title?: string,
-) {
-  const supabase = await createClient();
+export async function createBookmark(url: string, folderIds: string[] | null, title?: string) {
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   // Ensure user profile exists
-  await ensureUserProfile(user.id, user.email || "");
+  await ensureUserProfile(user.id, user.email || "")
 
   if (!isValidTwitterUrl(url)) {
-    return { error: "Invalid URL. Only X/Twitter URLs are allowed." };
+    return { error: "Invalid URL. Only X/Twitter URLs are allowed." }
   }
 
-  const tweetId = extractTweetId(url);
+  const tweetId = extractTweetId(url)
 
   // Fetch tweet metadata (raw oEmbed response)
-  const tweetMetadata = await fetchTweetMetadata(url);
+  const tweetMetadata = await fetchTweetMetadata(url)
 
   // Determine title: use provided title, or default to "<author>'s tweet"
   const bookmarkTitle =
-    title ||
-    (tweetMetadata?.author_name
-      ? `${tweetMetadata.author_name}'s tweet`
-      : "Tweet");
+    title || (tweetMetadata?.author_name ? `${tweetMetadata.author_name}'s tweet` : "Tweet")
 
   const metadata: Record<string, unknown> = {
     tweetId,
     title: bookmarkTitle,
-  };
+  }
   if (tweetMetadata) {
-    Object.assign(metadata, tweetMetadata);
+    Object.assign(metadata, tweetMetadata)
   }
 
   // Insert bookmark
@@ -153,11 +146,11 @@ export async function createBookmark(
       metadata,
     })
     .select()
-    .single();
+    .single()
 
   if (error) {
-    console.error("Error creating bookmark:", error);
-    return { error: "Failed to create bookmark" };
+    console.error("Error creating bookmark:", error)
+    return { error: "Failed to create bookmark" }
   }
 
   // Add bookmark to folders if provided
@@ -165,58 +158,49 @@ export async function createBookmark(
     const bookmarkFolders = folderIds.map((folderId) => ({
       bookmark_id: data.id,
       folder_id: folderId,
-    }));
+    }))
 
-    const { error: folderError } = await supabase
-      .from("bookmark_folders")
-      .insert(bookmarkFolders);
+    const { error: folderError } = await supabase.from("bookmark_folders").insert(bookmarkFolders)
 
     if (folderError) {
-      console.error("Error adding bookmark to folders:", folderError);
+      console.error("Error adding bookmark to folders:", folderError)
       // Don't fail the entire operation if folder assignment fails
     }
   }
 
-  return { success: true, bookmark: data };
+  return { success: true, bookmark: data }
 }
 
 // Delete a bookmark
 export async function deleteBookmark(id: string) {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
-  const { error } = await supabase
-    .from("bookmarks")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
+  const { error } = await supabase.from("bookmarks").delete().eq("id", id).eq("user_id", user.id)
 
   if (error) {
-    console.error("Error deleting bookmark:", error);
-    return { error: "Failed to delete bookmark" };
+    console.error("Error deleting bookmark:", error)
+    return { error: "Failed to delete bookmark" }
   }
 
-  return { success: true };
+  return { success: true }
 }
 
 // Add bookmark to folders
-export async function addBookmarkToFolders(
-  bookmarkId: string,
-  folderIds: string[],
-) {
-  const supabase = await createClient();
+export async function addBookmarkToFolders(bookmarkId: string, folderIds: string[]) {
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   // Verify bookmark belongs to user
@@ -225,67 +209,62 @@ export async function addBookmarkToFolders(
     .select("id")
     .eq("id", bookmarkId)
     .eq("user_id", user.id)
-    .single();
+    .single()
 
   if (!bookmark) {
-    return { error: "Bookmark not found" };
+    return { error: "Bookmark not found" }
   }
 
   // Add bookmark to folders
   const bookmarkFolders = folderIds.map((folderId) => ({
     bookmark_id: bookmarkId,
     folder_id: folderId,
-  }));
+  }))
 
-  const { error } = await supabase
-    .from("bookmark_folders")
-    .insert(bookmarkFolders);
+  const { error } = await supabase.from("bookmark_folders").insert(bookmarkFolders)
 
   if (error) {
-    console.error("Error adding bookmark to folders:", error);
-    return { error: "Failed to add bookmark to folders" };
+    console.error("Error adding bookmark to folders:", error)
+    return { error: "Failed to add bookmark to folders" }
   }
 
-  return { success: true };
+  return { success: true }
 }
 
 // Remove bookmark from folders
-export async function removeBookmarkFromFolders(
-  bookmarkId: string,
-  folderIds: string[],
-) {
-  const supabase = await createClient();
+export async function removeBookmarkFromFolders(bookmarkId: string, folderIds: string[]) {
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   const { error } = await supabase
     .from("bookmark_folders")
     .delete()
     .eq("bookmark_id", bookmarkId)
-    .in("folder_id", folderIds);
+    .in("folder_id", folderIds)
 
   if (error) {
-    console.error("Error removing bookmark from folders:", error);
-    return { error: "Failed to remove bookmark from folders" };
+    console.error("Error removing bookmark from folders:", error)
+    return { error: "Failed to remove bookmark from folders" }
   }
 
-  return { success: true };
+  return { success: true }
 }
 
 // Toggle reading list
 export async function toggleReadingList(bookmarkId: string) {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   // Get current value
@@ -294,35 +273,35 @@ export async function toggleReadingList(bookmarkId: string) {
     .select("reading_list")
     .eq("id", bookmarkId)
     .eq("user_id", user.id)
-    .single();
+    .single()
 
   if (!current) {
-    return { error: "Bookmark not found" };
+    return { error: "Bookmark not found" }
   }
 
   const { error } = await supabase
     .from("bookmarks")
     .update({ reading_list: !current.reading_list })
     .eq("id", bookmarkId)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
 
   if (error) {
-    console.error("Error toggling reading list:", error);
-    return { error: "Failed to update reading list" };
+    console.error("Error toggling reading list:", error)
+    return { error: "Failed to update reading list" }
   }
 
-  return { success: true, readingList: !current.reading_list };
+  return { success: true, readingList: !current.reading_list }
 }
 
 // Get all bookmarks for user
 export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return [];
+    return []
   }
 
   const { data, error } = await supabase
@@ -337,14 +316,14 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
           color
         )
       )
-    `,
+    `
     )
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("Error fetching bookmarks:", error);
-    return [];
+    console.error("Error fetching bookmarks:", error)
+    return []
   }
 
   // Transform to camelCase for components
@@ -362,24 +341,20 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
           id: bf.folders.id,
           name: bf.folders.name,
           color: bf.folders.color,
-        }),
+        })
       ) || [],
-  }));
+  }))
 }
 
 // Update a folder
-export async function updateFolder(
-  folderId: string,
-  name: string,
-  color: string,
-) {
-  const supabase = await createClient();
+export async function updateFolder(folderId: string, name: string, color: string) {
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   // Verify folder belongs to user
@@ -388,10 +363,10 @@ export async function updateFolder(
     .select("user_id")
     .eq("id", folderId)
     .eq("user_id", user.id)
-    .single();
+    .single()
 
   if (!folder) {
-    return { error: "Folder not found" };
+    return { error: "Folder not found" }
   }
 
   const { error } = await supabase
@@ -401,25 +376,25 @@ export async function updateFolder(
       color,
     })
     .eq("id", folderId)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
 
   if (error) {
-    console.error("Error updating folder:", error);
-    return { error: "Failed to update folder" };
+    console.error("Error updating folder:", error)
+    return { error: "Failed to update folder" }
   }
 
-  return { success: true };
+  return { success: true }
 }
 
 // Delete a folder
 export async function deleteFolder(folderId: string) {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: "Unauthorized" };
+    return { error: "Unauthorized" }
   }
 
   // Verify folder belongs to user
@@ -428,22 +403,22 @@ export async function deleteFolder(folderId: string) {
     .select("user_id")
     .eq("id", folderId)
     .eq("user_id", user.id)
-    .single();
+    .single()
 
   if (!folder) {
-    return { error: "Folder not found" };
+    return { error: "Folder not found" }
   }
 
   const { error } = await supabase
     .from("folders")
     .delete()
     .eq("id", folderId)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
 
   if (error) {
-    console.error("Error deleting folder:", error);
-    return { error: "Failed to delete folder" };
+    console.error("Error deleting folder:", error)
+    return { error: "Failed to delete folder" }
   }
 
-  return { success: true };
+  return { success: true }
 }

@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Trash2 } from "lucide-react";
-import { updateFolder, deleteFolder } from "@/app/actions/folders";
-import { useToast } from "@/contexts/toast-context";
-import type { Folder as FolderType } from "@/types";
-import { ConfirmModal } from "@/components/ui/confirm-modal";
+import { useState, useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
+import { motion, AnimatePresence } from "framer-motion"
+import { X, Check, Trash2 } from "lucide-react"
+import { updateFolder, deleteFolder } from "@/app/actions/folders"
+import { useToast } from "@/contexts/toast-context"
+import type { Folder as FolderType } from "@/types"
+import { ConfirmModal } from "@/components/ui/confirm-modal"
 
 interface EditFolderModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  folder: FolderType | null;
+  isOpen: boolean
+  onClose: () => void
+  folder: FolderType | null
 }
 
 const PRESET_COLORS = [
@@ -24,72 +24,68 @@ const PRESET_COLORS = [
   "#EF4444", // Red
   "#06B6D4", // Cyan
   "#F97316", // Orange
-];
+]
 
-export function EditFolderModal({
-  isOpen,
-  onClose,
-  folder,
-}: EditFolderModalProps) {
-  const [name, setName] = useState("");
-  const [color, setColor] = useState("#1D9BF0");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { success, error: showError } = useToast();
-  const modalRef = useRef<HTMLDivElement>(null);
-  const nameInputRef = useRef<HTMLInputElement>(null);
-  const firstFocusableRef = useRef<HTMLButtonElement>(null);
-  const lastFocusableRef = useRef<HTMLButtonElement>(null);
+export function EditFolderModal({ isOpen, onClose, folder }: EditFolderModalProps) {
+  const [name, setName] = useState("")
+  const [color, setColor] = useState("#1D9BF0")
+  const [isLoading, setIsLoading] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const { success, error: showError } = useToast()
+  const modalRef = useRef<HTMLDivElement>(null)
+  const nameInputRef = useRef<HTMLInputElement>(null)
+  const firstFocusableRef = useRef<HTMLButtonElement>(null)
+  const lastFocusableRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (isOpen) {
       if (folder) {
-        setName(folder.name);
-        setColor(folder.color);
+        setName(folder.name)
+        setColor(folder.color)
       }
       setTimeout(() => {
-        nameInputRef.current?.focus();
-      }, 100);
+        nameInputRef.current?.focus()
+      }, 100)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, folder]);
+  }, [isOpen, folder])
 
   const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!folder) return;
+    e.preventDefault()
+    if (!folder) return
 
-    setIsLoading(true);
-    const result = await updateFolder(folder.id, name, color);
+    setIsLoading(true)
+    const result = await updateFolder(folder.id, name, color)
 
     if ("error" in result) {
-      showError("Failed to update folder", result.error);
-      setIsLoading(false);
+      showError("Failed to update folder", result.error)
+      setIsLoading(false)
     } else {
-      success("Folder updated");
-      setIsLoading(false);
-      onClose();
+      success("Folder updated")
+      setIsLoading(false)
+      onClose()
     }
-  };
+  }
 
   const handleDelete = async () => {
-    if (!folder) return;
+    if (!folder) return
 
-    setIsDeleting(true);
-    const result = await deleteFolder(folder.id);
+    setIsDeleting(true)
+    const result = await deleteFolder(folder.id)
 
     if ("error" in result) {
-      showError("Failed to delete folder", result.error);
-      setIsDeleting(false);
+      showError("Failed to delete folder", result.error)
+      setIsDeleting(false)
     } else {
-      success("Folder deleted");
-      setIsDeleting(false);
-      setIsDeleteModalOpen(false);
-      onClose();
+      success("Folder deleted")
+      setIsDeleting(false)
+      setIsDeleteModalOpen(false)
+      onClose()
     }
-  };
+  }
 
-  if (!isOpen || !folder) return null;
+  if (!isOpen || !folder) return null
 
   return createPortal(
     <>
@@ -132,23 +128,21 @@ export function EditFolderModal({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-md overflow-hidden rounded-2xl border border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-2xl"
+                className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur"
               >
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-border/40 p-6">
+                <div className="border-border/40 flex items-center justify-between border-b p-6">
                   <div>
                     <h2 id="modal-title" className="text-xl font-semibold">
                       Edit Folder
                     </h2>
-                    <p className="text-sm text-muted-foreground">
-                      Update folder name and color
-                    </p>
+                    <p className="text-muted-foreground text-sm">Update folder name and color</p>
                   </div>
                   <button
                     ref={firstFocusableRef}
                     onClick={onClose}
                     aria-label="Close modal"
-                    className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                    className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
                   >
                     <X className="h-5 w-5" aria-hidden="true" />
                   </button>
@@ -158,10 +152,7 @@ export function EditFolderModal({
                 <form onSubmit={handleUpdate} className="p-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label
-                        htmlFor="folder-name"
-                        className="text-sm font-medium text-foreground"
-                      >
+                      <label htmlFor="folder-name" className="text-foreground text-sm font-medium">
                         Folder Name
                       </label>
                       <input
@@ -170,15 +161,13 @@ export function EditFolderModal({
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         disabled={isLoading}
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">
-                        Color
-                      </label>
+                      <label className="text-foreground text-sm font-medium">Color</label>
                       <div className="grid grid-cols-4 gap-2">
                         {PRESET_COLORS.map((presetColor) => (
                           <button
@@ -187,7 +176,7 @@ export function EditFolderModal({
                             onClick={() => setColor(presetColor)}
                             aria-pressed={color === presetColor}
                             disabled={isLoading}
-                            className={`h-12 w-full rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer ${
+                            className={`focus:ring-primary/50 h-12 w-full cursor-pointer rounded-lg border-2 transition-all focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                               color === presetColor
                                 ? "border-primary scale-110"
                                 : "border-border hover:border-border/80"
@@ -196,10 +185,7 @@ export function EditFolderModal({
                             aria-label={`Select color ${presetColor}`}
                           >
                             {color === presetColor && (
-                              <Check
-                                className="mx-auto h-5 w-5 text-white"
-                                aria-hidden="true"
-                              />
+                              <Check className="mx-auto h-5 w-5 text-white" aria-hidden="true" />
                             )}
                           </button>
                         ))}
@@ -212,7 +198,7 @@ export function EditFolderModal({
                     <button
                       type="button"
                       onClick={() => setIsDeleteModalOpen(true)}
-                      className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-2.5 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 focus:outline-none focus:ring-2 focus:ring-destructive/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                      className="border-destructive/20 bg-destructive/5 text-destructive hover:bg-destructive/10 focus:ring-destructive/50 flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={isLoading || isDeleting}
                     >
                       <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -222,7 +208,7 @@ export function EditFolderModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex items-center justify-center gap-2 rounded-lg border border-input bg-transparent px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                      className="border-input hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex cursor-pointer items-center justify-center gap-2 rounded-lg border bg-transparent px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={isLoading}
                     >
                       Cancel
@@ -230,13 +216,13 @@ export function EditFolderModal({
                     <button
                       ref={lastFocusableRef}
                       type="submit"
-                      className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={isLoading || !name.trim()}
                       aria-busy={isLoading}
                     >
                       {isLoading ? (
                         <>
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                          <div className="border-primary-foreground h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
                           Updating...
                         </>
                       ) : (
@@ -254,6 +240,6 @@ export function EditFolderModal({
         )}
       </AnimatePresence>
     </>,
-    document.body,
-  );
+    document.body
+  )
 }

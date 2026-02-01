@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import React from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import React from "react"
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 interface AuroraBackgroundProps {
-  className?: string;
-  children: React.ReactNode;
-  showRadialGradient?: boolean;
+  className?: string
+  children: React.ReactNode
+  showRadialGradient?: boolean
 }
 
 export default function AuroraBackground({
@@ -18,12 +18,12 @@ export default function AuroraBackground({
   return (
     <div
       className={cn(
-        "relative flex min-h-screen flex-col items-center justify-center bg-background",
-        className,
+        "bg-background relative flex min-h-screen flex-col items-center justify-center",
+        className
       )}
     >
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 aurora-bg opacity-50" />
+        <div className="aurora-bg absolute inset-0 opacity-50" />
         <motion.div
           animate={{
             rotate: [0, 360],
@@ -33,7 +33,7 @@ export default function AuroraBackground({
             repeat: Number.POSITIVE_INFINITY,
             ease: "linear",
           }}
-          className="absolute -left-[20%] -top-[20%] h-[60%] w-[60%] rounded-full bg-blue-500/20 blur-3xl"
+          className="absolute -top-[20%] -left-[20%] h-[60%] w-[60%] rounded-full bg-blue-500/20 blur-3xl"
         />
         <motion.div
           animate={{
@@ -56,13 +56,13 @@ export default function AuroraBackground({
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
-          className="absolute left-[30%] top-[30%] h-[40%] w-[40%] rounded-full bg-blue-600/10 blur-3xl"
+          className="absolute top-[30%] left-[30%] h-[40%] w-[40%] rounded-full bg-blue-600/10 blur-3xl"
         />
       </div>
       {showRadialGradient && (
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="from-background absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
       )}
       <div className="relative z-10">{children}</div>
     </div>
-  );
+  )
 }

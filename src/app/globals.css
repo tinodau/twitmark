@@ -105,16 +105,8 @@
 
   .aurora-bg {
     background:
-      radial-gradient(
-        ellipse at top,
-        rgba(29, 155, 240, 0.15),
-        transparent 50%
-      ),
-      radial-gradient(
-        ellipse at bottom right,
-        rgba(142, 45, 226, 0.1),
-        transparent 50%
-      );
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.15), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(142, 45, 226, 0.1), transparent 50%);
   }
 }
 
