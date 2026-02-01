@@ -5,9 +5,28 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import { createClient } from "@/lib/supabase/client"
+import { User } from "@supabase/supabase-js"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+      setLoading(false)
+    }
+
+    checkAuth()
+  }, [])
+
+  const buttonText = user ? "Dashboard" : "Get Started"
 
   const navLinks = [
     { name: "Features", href: "#features" },
@@ -67,9 +86,9 @@ export default function Navbar() {
             <Link
               href="/dashboard"
               className="group focus:ring-primary/50 relative inline-flex h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-sm font-medium text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
-              aria-label="Go to dashboard"
+              aria-label={user ? "Go to dashboard" : "Get started"}
             >
-              Get Started
+              {loading ? "..." : buttonText}
             </Link>
           </li>
         </ul>
@@ -120,9 +139,9 @@ export default function Navbar() {
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
                   className="focus:ring-primary/50 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-sm font-medium text-white transition-all hover:scale-105 focus:ring-2 focus:outline-none"
-                  aria-label="Go to dashboard"
+                  aria-label={user ? "Go to dashboard" : "Get started"}
                 >
-                  Get Started
+                  {loading ? "..." : buttonText}
                 </Link>
               </li>
             </ul>

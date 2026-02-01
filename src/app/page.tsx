@@ -2,12 +2,32 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight, BookOpen, LayoutGrid, Sparkles, Zap } from "lucide-react"
+import { ArrowRight, LayoutGrid, Sparkles, Zap } from "lucide-react"
 import AuroraBackground from "@/components/ui/aurora-background"
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid"
 import TestimonialsMarquee from "@/components/testimonials-marquee"
+import { createClient } from "@/lib/supabase/client"
+import { User } from "@supabase/supabase-js"
+import { useState, useEffect } from "react"
 
 export default function Home() {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+      setLoading(false)
+    }
+
+    checkAuth()
+  }, [])
+
+  const buttonText = user ? "Dashboard" : "Get Started Free"
   return (
     <AuroraBackground>
       {/* Skip to main content link for keyboard users */}
@@ -46,8 +66,8 @@ export default function Home() {
             </h1>
 
             <p className="text-muted-foreground mb-10 text-lg sm:text-xl">
-              Organize your X bookmarks with folders, read in distraction-free mode, and build your
-              personal knowledge base.
+              Organize your X bookmarks with folders, search instantly, and build your personal
+              knowledge base.
             </p>
 
             <motion.div
@@ -59,12 +79,15 @@ export default function Home() {
               <Link
                 href="/dashboard"
                 className="group focus:ring-primary/50 relative flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-8 text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
+                aria-label={user ? "Go to dashboard" : "Get started free"}
               >
-                Get Started Free
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
+                {loading ? "..." : buttonText}
+                {!user && (
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                )}
               </Link>
               <Link
                 href="#features"
@@ -99,24 +122,26 @@ export default function Home() {
 
           <BentoGrid className="mx-auto max-w-6xl">
             <BentoGridItem
-              title="Smart Folders"
-              description="Organize bookmarks into custom folders. Filter by topic, project, or mood."
+              title="Unlimited Folders"
+              description="Create unlimited folders to organize your bookmarks by topic, project, or mood."
               icon={<LayoutGrid className="h-6 w-6" aria-hidden="true" />}
             />
             <BentoGridItem
-              title="Reading Mode"
-              description="Distraction-free reading experience with clean typography and progress tracking."
-              icon={<BookOpen className="h-6 w-6" aria-hidden="true" />}
-            />
-            <BentoGridItem
-              title="Search & Filter"
-              description="Find any bookmark in seconds with powerful search and smart filters."
-              icon={<Sparkles className="h-6 w-6" aria-hidden="true" />}
-            />
-            <BentoGridItem
               title="Quick Actions"
-              description="Save any tweet with one click. Access your library instantly."
+              description="Save, edit, and manage your bookmarks with a clean, intuitive interface."
               icon={<Zap className="h-6 w-6" aria-hidden="true" />}
+            />
+            <BentoGridItem
+              title={
+                <div className="flex items-center gap-2">
+                  Search & Filter
+                  <span className="text-muted-foreground rounded-full bg-white/10 px-2 py-0.5 text-xs">
+                    Coming Soon
+                  </span>
+                </div>
+              }
+              description="Find any bookmark instantly with powerful search and filter by folder or content."
+              icon={<Sparkles className="h-6 w-6" aria-hidden="true" />}
             />
           </BentoGrid>
         </section>

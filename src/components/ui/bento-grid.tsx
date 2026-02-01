@@ -11,7 +11,7 @@ interface BentoGridProps {
 
 interface BentoGridItemProps {
   className?: string
-  title?: string
+  title?: string | React.ReactNode
   description?: string | React.ReactNode
   header?: React.ReactNode
   icon?: React.ReactNode
@@ -22,7 +22,7 @@ const BentoGrid = ({ className, children }: BentoGridProps) => {
   return (
     <div
       className={cn(
-        "grid auto-rows-[18rem] grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4",
+        "grid auto-rows-[18rem] grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3",
         className
       )}
     >
