@@ -20,20 +20,18 @@ interface BentoGridItemProps {
 
 const BentoGrid = ({ className, children }: BentoGridProps) => {
   return (
-    <div className={cn("grid auto-rows-[22rem] grid-cols-1 gap-4 md:grid-cols-3", className)}>
+    <div
+      className={cn(
+        "grid auto-rows-[18rem] grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4",
+        className
+      )}
+    >
       {children}
     </div>
   )
 }
 
-const BentoGridItem = ({
-  className,
-  title,
-  description,
-  header,
-  icon,
-  children,
-}: BentoGridItemProps) => {
+const BentoGridItem = ({ className, title, description, icon, children }: BentoGridItemProps) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -4 }}
@@ -43,11 +41,6 @@ const BentoGridItem = ({
         className
       )}
     >
-      {header && (
-        <div className="mb-4 flex h-40 flex-col items-start justify-center overflow-hidden rounded-xl border border-white/5 bg-gradient-to-br from-white/10 to-transparent">
-          {header}
-        </div>
-      )}
       <div className="flex flex-col gap-2">
         {icon && (
           <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-blue-400">

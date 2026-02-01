@@ -44,7 +44,7 @@ const testimonials = [
 
 export default function TestimonialsMarquee() {
   return (
-    <section className="overflow-hidden border-y border-white/10 bg-black/20 py-16 backdrop-blur-sm">
+    <section className="mt-24 overflow-hidden border-y border-white/10 bg-black/20 py-16 backdrop-blur-sm">
       <div className="mb-12 text-center">
         <h2 className="mb-4 text-4xl font-bold sm:text-5xl">
           Loved by <span className="text-gradient">curators</span>

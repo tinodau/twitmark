@@ -17,7 +17,7 @@ export default function Home() {
       >
         Skip to main content
       </a>
-      <main id="main-content" className="relative z-10 container mx-auto px-4 pt-32 sm:px-8">
+      <main id="main-content" className="relative z-10 container mx-auto pt-32">
         {/* Hero Section */}
         <section aria-labelledby="hero-title">
           <motion.div
@@ -98,7 +98,6 @@ export default function Home() {
               title="Smart Folders"
               description="Organize bookmarks into custom folders. Filter by topic, project, or mood."
               icon={<LayoutGrid className="h-6 w-6" aria-hidden="true" />}
-              className="md:col-span-2"
             />
             <BentoGridItem
               title="Reading Mode"
@@ -109,15 +108,6 @@ export default function Home() {
               title="Search & Filter"
               description="Find any bookmark in seconds with powerful search and smart filters."
               icon={<Sparkles className="h-6 w-6" aria-hidden="true" />}
-              className="md:col-span-2"
-              header={
-                <div
-                  className="flex h-full w-full items-center justify-center text-6xl font-bold text-white/10"
-                  aria-hidden="true"
-                >
-                  🔍
-                </div>
-              }
             />
             <BentoGridItem
               title="Quick Actions"
@@ -137,7 +127,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="glass-strong rounded-3xl p-12 sm:p-16"
+            className="rounded-3xl p-12 sm:p-16"
           >
             <h2 id="cta-title" className="mb-4 text-4xl font-bold sm:text-5xl">
               Ready to build your <span className="text-gradient">knowledge base</span>?
@@ -160,10 +150,10 @@ export default function Home() {
 
         {/* Footer */}
         <footer
-          className="text-muted-foreground mx-auto mt-32 max-w-6xl border-t border-white/10 pt-8 text-center text-sm"
+          className="text-muted-foreground mx-auto mt-32 border-t border-white/10 py-8 text-center text-sm"
           role="contentinfo"
         >
-          <p>Built with Next.js 16, Tailwind CSS 4, and Framer Motion</p>
+          <p>Built by Tino Dau</p>
         </footer>
       </main>
     </AuroraBackground>
