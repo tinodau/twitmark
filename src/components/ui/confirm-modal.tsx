@@ -118,6 +118,7 @@ export function ConfirmModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
         onClick={isLoading ? undefined : onClose}
         className="absolute inset-0 z-0 bg-black/50 backdrop-blur-sm"
         aria-hidden="true"
@@ -134,7 +135,8 @@ export function ConfirmModal({
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
-        className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 relative z-10 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur"
+        className="border-border/40 bg-background/95 relative z-10 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl saturate-180 backdrop-blur-md"
+        style={{ willChange: "transform, opacity" }}
       >
         <div className="p-6">
           {/* Header with Icon */}

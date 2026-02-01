@@ -144,9 +144,13 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4 }}
-        className={`group bg-background/95 supports-backdrop-filter:bg-background/60 relative flex h-fit min-h-[300px] flex-col overflow-hidden rounded-xl border backdrop-blur ${
-          bookmark.readingList ? "border-primary/40 ring-primary/10 ring-2" : "border-border/40"
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className={`group relative flex h-fit min-h-[300px] flex-col overflow-hidden rounded-xl border saturate-180 backdrop-blur-sm transition-colors ${
+          bookmark.readingList
+            ? "border-primary/40 ring-primary/10 bg-primary/5 ring-2"
+            : "border-border/40 bg-background/95"
         }`}
+        style={{ willChange: "transform" }}
       >
         {/* Header */}
         <div className="flex items-start justify-between px-4 pt-3">

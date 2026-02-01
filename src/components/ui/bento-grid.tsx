@@ -39,7 +39,7 @@ const BentoGridItem = ({
       whileHover={{ scale: 1.02, y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/10",
+        "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 saturate-180 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/10",
         className
       )}
     >
