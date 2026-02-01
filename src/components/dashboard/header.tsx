@@ -20,7 +20,7 @@ export function Header({ user }: HeaderProps) {
   }
 
   return (
-    <header className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 border-b backdrop-blur">
+    <header className="border-border/40 bg-secondary supports-backdrop-filter:bg-background border-b backdrop-blur">
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-2">
           <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">

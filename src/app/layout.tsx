@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import Navbar from "@/components/navbar"
+import { ConditionalNavbar } from "@/components/conditional-navbar"
 import { AppToastProvider } from "./toast-provider"
 import { QueryProvider } from "./query-provider"
 
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
           <AppToastProvider>
-            <Navbar />
+            <ConditionalNavbar />
             {children}
           </AppToastProvider>
         </QueryProvider>
