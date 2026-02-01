@@ -289,7 +289,7 @@
 - **TanStack Query Integration**: Full state management with optimistic updates
 - **UI/UX Refinement**: Glassmorphism 2.0 across all components
 - **Code Quality**: Prettier + tailwindcss-prettier plugin configured
-- **Documentation**: PERFORMANCE.md and TESTING.md created
+- **Documentation**: PERFORMANCE.md and .docs/testing-plan.md merged
 
 ### Technical Debt & Notes
 
@@ -301,4 +301,4 @@
 
 **Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
 
-_Last Updated: 2026-02-01 4:40 PM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-01 4:47 PM (Asia/Jakarta, UTC+7:00)_
