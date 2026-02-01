@@ -68,7 +68,7 @@ export function Sidebar() {
                   selectedFolderId === item.id
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                } focus:outline-none focus:ring-2 focus:ring-primary/50`}
+                } focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer`}
               >
                 <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {!isCollapsed && <span>{item.label}</span>}
@@ -86,7 +86,7 @@ export function Sidebar() {
                 <button
                   onClick={() => setIsAddModalOpen(true)}
                   aria-label="Add new folder"
-                  className="text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg p-1"
+                  className="text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg p-1 cursor-pointer"
                 >
                   <Plus className="h-3 w-3" aria-hidden="true" />
                 </button>
@@ -103,7 +103,7 @@ export function Sidebar() {
                             selectedFolderId === folder.id
                               ? "bg-accent text-accent-foreground"
                               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                          } focus:outline-none focus:ring-2 focus:ring-primary/50`}
+                          } focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer`}
                         >
                           <div
                             className="h-2 w-2 rounded-full shrink-0"
@@ -121,7 +121,7 @@ export function Sidebar() {
                         <DropdownMenu
                           trigger={
                             <button
-                              className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                               aria-label="Folder options"
                             >
                               <MoreVertical
@@ -170,7 +170,7 @@ export function Sidebar() {
             onClick={() => setIsCollapsed(!isCollapsed)}
             aria-expanded={!isCollapsed}
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
           >
             {isCollapsed ? (
               <ChevronRight className="h-4 w-4" aria-hidden="true" />

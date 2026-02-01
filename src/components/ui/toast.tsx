@@ -72,7 +72,7 @@ function ToastItem({ toast, onClose }: ToastProps) {
 
       <button
         onClick={() => onClose(toast.id)}
-        className="flex-shrink-0 rounded-lg p-1 transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-primary/50"
+        className="flex-shrink-0 rounded-lg p-1 transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
         aria-label="Close notification"
       >
         <X className="h-4 w-4" />

@@ -153,7 +153,7 @@ export default function DashboardPage() {
         <button
           onClick={() => setIsModalOpen(true)}
           aria-label="Add new bookmark"
-          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 hover:cursor-pointer"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Add Bookmark

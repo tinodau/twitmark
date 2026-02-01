@@ -171,7 +171,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
                 />
                 <button
                   onClick={handleSaveTitle}
-                  className="rounded-lg bg-primary px-2 py-1 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                  className="rounded-lg bg-primary px-2 py-1 text-sm font-medium text-primary-foreground hover:bg-primary/90 cursor-pointer"
                 >
                   Save
                 </button>
