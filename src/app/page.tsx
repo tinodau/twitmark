@@ -37,7 +37,7 @@ export default function Home() {
       >
         Skip to main content
       </a>
-      <main id="main-content" className="relative z-10 container mx-auto pt-32">
+      <main id="main-content" className="relative z-10 mx-auto pt-32">
         {/* Hero Section */}
         <section aria-labelledby="hero-title">
           <motion.div
@@ -144,6 +144,43 @@ export default function Home() {
               icon={<Sparkles className="h-6 w-6" aria-hidden="true" />}
             />
           </BentoGrid>
+        </section>
+
+        {/* About Section */}
+        <section
+          id="about"
+          aria-labelledby="about-title"
+          className="mx-auto mt-32 max-w-4xl text-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 id="about-title" className="mb-6 text-4xl font-bold sm:text-5xl">
+              Built for <span className="text-gradient">curators</span>, by a curator
+            </h2>
+            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+              Twitmark was born from a simple frustration: losing track of valuable X content. But
+              folder is a premium feature, so as a developer who constantly discovers gems on the
+              platform, I needed a better way to save, organize, and actually read what matters.
+            </p>
+            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+              No more losing tweets to the void. No more scrolling through likes and bookmark to
+              find that one perfect thread. Just clean, simple bookmark management that works the
+              way you do.
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-xl font-bold text-white">
+                T
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-white">Built by Tino Dau</p>
+                <p className="text-muted-foreground text-sm">Developer & X User</p>
+              </div>
+            </div>
+          </motion.div>
         </section>
 
         {/* Testimonials Marquee */}
