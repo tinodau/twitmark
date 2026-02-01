@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Plus, BookOpen, Folder, ChevronDown } from "lucide-react"
+import { motion } from "framer-motion"
 import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal"
 import { BookmarkCard } from "@/components/dashboard/bookmark-card"
 import { getUserBookmarks } from "@/app/actions/bookmarks"
@@ -10,6 +11,7 @@ import { useFolder } from "@/contexts/folder-context"
 import type { BookmarkWithFolder } from "@/types"
 
 const ITEMS_PER_PAGE = 12
+const SCROLL_THRESHOLD = 80 // Show floating button after scrolling 80px
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -17,6 +19,7 @@ export default function DashboardPage() {
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(true)
   const [folderName, setFolderName] = useState<string>("")
+  const [showFloatingButton, setShowFloatingButton] = useState(false)
   const { selectedFolderId, setSelectedFolderId } = useFolder()
   const mountedRef = useRef(true)
 
@@ -140,6 +143,21 @@ export default function DashboardPage() {
     }
   }, [isModalOpen])
 
+  // Track scroll to show/hide floating button
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      setShowFloatingButton(scrollY > SCROLL_THRESHOLD)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll() // Check initial state
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
   return (
     <div className="space-y-6" onKeyDown={handleKeyDown}>
       <header className="flex items-center justify-between" role="banner">
@@ -228,6 +246,22 @@ export default function DashboardPage() {
       )}
 
       <AddBookmarkModal isOpen={isModalOpen} onClose={handleModalClose} />
+
+      {/* Floating Add Bookmark Button */}
+      <motion.button
+        onClick={() => setIsModalOpen(true)}
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{
+          opacity: showFloatingButton ? 1 : 0,
+          scale: showFloatingButton ? 1 : 0.8,
+          y: showFloatingButton ? 0 : 20,
+        }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        aria-label="Add new bookmark"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 fixed right-6 bottom-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-lg transition-colors focus:ring-2 focus:outline-none sm:right-8 sm:bottom-8 sm:h-16 sm:w-16"
+      >
+        <Plus className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden="true" />
+      </motion.button>
     </div>
   )
 }

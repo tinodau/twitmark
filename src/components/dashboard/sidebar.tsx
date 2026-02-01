@@ -49,7 +49,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 border-r backdrop-blur transition-all duration-300 ${
+      className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-[64px] left-0 z-20 h-[calc(100vh-64px)] border-r backdrop-blur transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
       }`}
       aria-label="Main navigation sidebar"
@@ -160,7 +160,7 @@ export function Sidebar() {
         </div>
 
         {/* Collapse Toggle */}
-        <div className="border-border/40 border-t p-3">
+        <div className="border-t p-3">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             aria-expanded={!isCollapsed}

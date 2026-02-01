@@ -106,16 +106,10 @@ export default function Home() {
               icon={<BookOpen className="h-6 w-6" aria-hidden="true" />}
             />
             <BentoGridItem
-              title="Quick Actions"
-              description="Save any tweet with one click. Access your library instantly."
-              icon={<Zap className="h-6 w-6" aria-hidden="true" />}
-              className="md:col-span-2"
-            />
-            <BentoGridItem
               title="Search & Filter"
               description="Find any bookmark in seconds with powerful search and smart filters."
               icon={<Sparkles className="h-6 w-6" aria-hidden="true" />}
-              className="md:col-span-3 md:row-span-2"
+              className="md:col-span-2"
               header={
                 <div
                   className="flex h-full w-full items-center justify-center text-6xl font-bold text-white/10"
@@ -124,6 +118,11 @@ export default function Home() {
                   🔍
                 </div>
               }
+            />
+            <BentoGridItem
+              title="Quick Actions"
+              description="Save any tweet with one click. Access your library instantly."
+              icon={<Zap className="h-6 w-6" aria-hidden="true" />}
             />
           </BentoGrid>
         </section>

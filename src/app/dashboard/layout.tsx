@@ -37,7 +37,7 @@ function DashboardLayoutWithProvider({ children }: { children: React.ReactNode }
     <FolderProvider>
       <div className="flex min-h-screen">
         <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 pt-[80px] sm:pl-20 md:pl-72 lg:pl-[280px]">{children}</main>
       </div>
       <AddFolderModalContent />
       <EditFolderModalContent />
