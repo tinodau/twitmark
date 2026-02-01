@@ -15,17 +15,19 @@ export type TweetMetadata = {
 };
 
 // Database types (exported separately from server actions)
-export type BookmarkWithFolder = {
+export type BookmarkWithFolders = {
   id: string;
   url: string;
   contentType: "tweet";
   metadata: TweetMetadata | null;
-  folderId: string | null;
   userId: string;
   readingList: boolean;
   createdAt: Date;
-  folder: {
+  folders: Array<{
     name: string;
     color: string;
-  } | null;
+  }>;
 };
+
+// Legacy type for backward compatibility
+export type BookmarkWithFolder = BookmarkWithFolders;

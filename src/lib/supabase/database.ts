@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { BookmarkWithFolder } from "@/types";
+import type { BookmarkWithFolders } from "@/types";
 
 // Database types (snake_case from Supabase)
 type Bookmark = {
@@ -7,14 +7,21 @@ type Bookmark = {
   url: string;
   content_type: "tweet" | "article";
   metadata: Record<string, unknown> | null;
-  folder_id: string | null;
   user_id: string;
   reading_list: boolean;
   created_at: string;
-  folders?: {
-    name: string;
-    color: string;
-  } | null;
+  bookmark_folders?: Array<{
+    folders: {
+      name: string;
+      color: string;
+    };
+  }>;
+};
+
+type BookmarkFolder = {
+  bookmark_id: string;
+  folder_id: string;
+  created_at: string;
 };
 
 type Folder = {
@@ -97,7 +104,7 @@ async function fetchTweetMetadata(url: string) {
 // Create a new bookmark
 export async function createBookmark(
   url: string,
-  folderId: string | null,
+  folderIds: string[] | null,
   title?: string,
 ) {
   const supabase = await createClient();
@@ -136,13 +143,13 @@ export async function createBookmark(
     Object.assign(metadata, tweetMetadata);
   }
 
+  // Insert bookmark
   const { data, error } = await supabase
     .from("bookmarks")
     .insert({
       url,
       content_type: "tweet",
       user_id: user.id,
-      folder_id: folderId,
       metadata,
     })
     .select()
@@ -151,6 +158,23 @@ export async function createBookmark(
   if (error) {
     console.error("Error creating bookmark:", error);
     return { error: "Failed to create bookmark" };
+  }
+
+  // Add bookmark to folders if provided
+  if (folderIds && folderIds.length > 0) {
+    const bookmarkFolders = folderIds.map((folderId) => ({
+      bookmark_id: data.id,
+      folder_id: folderId,
+    }));
+
+    const { error: folderError } = await supabase
+      .from("bookmark_folders")
+      .insert(bookmarkFolders);
+
+    if (folderError) {
+      console.error("Error adding bookmark to folders:", folderError);
+      // Don't fail the entire operation if folder assignment fails
+    }
   }
 
   return { success: true, bookmark: data };
@@ -181,10 +205,56 @@ export async function deleteBookmark(id: string) {
   return { success: true };
 }
 
-// Move bookmark to folder
-export async function moveBookmark(
+// Add bookmark to folders
+export async function addBookmarkToFolders(
   bookmarkId: string,
-  folderId: string | null,
+  folderIds: string[],
+) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  // Verify bookmark belongs to user
+  const { data: bookmark } = await supabase
+    .from("bookmarks")
+    .select("id")
+    .eq("id", bookmarkId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!bookmark) {
+    return { error: "Bookmark not found" };
+  }
+
+  // Add bookmark to folders
+  const bookmarkFolders = folderIds.map((folderId) => ({
+    bookmark_id: bookmarkId,
+    folder_id: folderId,
+  }));
+
+  const { error } = await supabase
+    .from("bookmark_folders")
+    .insert(bookmarkFolders)
+    .onConflict("bookmark_id,folder_id")
+    .ignore();
+
+  if (error) {
+    console.error("Error adding bookmark to folders:", error);
+    return { error: "Failed to add bookmark to folders" };
+  }
+
+  return { success: true };
+}
+
+// Remove bookmark from folders
+export async function removeBookmarkFromFolders(
+  bookmarkId: string,
+  folderIds: string[],
 ) {
   const supabase = await createClient();
   const {
@@ -196,14 +266,14 @@ export async function moveBookmark(
   }
 
   const { error } = await supabase
-    .from("bookmarks")
-    .update({ folder_id: folderId })
-    .eq("id", bookmarkId)
-    .eq("user_id", user.id);
+    .from("bookmark_folders")
+    .delete()
+    .eq("bookmark_id", bookmarkId)
+    .in("folder_id", folderIds);
 
   if (error) {
-    console.error("Error moving bookmark:", error);
-    return { error: "Failed to move bookmark" };
+    console.error("Error removing bookmark from folders:", error);
+    return { error: "Failed to remove bookmark from folders" };
   }
 
   return { success: true };
@@ -247,7 +317,7 @@ export async function toggleReadingList(bookmarkId: string) {
 }
 
 // Get all bookmarks for user
-export async function getUserBookmarks(): Promise<BookmarkWithFolder[]> {
+export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -262,9 +332,11 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolder[]> {
     .select(
       `
       *,
-      folders (
-        name,
-        color
+      bookmark_folders (
+        folders (
+          name,
+          color
+        )
       )
     `,
     )
@@ -282,15 +354,15 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolder[]> {
     url: bookmark.url,
     contentType: bookmark.content_type,
     metadata: bookmark.metadata,
-    folderId: bookmark.folder_id,
     userId: bookmark.user_id,
     readingList: bookmark.reading_list,
     createdAt: new Date(bookmark.created_at),
-    folder: bookmark.folders
-      ? {
-          name: bookmark.folders.name,
-          color: bookmark.folders.color,
-        }
-      : null,
+    folders:
+      bookmark.bookmark_folders?.map(
+        (bf: { folders: { name: string; color: string } }) => ({
+          name: bf.folders.name,
+          color: bf.folders.color,
+        }),
+      ) || [],
   }));
 }

@@ -5,18 +5,23 @@ import type { BookmarkWithFolder } from "@/types";
 import {
   createBookmark as dbCreateBookmark,
   deleteBookmark as dbDeleteBookmark,
-  moveBookmark as dbMoveBookmark,
   toggleReadingList as dbToggleReadingList,
   getUserBookmarks as dbGetUserBookmarks,
+  addBookmarkToFolders as dbAddBookmarkToFolders,
+  removeBookmarkFromFolders as dbRemoveBookmarkFromFolders,
 } from "@/lib/supabase/database";
 
 // Create a new bookmark
 export async function createBookmark(formData: FormData) {
   const url = formData.get("url") as string;
   const title = formData.get("title") as string | null;
-  const folderId = formData.get("folderId") as string | null;
+  const folderIds = formData.getAll("folderIds") as string[] | null;
 
-  const result = await dbCreateBookmark(url, folderId, title || undefined);
+  const result = await dbCreateBookmark(
+    url,
+    folderIds && folderIds.length > 0 ? folderIds : null,
+    title || undefined,
+  );
 
   if (result.error) {
     return result;
@@ -38,12 +43,27 @@ export async function deleteBookmark(id: string) {
   return result;
 }
 
-// Move bookmark to folder
-export async function moveBookmark(
+// Add bookmark to folders
+export async function addBookmarkToFolders(
   bookmarkId: string,
-  folderId: string | null,
+  folderIds: string[],
 ) {
-  const result = await dbMoveBookmark(bookmarkId, folderId);
+  const result = await dbAddBookmarkToFolders(bookmarkId, folderIds);
+
+  if (result.error) {
+    return result;
+  }
+
+  revalidatePath("/dashboard");
+  return result;
+}
+
+// Remove bookmark from folders
+export async function removeBookmarkFromFolders(
+  bookmarkId: string,
+  folderIds: string[],
+) {
+  const result = await dbRemoveBookmarkFromFolders(bookmarkId, folderIds);
 
   if (result.error) {
     return result;

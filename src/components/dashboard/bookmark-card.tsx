@@ -230,17 +230,22 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         </div>
 
         {/* Metadata Bar - Row 2: Folders */}
-        {bookmark.folder && (
+        {bookmark.folders && bookmark.folders.length > 0 && (
           <div className="px-4 py-2 z-10">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
-              style={{
-                backgroundColor: hexToRgba(bookmark.folder.color, 0.15),
-                color: bookmark.folder.color,
-              }}
-            >
-              {bookmark.folder.name}
-            </span>
+            <div className="flex flex-wrap gap-2">
+              {bookmark.folders.map((folder) => (
+                <span
+                  key={folder.name}
+                  className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+                  style={{
+                    backgroundColor: hexToRgba(folder.color, 0.15),
+                    color: folder.color,
+                  }}
+                >
+                  {folder.name}
+                </span>
+              ))}
+            </div>
           </div>
         )}
 

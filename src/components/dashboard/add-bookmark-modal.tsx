@@ -17,7 +17,7 @@ interface AddBookmarkModalProps {
 export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
   const [folders, setFolders] = useState<FolderType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFoldersLoading, setIsFoldersLoading] = useState(false);
@@ -46,7 +46,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
         setIsFoldersLoading(false);
         // Pre-select folder if viewing a specific folder
         if (currentFolderId && currentFolderId !== "reading-list") {
-          setSelectedFolderId(currentFolderId);
+          setSelectedFolderIds([currentFolderId]);
         }
       }
     };
@@ -123,8 +123,10 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
     if (title) {
       formData.append("title", title);
     }
-    if (selectedFolderId) {
-      formData.append("folderId", selectedFolderId);
+    if (selectedFolderIds.length > 0) {
+      selectedFolderIds.forEach((folderId) => {
+        formData.append("folderIds", folderId);
+      });
     }
 
     const result = await createBookmark(formData);
@@ -139,7 +141,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
       onClose();
       setTitle("");
       setUrl("");
-      setSelectedFolderId(null);
+      setSelectedFolderIds([]);
     }
   };
 
@@ -263,47 +265,64 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                     ) : folders.length > 0 ? (
                       <div
                         className="grid gap-2"
-                        role="radiogroup"
-                        aria-label="Select folder"
+                        role="group"
+                        aria-label="Select folders"
                       >
-                        <button
-                          type="button"
-                          onClick={() => setSelectedFolderId(null)}
-                          aria-pressed={selectedFolderId === null}
-                          disabled={isLoading}
-                          className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
-                            selectedFolderId === null
-                              ? "border-primary bg-primary/10 text-primary"
-                              : "border-border hover:bg-accent"
-                          }`}
-                        >
-                          <Folder
-                            className="h-4 w-4 shrink-0"
-                            aria-hidden="true"
-                          />
-                          <span>No Folder</span>
-                        </button>
-                        {folders.map((folder) => (
-                          <button
-                            key={folder.id}
-                            type="button"
-                            onClick={() => setSelectedFolderId(folder.id)}
-                            aria-pressed={selectedFolderId === folder.id}
-                            disabled={isLoading}
-                            className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
-                              selectedFolderId === folder.id
-                                ? "border-primary bg-primary/10 text-primary"
-                                : "border-border hover:bg-accent"
-                            }`}
-                          >
-                            <div
-                              className="h-2 w-2 rounded-full shrink-0"
-                              style={{ backgroundColor: folder.color }}
-                              aria-hidden="true"
-                            />
-                            <span className="truncate">{folder.name}</span>
-                          </button>
-                        ))}
+                        {folders.map((folder) => {
+                          const isSelected = selectedFolderIds.includes(
+                            folder.id,
+                          );
+                          return (
+                            <button
+                              key={folder.id}
+                              type="button"
+                              onClick={() => {
+                                if (isSelected) {
+                                  setSelectedFolderIds(
+                                    selectedFolderIds.filter(
+                                      (id) => id !== folder.id,
+                                    ),
+                                  );
+                                } else {
+                                  setSelectedFolderIds([
+                                    ...selectedFolderIds,
+                                    folder.id,
+                                  ]);
+                                }
+                              }}
+                              aria-pressed={isSelected}
+                              disabled={isLoading}
+                              className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+                                isSelected
+                                  ? "border-primary bg-primary/10 text-primary"
+                                  : "border-border hover:bg-accent"
+                              }`}
+                            >
+                              <div
+                                className="h-4 w-4 shrink-0 rounded border-2 flex items-center justify-center"
+                                style={{
+                                  borderColor: isSelected
+                                    ? folder.color
+                                    : "currentColor",
+                                  backgroundColor: isSelected
+                                    ? folder.color
+                                    : "transparent",
+                                }}
+                                aria-hidden="true"
+                              >
+                                {isSelected && (
+                                  <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                                )}
+                              </div>
+                              <div
+                                className="h-2 w-2 rounded-full shrink-0"
+                                style={{ backgroundColor: folder.color }}
+                                aria-hidden="true"
+                              />
+                              <span className="truncate">{folder.name}</span>
+                            </button>
+                          );
+                        })}
                       </div>
                     ) : (
                       <div className="rounded-lg border border-dashed border-border/40 bg-muted/30 px-4 py-3 text-center">

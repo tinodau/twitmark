@@ -33,18 +33,26 @@ CREATE TABLE IF NOT EXISTS public.bookmarks (
   url TEXT NOT NULL,
   content_type TEXT DEFAULT 'tweet', -- currently only 'tweet' is used
   metadata JSONB,
-  folder_id UUID REFERENCES public.folders(id) ON DELETE SET NULL,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   reading_list BOOLEAN DEFAULT false NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL
 );
 
+-- Junction table for many-to-many relationship between bookmarks and folders
+CREATE TABLE IF NOT EXISTS public.bookmark_folders (
+  bookmark_id UUID REFERENCES public.bookmarks(id) ON DELETE CASCADE NOT NULL,
+  folder_id UUID REFERENCES public.folders(id) ON DELETE CASCADE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
+  PRIMARY KEY (bookmark_id, folder_id)
+);
+
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS idx_bookmarks_user_id ON public.bookmarks(user_id);
-CREATE INDEX IF NOT EXISTS idx_bookmarks_folder_id ON public.bookmarks(folder_id);
 CREATE INDEX IF NOT EXISTS idx_bookmarks_reading_list ON public.bookmarks(reading_list);
 CREATE INDEX IF NOT EXISTS idx_bookmarks_created_at ON public.bookmarks(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_folders_user_id ON public.folders(user_id);
+CREATE INDEX IF NOT EXISTS idx_bookmark_folders_bookmark_id ON public.bookmark_folders(bookmark_id);
+CREATE INDEX IF NOT EXISTS idx_bookmark_folders_folder_id ON public.bookmark_folders(folder_id);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -80,6 +88,40 @@ CREATE POLICY "Users can update own folders"
 CREATE POLICY "Users can delete own folders"
   ON public.folders FOR DELETE
   USING (auth.uid() = user_id);
+
+-- Enable RLS on junction table
+ALTER TABLE public.bookmark_folders ENABLE ROW LEVEL SECURITY;
+
+-- Bookmark_folders policies
+CREATE POLICY "Users can view bookmark folders for own bookmarks"
+  ON public.bookmark_folders FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.bookmarks
+      WHERE bookmarks.id = bookmark_folders.bookmark_id
+      AND bookmarks.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can add folders to own bookmarks"
+  ON public.bookmark_folders FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.bookmarks
+      WHERE bookmarks.id = bookmark_folders.bookmark_id
+      AND bookmarks.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can remove folders from own bookmarks"
+  ON public.bookmark_folders FOR DELETE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.bookmarks
+      WHERE bookmarks.id = bookmark_folders.bookmark_id
+      AND bookmarks.user_id = auth.uid()
+    )
+  );
 
 -- Bookmarks policies
 CREATE POLICY "Users can view own bookmarks"
