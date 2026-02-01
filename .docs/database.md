@@ -1,24 +1,24 @@
-# Supabase Database Setup Instructions
+# Database Setup Instructions
 
-Follow these steps to set up your Supabase database with the Twitmark schema.
+Follow these steps to set up your Supabase database with Twitmark schema.
 
-## Step 1: Run the SQL Schema
+## Step 1: Run SQL Schema
 
 1. Go to your Supabase project dashboard: [supabase.com/dashboard](https://supabase.com/dashboard)
 
 2. Select your project
 
-3. Navigate to **SQL Editor** in the left sidebar
+3. Navigate to **SQL Editor** in left sidebar
 
 4. Click **New Query**
 
-5. Copy the entire contents of `supabase/schema.sql` file and paste it into the SQL Editor
+5. Copy entire contents of `supabase/schema.sql` file and paste it into SQL Editor
 
 6. Click **Run** (or press `Cmd/Ctrl + Enter`)
 
 7. Verify you see "Success" message with no errors
 
-## What the Schema Creates:
+## What Schema Creates:
 
 ### Tables:
 
@@ -37,7 +37,7 @@ Follow these steps to set up your Supabase database with the Twitmark schema.
 
 After running the schema, verify tables exist:
 
-1. Go to **Database** in the left sidebar
+1. Go to **Database** in left sidebar
 2. Click on **Tables**
 3. You should see:
    - `public.profiles`
@@ -46,7 +46,7 @@ After running the schema, verify tables exist:
 
 ## Step 3: Test Row Level Security
 
-1. Click on the **`bookmarks`** table
+1. Click on **`bookmarks`** table
 2. Click on **RLS Policies** tab
 3. Verify these policies exist:
    - "Users can view own bookmarks"
@@ -70,8 +70,8 @@ After running the schema, verify tables exist:
 
 **Error: "permission denied for schema public"**
 
-- Make sure you're the project owner
-- Check you're in the correct project
+- Make sure you're project owner
+- Check you're in correct project
 
 **Error: "function generate_uuid() already exists"**
 
@@ -88,7 +88,7 @@ After running the schema, verify tables exist:
 
 **"Invalid redirect_uri" error:**
 
-- Copy the redirect URL from Supabase Google provider page
+- Copy redirect URL from Supabase Google provider page
 - Paste it into Google Cloud Console OAuth settings
 
 **"Access denied" error:**
@@ -98,16 +98,16 @@ After running the schema, verify tables exist:
 
 ## Next Steps
 
-Once the schema is set up successfully:
+Once schema is set up successfully:
 
-1. Run this command to confirm the connection works:
+1. Run this command to confirm connection works:
 
    ```bash
    npm run dev
    ```
 
-2. I'll create the auth pages and dashboard next!
+2. I'll create auth pages and dashboard next!
 
 ---
 
-**Need help?** Check the [Supabase docs](https://supabase.com/docs) or ask me! 🚀
+**Need help?** Check [Supabase docs](https://supabase.com/docs) or ask me! 🚀

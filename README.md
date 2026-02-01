@@ -50,7 +50,10 @@ twitmark/
 │   ├── design-system.md      # UI/UX guidelines
 │   ├── spec.md             # Functional requirements
 │   ├── tech-stack.md        # Technology choices
-│   └── testing-plan.md      # Testing strategy
+│   ├── testing-plan.md      # Testing strategy
+│   ├── performance.md       # Performance optimization
+│   ├── mcp-tools.md       # MCP server documentation
+│   └── database.md        # Database setup
 ├── src/
 │   ├── app/                 # Next.js App Router
 │   │   ├── actions/        # Server Actions
@@ -161,7 +164,7 @@ SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET="https://your-project.supabase.co/au
 NODE_ENV="development"
 ```
 
-See `SUPABASE_SETUP.md` for detailed setup instructions.
+See `.docs/database.md` for detailed setup instructions.
 
 ## 📄 License
 

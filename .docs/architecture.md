@@ -14,7 +14,10 @@ twitmark/
 │   ├── tech-stack.md
 │   ├── architecture.md   # <--- You are here
 │   ├── design-system.md
-│   └── testing-plan.md
+│   ├── testing-plan.md
+│   ├── performance.md
+│   ├── mcp-tools.md
+│   └── database.md
 ├── .memory/              # Lessons learned
 ├── src/
 │   ├── app/               # Next.js 16 App Router

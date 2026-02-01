@@ -223,7 +223,7 @@
 - [x] Implement bundle optimization (tree shaking, code splitting)
 - [x] Enable CSS optimization and compression
 - [x] Run production build successfully
-- [x] Create PERFORMANCE.md documentation
+- [x] Create .docs/performance.md documentation
 - [ ] Run Lighthouse audit (post-deployment)
 - [ ] Set up caching headers in Vercel (deployment)
 
@@ -289,7 +289,7 @@
 - **TanStack Query Integration**: Full state management with optimistic updates
 - **UI/UX Refinement**: Glassmorphism 2.0 across all components
 - **Code Quality**: Prettier + tailwindcss-prettier plugin configured
-- **Documentation**: PERFORMANCE.md and .docs/testing-plan.md merged
+- **Documentation**: .docs/performance.md and .docs/testing-plan.md consolidated
 
 ### Technical Debt & Notes
 
@@ -301,4 +301,4 @@
 
 **Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
 
-_Last Updated: 2026-02-01 4:47 PM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-01 5:02 PM (Asia/Jakarta, UTC+7:00)_

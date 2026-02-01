@@ -15,6 +15,9 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - `architecture.md`: Data flow and folder structure conventions.
 - `design-system.md`: Visual guidelines (Bento Grid, Glassmorphism 2.0).
 - `testing-plan.md`: Testing strategy and implementation plan.
+- `performance.md`: Performance optimization details and best practices.
+- `mcp-tools.md`: MCP server documentation.
+- `database.md`: Database setup instructions and schema guide.
 
 ### 2. The "Skills" (.skills/)
 
