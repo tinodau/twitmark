@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Link as LinkIcon, Check, Folder } from "lucide-react";
 import { createBookmark } from "@/app/actions/bookmarks";
@@ -147,7 +148,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -157,12 +158,15 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
             aria-hidden="true"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+            onClick={onClose}
+          >
             <motion.div
               ref={modalRef}
               role="dialog"
@@ -171,6 +175,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md overflow-hidden rounded-2xl border border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-2xl"
             >
               {/* Header */}
@@ -179,9 +184,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                   <h2 id="modal-title" className="text-xl font-semibold">
                     Add Bookmark
                   </h2>
-                  <p className="text-sm text-muted-foreground">
-                    Save a tweet from X
-                  </p>
+                  <p className="text-sm text-muted-foreground">Save a tweet</p>
                 </div>
                 <button
                   ref={firstFocusableRef}
@@ -327,7 +330,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                     ) : (
                       <div className="rounded-lg border border-dashed border-border/40 bg-muted/30 px-4 py-3 text-center">
                         <p className="text-sm text-muted-foreground">
-                          No folders created yet
+                          We automatically fetch tweet
                         </p>
                       </div>
                     )}
@@ -347,7 +350,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                       <Check className="h-4 w-4 text-primary" />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      We'll automatically fetch the tweet
+                      We automatically fetch the tweet
                     </p>
                   </div>
                 </div>
@@ -387,6 +390,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
           </div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
