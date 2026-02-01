@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Plus, BookOpen, Folder } from "lucide-react";
+import { Plus, BookOpen, Folder, ChevronDown } from "lucide-react";
 import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal";
 import { BookmarkCard } from "@/components/dashboard/bookmark-card";
 import { getUserBookmarks } from "@/app/actions/bookmarks";
@@ -9,9 +9,12 @@ import { getFolderById } from "@/app/actions/folders";
 import { useFolder } from "@/contexts/folder-context";
 import type { BookmarkWithFolder } from "@/types";
 
+const ITEMS_PER_PAGE = 12;
+
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookmarks, setBookmarks] = useState<BookmarkWithFolder[]>([]);
+  const [allBookmarks, setAllBookmarks] = useState<BookmarkWithFolder[]>([]);
+  const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const [isLoading, setIsLoading] = useState(true);
   const [folderName, setFolderName] = useState<string>("");
   const { selectedFolderId, setSelectedFolderId } = useFolder();
@@ -22,20 +25,7 @@ export default function DashboardPage() {
     setIsLoading(true);
     const data = await getUserBookmarks();
     if (mountedRef.current) {
-      let filteredData = data as BookmarkWithFolder[];
-
-      // Filter by reading list
-      if (selectedFolderId === "reading-list") {
-        filteredData = filteredData.filter((b) => b.readingList);
-      }
-      // Filter by folder
-      else if (selectedFolderId) {
-        filteredData = filteredData.filter((b) =>
-          b.folders.some((f) => f.id === selectedFolderId),
-        );
-      }
-
-      setBookmarks(filteredData);
+      setAllBookmarks(data as BookmarkWithFolder[]);
       setIsLoading(false);
     }
   };
@@ -67,6 +57,29 @@ export default function DashboardPage() {
     setTimeout(fetchBookmarks, 100);
   };
 
+  // Get filtered bookmarks based on selected folder/reading list
+  const getFilteredBookmarks = () => {
+    let filtered = allBookmarks;
+
+    if (selectedFolderId === "reading-list") {
+      filtered = filtered.filter((b) => b.readingList);
+    } else if (selectedFolderId) {
+      filtered = filtered.filter((b) =>
+        b.folders.some((f) => f.id === selectedFolderId),
+      );
+    }
+
+    return filtered;
+  };
+
+  const filteredBookmarks = getFilteredBookmarks();
+  const displayedBookmarks = filteredBookmarks.slice(0, displayCount);
+  const hasMore = filteredBookmarks.length > displayCount;
+
+  const handleLoadMore = () => {
+    setDisplayCount((prev) => prev + ITEMS_PER_PAGE);
+  };
+
   const getTitle = () => {
     if (selectedFolderId === null) return "All Bookmarks";
     if (selectedFolderId === "reading-list") return "Reading List";
@@ -76,8 +89,8 @@ export default function DashboardPage() {
   const getDescription = () => {
     if (selectedFolderId === null) return "Your saved tweets and articles";
     if (selectedFolderId === "reading-list")
-      return `${bookmarks.length} ${bookmarks.length === 1 ? "item" : "items"} marked for later reading`;
-    return `Bookmarks in this folder`;
+      return `${filteredBookmarks.length} ${filteredBookmarks.length === 1 ? "item" : "items"} marked for later reading`;
+    return `${filteredBookmarks.length} ${filteredBookmarks.length === 1 ? "bookmark" : "bookmarks"} in this folder`;
   };
 
   const getEmptyStateTitle = () => {
@@ -156,7 +169,7 @@ export default function DashboardPage() {
             />
           ))}
         </div>
-      ) : bookmarks.length === 0 ? (
+      ) : filteredBookmarks.length === 0 ? (
         <div
           className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-16"
           role="status"
@@ -196,18 +209,32 @@ export default function DashboardPage() {
           </button>
         </div>
       ) : (
-        <section
-          className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3 items-start"
-          aria-label="Bookmarks grid"
-        >
-          {bookmarks.map((bookmark) => (
-            <BookmarkCard
-              key={bookmark.id}
-              bookmark={bookmark}
-              onUpdate={fetchBookmarks}
-            />
-          ))}
-        </section>
+        <>
+          <section
+            className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3 items-start"
+            aria-label="Bookmarks grid"
+          >
+            {displayedBookmarks.map((bookmark) => (
+              <BookmarkCard
+                key={bookmark.id}
+                bookmark={bookmark}
+                onUpdate={fetchBookmarks}
+              />
+            ))}
+          </section>
+
+          {hasMore && (
+            <div className="flex justify-center pt-6">
+              <button
+                onClick={handleLoadMore}
+                className="flex items-center gap-2 rounded-lg border border-border/40 bg-background/95 px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                Load More
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       <AddBookmarkModal isOpen={isModalOpen} onClose={handleModalClose} />
