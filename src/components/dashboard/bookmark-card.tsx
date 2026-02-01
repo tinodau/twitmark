@@ -9,6 +9,7 @@ import {
   ExternalLink,
   MoreVertical,
   Edit2,
+  FolderEdit,
 } from "lucide-react";
 import { Tweet } from "react-tweet";
 import type { BookmarkWithFolder } from "@/types";
@@ -17,6 +18,7 @@ import { useToast } from "@/contexts/toast-context";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { ManageFoldersModal } from "@/components/dashboard/manage-folders-modal";
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithFolder;
@@ -35,6 +37,7 @@ function hexToRgba(hex: string, opacity: number): string {
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
   const { success, error: showError } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isManagingFolders, setIsManagingFolders] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
@@ -119,6 +122,14 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
 
   return (
     <>
+      <ManageFoldersModal
+        isOpen={isManagingFolders}
+        onClose={() => setIsManagingFolders(false)}
+        bookmarkId={bookmark.id}
+        currentFolderIds={bookmark.folders?.map((f) => f.id)}
+        onUpdate={onUpdate}
+      />
+
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
@@ -190,6 +201,12 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
               {bookmark.readingList
                 ? "Remove from Reading List"
                 : "Add to Reading List"}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setIsManagingFolders(true)}
+              icon={<FolderEdit className="h-4 w-4" />}
+            >
+              Manage Folders
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleEditTitle}

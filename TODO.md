@@ -89,7 +89,7 @@
 ### 3.4 Bookmark Management ✅ COMPLETED
 
 - [x] Implement delete bookmark action
-- [ ] Create "Move to Folder" dropdown
+- [x] Create "Move to Folder" dropdown
 - [x] Add "Add to Reading List" toggle
 - [x] Show success notifications (toast)
 
@@ -121,8 +121,8 @@
 ### 4.3 Bookmark Assignment ✅ COMPLETED
 
 - [x] Move bookmark to folder on creation
-- [ ] Update bookmark's folder via dropdown
-- [ ] Handle bookmark count updates
+- [x] Update bookmark's folder via dropdown
+- [x] Handle bookmark count updates
 
 ---
 
