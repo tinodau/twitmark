@@ -28,7 +28,7 @@
 }
 
 :root {
-  --background: #050505;
+  --background: var(--color-slate-600);
   --foreground: #ffffff;
   --card: #121212;
   --card-foreground: #ffffff;
@@ -50,11 +50,11 @@
 }
 
 .dark {
-  --background: #050505;
+  --background: var(--color-slate-900);
   --foreground: #ffffff;
-  --card: rgba(18, 18, 18, 0.5);
+  --card: var(--color-slate-800);
   --card-foreground: #ffffff;
-  --popover: rgba(18, 18, 18, 0.5);
+  --popover: var(--color-slate-800);
   --popover-foreground: #ffffff;
   --primary: #1d9bf0;
   --primary-foreground: #ffffff;
@@ -83,7 +83,7 @@
 /* Glassmorphism 2.0 Utilities */
 @layer utilities {
   .glass {
-    background: rgba(18, 18, 18, 0.5);
+    background: var(--color-slate-800);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);

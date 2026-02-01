@@ -145,10 +145,10 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className={`group relative flex h-fit min-h-[300px] flex-col overflow-hidden rounded-xl border saturate-180 backdrop-blur-sm transition-colors ${
+        className={`group relative flex h-fit min-h-[300px] flex-col overflow-hidden rounded-xl border backdrop-blur-sm transition-colors ${
           bookmark.readingList
             ? "border-primary/40 ring-primary/10 bg-primary/5 ring-2"
-            : "border-border/40 bg-background/95"
+            : "border-border/40 bg-card/50"
         }`}
         style={{ willChange: "transform" }}
       >
