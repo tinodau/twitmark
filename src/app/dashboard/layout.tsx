@@ -5,8 +5,59 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
+import { EditFolderModal } from "@/components/dashboard/edit-folder-modal";
+import { AddFolderModal } from "@/components/dashboard/add-folder-modal";
 import { FolderProvider } from "@/contexts/folder-context";
+import { useFolder } from "@/contexts/folder-context";
 import { User } from "@supabase/supabase-js";
+
+function EditFolderModalContent() {
+  const {
+    isEditModalOpen,
+    setIsEditModalOpen,
+    editingFolder,
+    setEditingFolder,
+  } = useFolder();
+
+  return (
+    <EditFolderModal
+      isOpen={isEditModalOpen}
+      onClose={() => {
+        setIsEditModalOpen(false);
+        setEditingFolder(null);
+      }}
+      folder={editingFolder}
+    />
+  );
+}
+
+function AddFolderModalContent() {
+  const { isAddModalOpen, setIsAddModalOpen } = useFolder();
+
+  return (
+    <AddFolderModal
+      isOpen={isAddModalOpen}
+      onClose={() => setIsAddModalOpen(false)}
+    />
+  );
+}
+
+function DashboardLayoutWithProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <FolderProvider>
+      <div className="flex">
+        <Sidebar />
+        <main className="flex-1 p-6">{children}</main>
+      </div>
+      <AddFolderModalContent />
+      <EditFolderModalContent />
+    </FolderProvider>
+  );
+}
 
 export default function DashboardLayout({
   children,
@@ -44,12 +95,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       <Header user={user!} />
-      <FolderProvider>
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 p-6">{children}</main>
-        </div>
-      </FolderProvider>
+      <DashboardLayoutWithProvider>{children}</DashboardLayoutWithProvider>
     </div>
   );
 }

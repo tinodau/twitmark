@@ -24,6 +24,7 @@ export type BookmarkWithFolders = {
   readingList: boolean;
   createdAt: Date;
   folders: Array<{
+    id: string;
     name: string;
     color: string;
   }>;

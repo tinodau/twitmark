@@ -30,8 +30,8 @@ export default function DashboardPage() {
       }
       // Filter by folder
       else if (selectedFolderId) {
-        filteredData = filteredData.filter(
-          (b) => b.folderId === selectedFolderId,
+        filteredData = filteredData.filter((b) =>
+          b.folders.some((f) => f.id === selectedFolderId),
         );
       }
 

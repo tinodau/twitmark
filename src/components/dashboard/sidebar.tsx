@@ -8,18 +8,29 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  MoreVertical,
+  Edit2,
+  Trash2,
 } from "lucide-react";
 import { getFolders } from "@/app/actions/folders";
 import type { Folder as FolderType } from "@/types";
 import { AddFolderModal } from "./add-folder-modal";
 import { useFolder } from "@/contexts/folder-context";
+import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export function Sidebar() {
-  const { selectedFolderId, setSelectedFolderId } = useFolder();
+  const {
+    selectedFolderId,
+    setSelectedFolderId,
+    editingFolder,
+    setEditingFolder,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isAddModalOpen,
+    setIsAddModalOpen,
+  } = useFolder();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [folders, setFolders] = useState<FolderType[]>([]);
-  const [readingListCount, setReadingListCount] = useState(0);
 
   async function loadFolders() {
     const data = await getFolders();
@@ -28,7 +39,8 @@ export function Sidebar() {
 
   useEffect(() => {
     loadFolders();
-  }, [isAddModalOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAddModalOpen, isEditModalOpen]);
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", id: null },
@@ -82,29 +94,64 @@ export function Sidebar() {
               {folders.length > 0 ? (
                 <ul className="space-y-1" role="list" aria-label="Your folders">
                   {folders.map((folder) => (
-                    <li key={folder.id}>
-                      <button
-                        onClick={() => setSelectedFolderId(folder.id)}
-                        aria-pressed={selectedFolderId === folder.id}
-                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                          selectedFolderId === folder.id
-                            ? "bg-accent text-accent-foreground"
-                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                        } focus:outline-none focus:ring-2 focus:ring-primary/50`}
-                      >
-                        <div
-                          className="h-2 w-2 rounded-full shrink-0"
-                          style={{ backgroundColor: folder.color }}
-                          aria-hidden="true"
-                        />
-                        <span className="truncate">{folder.name}</span>
-                        <span
-                          className="ml-auto text-xs text-muted-foreground"
-                          aria-label={`${folder.bookmarkCount || 0} bookmarks`}
+                    <li key={folder.id} className="group">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedFolderId(folder.id)}
+                          aria-pressed={selectedFolderId === folder.id}
+                          className={`flex-1 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                            selectedFolderId === folder.id
+                              ? "bg-accent text-accent-foreground"
+                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          } focus:outline-none focus:ring-2 focus:ring-primary/50`}
                         >
-                          {folder.bookmarkCount || 0}
-                        </span>
-                      </button>
+                          <div
+                            className="h-2 w-2 rounded-full shrink-0"
+                            style={{ backgroundColor: folder.color }}
+                            aria-hidden="true"
+                          />
+                          <span className="truncate">{folder.name}</span>
+                          <span
+                            className="ml-auto text-xs text-muted-foreground"
+                            aria-label={`${folder.bookmarkCount || 0} bookmarks`}
+                          >
+                            {folder.bookmarkCount || 0}
+                          </span>
+                        </button>
+                        <DropdownMenu
+                          trigger={
+                            <button
+                              className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              aria-label="Folder options"
+                            >
+                              <MoreVertical
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          }
+                        >
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setEditingFolder(folder);
+                              setIsEditModalOpen(true);
+                            }}
+                            icon={<Edit2 className="h-4 w-4" />}
+                          >
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setEditingFolder(folder);
+                              setIsEditModalOpen(true);
+                            }}
+                            icon={<Trash2 className="h-4 w-4" />}
+                            variant="danger"
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -135,12 +182,6 @@ export function Sidebar() {
             )}
           </button>
         </div>
-
-        {/* Add Folder Modal */}
-        <AddFolderModal
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-        />
       </div>
     </aside>
   );

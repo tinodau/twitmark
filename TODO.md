@@ -108,8 +108,8 @@
 - [x] Create "New Folder" modal/form
 - [x] Implement create folder server action
 - [x] Build folder card component with color picker
-- [ ] Add edit folder (rename, change color)
-- [ ] Implement delete folder with confirmation
+- [x] Add edit folder (rename, change color)
+- [x] Implement delete folder with confirmation
 
 ### 4.2 Folder Navigation ✅ COMPLETED
 

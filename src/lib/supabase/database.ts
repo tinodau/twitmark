@@ -239,9 +239,7 @@ export async function addBookmarkToFolders(
 
   const { error } = await supabase
     .from("bookmark_folders")
-    .insert(bookmarkFolders)
-    .onConflict("bookmark_id,folder_id")
-    .ignore();
+    .insert(bookmarkFolders);
 
   if (error) {
     console.error("Error adding bookmark to folders:", error);
@@ -334,6 +332,7 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
       *,
       bookmark_folders (
         folders (
+          id,
           name,
           color
         )
@@ -359,10 +358,92 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
     createdAt: new Date(bookmark.created_at),
     folders:
       bookmark.bookmark_folders?.map(
-        (bf: { folders: { name: string; color: string } }) => ({
+        (bf: { folders: { id: string; name: string; color: string } }) => ({
+          id: bf.folders.id,
           name: bf.folders.name,
           color: bf.folders.color,
         }),
       ) || [],
   }));
+}
+
+// Update a folder
+export async function updateFolder(
+  folderId: string,
+  name: string,
+  color: string,
+) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  // Verify folder belongs to user
+  const { data: folder } = await supabase
+    .from("folders")
+    .select("user_id")
+    .eq("id", folderId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!folder) {
+    return { error: "Folder not found" };
+  }
+
+  const { error } = await supabase
+    .from("folders")
+    .update({
+      name: name.trim(),
+      color,
+    })
+    .eq("id", folderId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Error updating folder:", error);
+    return { error: "Failed to update folder" };
+  }
+
+  return { success: true };
+}
+
+// Delete a folder
+export async function deleteFolder(folderId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  // Verify folder belongs to user
+  const { data: folder } = await supabase
+    .from("folders")
+    .select("user_id")
+    .eq("id", folderId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!folder) {
+    return { error: "Folder not found" };
+  }
+
+  const { error } = await supabase
+    .from("folders")
+    .delete()
+    .eq("id", folderId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Error deleting folder:", error);
+    return { error: "Failed to delete folder" };
+  }
+
+  return { success: true };
 }

@@ -2,7 +2,39 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import {
+  updateFolder as dbUpdateFolder,
+  deleteFolder as dbDeleteFolder,
+} from "@/lib/supabase/database";
 import type { Folder } from "@/types";
+
+// Update a folder with direct parameters
+export async function updateFolder(
+  folderId: string,
+  name: string,
+  color: string,
+) {
+  const result = await dbUpdateFolder(folderId, name, color);
+
+  if (result.error) {
+    return result;
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+// Delete a folder with direct parameter
+export async function deleteFolder(folderId: string) {
+  const result = await dbDeleteFolder(folderId);
+
+  if (result.error) {
+    return result;
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true };
+}
 
 // Get all folders for current user
 export async function getFolders(): Promise<Folder[]> {
@@ -75,96 +107,6 @@ export async function createFolder(formData: FormData) {
   if (error) {
     console.error("Error creating folder:", error);
     return { error: "Failed to create folder" };
-  }
-
-  revalidatePath("/dashboard");
-  return { success: true };
-}
-
-// Update a folder
-export async function updateFolder(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return { error: "You must be logged in to update a folder" };
-  }
-
-  const folderId = formData.get("id") as string;
-  const name = formData.get("name") as string;
-  const color = formData.get("color") as string;
-
-  if (!folderId) {
-    return { error: "Folder ID is required" };
-  }
-
-  if (!name || name.trim().length === 0) {
-    return { error: "Folder name is required" };
-  }
-
-  // Verify folder belongs to user
-  const { data: folder } = await supabase
-    .from("folders")
-    .select("user_id")
-    .eq("id", folderId)
-    .single();
-
-  if (!folder || folder.user_id !== user.id) {
-    return { error: "Folder not found" };
-  }
-
-  const { error } = await supabase
-    .from("folders")
-    .update({
-      name: name.trim(),
-      color,
-    })
-    .eq("id", folderId);
-
-  if (error) {
-    console.error("Error updating folder:", error);
-    return { error: "Failed to update folder" };
-  }
-
-  revalidatePath("/dashboard");
-  return { success: true };
-}
-
-// Delete a folder
-export async function deleteFolder(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return { error: "You must be logged in to delete a folder" };
-  }
-
-  const folderId = formData.get("id") as string;
-
-  if (!folderId) {
-    return { error: "Folder ID is required" };
-  }
-
-  // Verify folder belongs to user
-  const { data: folder } = await supabase
-    .from("folders")
-    .select("user_id")
-    .eq("id", folderId)
-    .single();
-
-  if (!folder || folder.user_id !== user.id) {
-    return { error: "Folder not found" };
-  }
-
-  const { error } = await supabase.from("folders").delete().eq("id", folderId);
-
-  if (error) {
-    console.error("Error deleting folder:", error);
-    return { error: "Failed to delete folder" };
   }
 
   revalidatePath("/dashboard");
