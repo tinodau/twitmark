@@ -447,4 +447,297 @@ useEffect(() => {
 
 ---
 
-_Last Updated: 2026-01-31 4:20 PM (Asia/Jakarta, UTC+7:00)_
+## 2026-02-01 | State Management & UI/UX Refinement
+
+### TanStack Query Integration
+
+#### Decision Context
+
+Initially, the app relied on server actions with `revalidatePath()` for UI updates. This caused delays between user action and visual feedback.
+
+#### Solution: TanStack Query v6 with Optimistic Updates
+
+Implemented client-side state management using TanStack Query for instant UI feedback.
+
+#### Implementation Steps
+
+1. **Installed Dependencies**:
+
+   ```bash
+   npm install @tanstack/react-query@6
+   ```
+
+2. **Created QueryProvider** (`src/app/query-provider.tsx`):
+
+   ```tsx
+   const queryClient = new QueryClient({
+     defaultOptions: {
+       queries: {
+         staleTime: 60 * 1000, // 1 minute
+         refetchOnWindowFocus: false,
+         retry: 1,
+       },
+     },
+   })
+   ```
+
+3. **Created Custom Hooks**:
+   - `src/hooks/use-bookmarks.ts`: `useCreateBookmark`, `useDeleteBookmark`, `useToggleReadingList`, `useAddBookmarkToFolders`, `useRemoveBookmarkFromFolders`
+   - `src/hooks/use-folders.ts`: `useCreateFolder`, `useUpdateFolder`, `useDeleteFolder`
+
+4. **Optimistic Updates Pattern**:
+
+   ```tsx
+   onMutate: async (bookmarkId: string) => {
+     // Cancel outgoing refetches
+     await queryClient.cancelQueries({ queryKey: bookmarksKeys.lists() })
+
+     // Snapshot previous value
+     const previousBookmarks = queryClient.getQueryData(bookmarksKeys.lists())
+
+     // Optimistically update UI
+     queryClient.setQueryData(bookmarksKeys.lists(), (old) => {
+       return old.filter((b) => b.id !== bookmarkId)
+     })
+
+     return { previousBookmarks }
+   },
+   onError: (error, variables, context) => {
+     // Rollback on error
+     queryClient.setQueryData(bookmarksKeys.lists(), context?.previousBookmarks)
+   },
+   onSettled: () => {
+     // Refetch to ensure consistency
+     queryClient.invalidateQueries({ queryKey: bookmarksKeys.lists() })
+   },
+   ```
+
+#### Key Learnings
+
+- **Server Actions + Client Cache**: Server actions handle persistence, TanStack Query manages cache
+- **Optimistic Updates Make App Feel Faster**: Users see changes instantly, even if server takes 200-500ms
+- **Rollback is Critical**: Always snapshot and restore state on errors
+- **Query Keys Structure**: Organize keys hierarchically for easy invalidation
+- **Type Safety**: Custom hooks maintain full TypeScript support
+
+#### Technical Benefits
+
+- **Reduced Perceived Latency**: UI updates instantly, no waiting for server response
+- **Automatic Cache Management**: Intelligent deduplication and caching
+- **Error Resilience**: Automatic rollback on failed mutations
+- **Better UX**: Users feel like app is "instant"
+
+### Glassmorphism 2.0 Implementation
+
+#### Problem Statement
+
+Initial glassmorphism was inconsistent across components, with varying blur amounts, border styles, and background opacities.
+
+#### Solution: Standardized Glassmorphism 2.0
+
+Created consistent glass effect across all components using specific pattern.
+
+#### Implementation Pattern
+
+```tsx
+className = "border-border/40 bg-background/95 saturate-180 backdrop-blur-sm"
+```
+
+#### Key Properties
+
+- **`backdrop-blur-sm`**: Light blur (12px) for glass effect
+- **`saturate-180`**: Increases color saturation for depth
+- **`bg-background/95`**: High opacity (95%) for readability
+- **`border-border/40`**: Subtle border (40% opacity) for definition
+- **Alternative**: `bg-white/5` for lighter glass variant
+
+#### Components Updated
+
+1. **Bento Grid** (`src/components/ui/bento-grid.tsx`)
+   - Added `saturate-180` for enhanced glass effect
+   - Consistent border opacity
+
+2. **Bookmark Card** (`src/components/dashboard/bookmark-card.tsx`)
+   - `saturate-180 backdrop-blur-sm`
+   - Reading list highlight with `bg-primary/5`
+   - Consistent border handling
+
+3. **Confirm Modal** (`src/components/ui/confirm-modal.tsx`)
+   - `saturate-180 backdrop-blur-md`
+   - Higher blur for modal overlay
+
+4. **Dashboard Layout** (`src/app/dashboard/layout.tsx`)
+   - `min-h-screen` for full viewport coverage
+   - Glassmorphism sidebar and content areas
+
+#### Key Learnings
+
+- **Consistency is Critical**: Same glass effect everywhere creates cohesive design
+- **Saturate Matters**: `saturate-180%` makes glass effect more visible and premium
+- **Contrast is Key**: High background opacity (95%) ensures text readability
+- **Test on Dark Background**: Glass effects look different on dark vs light backgrounds
+
+### 60fps Animations with GPU Acceleration
+
+#### Problem Statement
+
+Animations felt slightly choppy on some devices, especially hover effects and modal transitions.
+
+#### Solution: GPU-Accelerated Animations
+
+Implemented hardware-accelerated animations using `willChange` property and spring physics.
+
+#### Implementation Pattern
+
+```tsx
+<motion.div
+  whileHover={{ y: -4 }}
+  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+  style={{ willChange: "transform" }}
+>
+```
+
+#### Key Properties
+
+- **`willChange: "transform"`**: Promotes element to GPU layer for smooth animation
+- **`willChange: "transform, opacity"`**: For fade + move animations (modals)
+- **Spring Physics**: `{ stiffness: 300, damping: 20 }` for natural feel
+- **Modal Physics**: `{ stiffness: 300, damping: 25 }` for slightly tighter feel
+
+#### Animation Standards
+
+| Type             | Physics                           | willChange           |
+| ---------------- | --------------------------------- | -------------------- |
+| Hover effects    | `{ stiffness: 300, damping: 20 }` | `transform`          |
+| Modal open/close | `{ stiffness: 300, damping: 25 }` | `transform, opacity` |
+| Page transitions | `{ stiffness: 300, damping: 20 }` | `transform, opacity` |
+| Staggered lists  | `{ staggerChildren: 0.1 }`        | `transform`          |
+
+#### Key Learnings
+
+- **willChange Promotes to GPU Layer**: Tells browser to prepare GPU resources ahead of time
+- **Spring Physics > Easing**: Natural, smooth motion feels more premium
+- **Be Careful with willChange**: Don't overuse - can cause memory issues
+- **60fps Target**: Test with Chrome DevTools Performance tab
+
+### Code Quality: Prettier Integration
+
+#### Problem Statement
+
+Code formatting was inconsistent between team members and editors, leading to merge conflicts.
+
+#### Solution: Prettier + tailwindcss-prettier Plugin
+
+Implemented automatic code formatting with Tailwind class sorting.
+
+#### Implementation Steps
+
+1. **Installed Dependencies**:
+
+   ```bash
+   npm install -D prettier tailwindcss-prettier
+   ```
+
+2. **Created .prettierrc**:
+
+   ```json
+   {
+     "semi": false,
+     "singleQuote": false,
+     "tabWidth": 2,
+     "trailingComma": "es5",
+     "plugins": ["tailwindcss-prettier"]
+   }
+   ```
+
+3. **Created .prettierignore**:
+
+   ```
+   .next/
+   node_modules/
+   public/
+   ```
+
+#### Key Learnings
+
+- **tailwindcss-prettier Sorts Classes**: Automatic class organization by variant group
+- **Consistent Formatting**: No more "comma vs no comma" debates
+- **Auto-Format on Save**: Configure in VS Code settings for instant feedback
+- **Reduces Merge Conflicts**: Same formatting across all contributors
+
+#### Prettier Configuration Decisions
+
+- **No Semicolons**: Matches TypeScript/JavaScript modern style
+- **Double Quotes**: Standard for JSX/TSX files
+- **2-Space Indent**: Standard for web development
+- **Trailing Commas**: Reduces diff noise
+
+### Cursor Pointers & Interactive Feedback
+
+#### Problem Statement
+
+Some clickable elements didn't have cursor pointer, making it unclear they're interactive.
+
+#### Solution: Consistent Cursor Pointers
+
+Added `cursor-pointer` class to all clickable elements.
+
+#### Pattern Applied
+
+```tsx
+<button className="bg-primary cursor-pointer text-primary-foreground">
+  Click Me
+</button>
+
+<a href="#" className="cursor-pointer">Link</a>
+```
+
+#### Key Learnings
+
+- **All Interactive Elements Need Cursor Pointers**: Buttons, links, clickable divs
+- **Helps with Discoverability**: Users know what they can interact with
+- **Accessibility Consideration**: Don't rely solely on cursor pointer - also use visual cues
+
+### Documentation Updates
+
+Updated all documentation to reflect current state:
+
+1. **context.md**: Added TanStack Query, Glassmorphism 2.0, performance sections
+2. **TODO.md**: Updated progress tracking (85% complete)
+3. **.docs/architecture.md**: Added state management section, performance optimization
+4. **.docs/design-system.md**: Comprehensive design tokens, animation standards, code quality
+5. **.memory/lessons-learned.md**: This file documenting all learnings
+
+### Project Health Check
+
+Build verified after all changes:
+
+```bash
+npm run build
+✓ Compiled successfully in 8.6s
+Route (app)
+├ ○ /
+├ ○ /_not-found
+├ ƒ /auth/callback
+├ ○ /dashboard
+└ ○ /login
+```
+
+### Overall Progress (2026-02-01)
+
+- **TanStack Query**: ✅ Full integration with optimistic updates
+- **UI/UX Refinement**: ✅ Consistent glassmorphism 2.0
+- **Performance**: ✅ 60fps animations with GPU acceleration
+- **Code Quality**: ✅ Prettier + tailwindcss-prettier configured
+- **Documentation**: ✅ All docs updated to current state
+- **Overall Progress**: 85% (73/86 tasks)
+
+### Remaining Work
+
+- **Phase 7.6**: Testing (Vitest unit tests, Playwright E2E tests)
+- **Phase 7.7**: Performance Optimization (Lighthouse audit, image optimization, code splitting)
+- **Phase 8**: Deployment (0/9 tasks)
+
+---
+
+_Last Updated: 2026-02-01 4:16 PM (Asia/Jakarta, UTC+7:00)_

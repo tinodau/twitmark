@@ -14,6 +14,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - `tech-stack.md`: The 2026 tech stack (Next.js 16, Supabase, Magic UI).
 - `architecture.md`: Data flow and folder structure conventions.
 - `design-system.md`: Visual guidelines (Bento Grid, Glassmorphism 2.0).
+- `testing-plan.md`: Testing strategy and implementation plan.
 
 ### 2. The "Skills" (.skills/)
 
@@ -25,6 +26,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - `app/`: Next.js App Router (Landing page, Auth, Dashboard).
 - `components/`: UI components (Atomic design).
 - `lib/`: Shared utilities and Supabase config.
+- `hooks/`: Custom React hooks (TanStack Query for state management).
 
 ### 4. The "State" (Source of Truth)
 
@@ -37,6 +39,8 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - **Rendering**: Using `react-tweet` for all tweet embeds (no custom styling, follows natural dimensions)
 - **Database**: Supabase (PostgreSQL with direct client access)
 - **Auth**: Supabase Auth with Google OAuth
+- **State Management**: TanStack Query with optimistic updates
+- **UI Framework**: Tailwind CSS 4.x with Prettier + tailwindcss-prettier plugin
 
 ## 📦 Completed Features
 
@@ -62,6 +66,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Bookmark cards with `react-tweet` embed
 - Delete bookmark action
 - Loading states
+- Pagination for large bookmark lists
 
 ### Phase 4: Folder System ✅
 
@@ -70,6 +75,8 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Folder sidebar with bookmark counts
 - Filter by folder on dashboard
 - Assign folder on bookmark creation
+- Edit folder name and color
+- Delete folder
 
 ### Phase 5: Reading List ✅
 
@@ -77,6 +84,45 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Dedicated reading list view
 - Visual indicators for reading list items
 - Empty states
+
+### Phase 7: Refinement & Polish ✅
+
+#### Accessibility Improvements
+
+- ARIA labels on all interactive elements
+- Keyboard navigation support
+- Focus management for modals
+- Screen reader compatible
+
+#### Toast Notifications ✅
+
+- Custom toast context and component
+- Success and error variants
+- Auto-dismiss with timer
+- Smooth animations with Framer Motion
+
+#### UI/UX Refinement ✅
+
+- Consistent cursor pointers on all clickable elements
+- Glassmorphism 2.0 implementation across all components
+- 60fps animations with GPU acceleration
+- Spring physics for smooth, natural motion
+- `willChange` property for optimized rendering
+- Saturate-180 backdrop filter for glass effects
+
+#### Code Quality ✅
+
+- Prettier configured for code formatting
+- tailwindcss-prettier plugin for Tailwind class sorting
+- Auto-format on save enabled
+
+#### State Management with TanStack Query ✅
+
+- QueryClient provider set up with optimal defaults
+- Custom hooks for bookmark operations (create, delete, toggle reading list, manage folders)
+- Custom hooks for folder operations (create, update, delete)
+- Optimistic updates for instant UI feedback
+- Automatic cache invalidation and rollback on errors
 
 ## 🚀 Getting Started for AI
 
@@ -86,6 +132,7 @@ Before performing any task:
 2. Check `tech-stack.md` to ensure library compatibility.
 3. Follow "Vibe-Coding" flow: prioritize beautiful UI and smooth animations.
 4. Review `.memory/lessons-learned.md` to avoid repeating past mistakes.
+5. Use TanStack Query hooks for data operations (see `src/hooks/`)
 
 ## 📝 Key Design Decisions (for reference)
 
@@ -96,3 +143,30 @@ Before performing any task:
 3. **Supabase Direct Access**: Using Supabase client directly in server actions (no ORM/Prisma layer).
 
 4. **Folder Context**: Using React Context for folder state management across dashboard components.
+
+5. **TanStack Query**: Client-side state management with optimistic updates for instant UI feedback. Server actions handle mutations, while TanStack Query manages cache.
+
+6. **Glassmorphism 2.0**: Consistent use of `backdrop-blur`, `saturate-180`, and `bg-white/5` (or `bg-background/95`) for glass effects across all components.
+
+7. **GPU Acceleration**: Using `willChange: "transform"` and spring physics for 60fps animations on interactive elements.
+
+## 🔧 Recent Improvements
+
+### Performance Optimizations
+
+- Pagination implemented for bookmark lists to handle large datasets
+- Optimistic updates reduce perceived latency
+- Cache management with TanStack Query reduces unnecessary API calls
+
+### Visual Enhancements
+
+- Consistent glassmorphism implementation throughout app
+- Smooth 60fps animations with proper GPU acceleration
+- Enhanced contrast ratios for better readability
+- Interactive hover states with spring physics
+
+### Code Quality
+
+- Prettier integration for consistent code formatting
+- Tailwind class sorting for maintainable CSS
+- Type-safe custom hooks with TypeScript

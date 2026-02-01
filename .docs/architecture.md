@@ -26,21 +26,32 @@ twitmark/
 │   │   ├── login/        # Login page (Google OAuth)
 │   │   ├── globals.css   # Tailwind + custom styles
 │   │   ├── layout.tsx    # Root layout
-│   │   └── page.tsx      # Landing page
+│   │   ├── page.tsx      # Landing page
+│   │   ├── query-provider.tsx # TanStack Query provider
+│   │   └── toast-provider.tsx # Toast notification provider
 │   ├── components/     # React Components
 │   │   ├── dashboard/  # Dashboard-specific components
 │   │   │   ├── add-bookmark-modal.tsx
 │   │   │   ├── add-folder-modal.tsx
 │   │   │   ├── bookmark-card.tsx
+│   │   │   ├── edit-folder-modal.tsx
 │   │   │   ├── header.tsx
+│   │   │   ├── manage-folders-modal.tsx
 │   │   │   └── sidebar.tsx
 │   │   ├── ui/         # Shadcn/Magic UI primitives
 │   │   │   ├── aurora-background.tsx
-│   │   │   └── bento-grid.tsx
+│   │   │   ├── bento-grid.tsx
+│   │   │   ├── confirm-modal.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   └── toast.tsx
 │   │   ├── navbar.tsx   # Main navigation
 │   │   └── testimonials-marquee.tsx
 │   ├── contexts/       # React Context providers
-│   │   └── folder-context.tsx
+│   │   ├── folder-context.tsx
+│   │   └── toast-context.tsx
+│   ├── hooks/          # Custom React hooks (TanStack Query)
+│   │   ├── use-bookmarks.ts
+│   │   └── use-folders.ts
 │   ├── lib/           # Shared logic
 │   │   ├── supabase/
 │   │   │   ├── client.ts
@@ -51,33 +62,63 @@ twitmark/
 │       └── index.ts
 ├── public/            # Static assets
 ├── supabase/          # Database schema
-│   └── schema.sql
+│   ├── schema.sql
+│   └── migrations/    # Database migrations
+├── .prettierrc        # Prettier config
+└── tailwind.config.ts  # Tailwind CSS config
 ```
 
 ## 2. Component Design Pattern
 
 - **Server Components (RSC)**: Used for all pages in `src/app` to fetch initial data from Supabase directly.
 - **Client Components**: Marked with `"use client"`. Used for:
-  - **Interactive Modals (Magic UI)**.
-  - **Forms (Server Actions)**.
-  - **Real-time animations (Framer Motion)**.
-  - **Context Providers** (FolderContext).
-  - **Colocation**: Keep components close to where they are used. If a component is only used in Dashboard, put it in `components/dashboard`.
+  - **Interactive Modals** (Magic UI).
+  - **Forms** (Server Actions).
+  - **Real-time animations** (Framer Motion).
+  - **Context Providers** (FolderContext, ToastContext).
+  - **TanStack Query Hooks** (useBookmarks, useFolders).
+- **Colocation**: Keep components close to where they are used. If a component is only used in Dashboard, put it in `components/dashboard`.
 
 ## 3. Data Flow Strategy
 
+### User Interactions (Client-Side)
+
 - **Input**: User pastes X/Twitter link in `AddBookmarkModal` component.
-- **Action**: Invokes a Server Action in `actions/bookmarks.ts`.
+- **Optimistic UI**: TanStack Query immediately updates UI for instant feedback.
+- **Action**: Invokes Server Action in `actions/bookmarks.ts`.
 - **Validation**: Server validates URL format (x.com/twitter.com only).
 - **Persistence**: Saved to Supabase directly via Supabase client.
-- **Rendering**: `BookmarkCard` component uses `react-tweet` to render tweet embed.
+- **Cache**: TanStack Query invalidates cache and refetches data.
+
+### Rendering
+
+- **BookmarkCard**: Uses `react-tweet` to render tweet embed.
+- **Pagination**: Handles large bookmark lists efficiently.
 - **Update**: Server action revalidates path, triggering UI refresh.
 
 ## 4. State Management
 
-- **Server State**: Managed by Next.js 16 cache and Server Actions.
-- **UI State**: Local `useState` for modals and React Context for folder state.
-- **Persistent UI**: URL state for folder filtering (`/dashboard?folder=id`).
+### Client-Side (TanStack Query)
+
+- **QueryClient Provider**: Wraps app at root level (`src/app/layout.tsx`).
+- **Custom Hooks**: Located in `src/hooks/`
+  - `useBookmarks`: Create, delete, toggle reading list, manage folders
+  - `useFolders`: Create, update, delete folders
+- **Optimistic Updates**: Instant UI feedback before server confirmation
+- **Cache Management**: Automatic invalidation and rollback on errors
+- **Query Keys**: Structured keys for efficient cache invalidation
+
+### Server State
+
+- **Next.js 16 Cache**: Server component data caching
+- **Server Actions**: Mutate data with automatic revalidation
+
+### UI State
+
+- **Local State**: `useState` for modals and form inputs
+- **React Context**: FolderContext for folder selection across dashboard
+- **URL State**: Folder filtering via query params (`/dashboard?folder=id`)
+- **Toast Context**: Notification system for user feedback
 
 ## 5. Database Layer
 
@@ -85,6 +126,7 @@ twitmark/
 - **Server Components**: Use `createClient()` from `@/lib/supabase/server`
 - **Client Components**: Use `createClient()` from `@/lib/supabase/client`
 - **Type Safety**: Shared types in `@/types/index.ts`
+- **Migrations**: Located in `supabase/migrations/` for schema evolution
 
 ## 6. Authentication Flow
 
@@ -94,6 +136,7 @@ twitmark/
 4. Server exchanges code for session
 5. Redirects to `/dashboard`
 6. Database trigger auto-creates user profile
+7. Dashboard layout checks auth and redirects unauthenticated users
 
 ## 7. Security
 
@@ -101,10 +144,55 @@ twitmark/
 - **Policies**: Users can only CRUD their own data
 - **Auth**: Supabase Auth handles JWT verification
 - **Type Safety**: No `any` types, strict TypeScript mode
+- **Environment Variables**: Secrets stored in `.env.local` (never committed)
 
-## 8. Key Design Decisions
+## 8. Performance Optimizations
+
+### Rendering
+
+- **GPU Acceleration**: `willChange` property on animated elements
+- **Spring Physics**: 60fps animations using Framer Motion
+- **Pagination**: Efficient handling of large bookmark lists
+- **Code Splitting**: Next.js automatic code splitting
+
+### Data Fetching
+
+- **TanStack Query**: Intelligent caching and deduplication
+- **Optimistic Updates**: Instant UI feedback
+- **Stale Time**: 1 minute cache to reduce API calls
+- **Refetch on Focus**: Disabled for better UX
+
+### Styling
+
+- **Tailwind CSS**: Production-optimized via JIT compiler
+- **Glassmorphism 2.0**: Efficient backdrop-filter with saturate-180
+- **Prettier**: Consistent code formatting for maintainability
+
+## 9. Key Design Decisions
 
 - **No ORM**: Direct Supabase client access instead of Prisma/TypeORM
 - **Tweet-Only**: Removed article/metadata scraping - focuses on `react-tweet` embeds
 - **Natural Card Size**: Bookmark cards follow tweet dimensions, no fixed sizing
 - **Context for Folders**: React Context for folder state across dashboard components
+- **TanStack Query**: Client-side state management with optimistic updates
+- **Glassmorphism 2.0**: Consistent `backdrop-blur`, `saturate-180`, and `bg-white/5` or `bg-background/95` for glass effects
+- **GPU Acceleration**: Using `willChange: "transform"` and spring physics for 60fps animations
+- **Server Actions**: Handle mutations while TanStack Query manages cache
+- **Type-Safe Hooks**: Custom hooks with full TypeScript support
+
+## 10. Code Quality Standards
+
+- **Prettier**: Auto-formatting with project standards
+- **Tailwind Plugin**: `tailwindcss-prettier` for class sorting
+- **Strict TypeScript**: No `any` types, proper typing everywhere
+- **Clean Code**: Follow `.skills/clean-code.md` guidelines
+- **Component Modularity**: Single responsibility per component
+- **Accessibility**: ARIA labels, keyboard navigation, focus management
+
+## 11. Animation Standards
+
+- **Framer Motion**: All animations use Framer Motion 12
+- **Spring Physics**: `{ stiffness: 300, damping: 20 }` for smooth, natural motion
+- **GPU Layer**: `willChange: "transform"` for hardware acceleration
+- **Consistent Duration**: 60fps target for all interactive elements
+- **Smooth Transitions**: No jarring cuts, always animated
