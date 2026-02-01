@@ -77,7 +77,11 @@ export default function Home() {
         </section>
 
         {/* Features Bento Grid */}
-        <section id="features" aria-labelledby="features-title" className="mx-auto mt-32 max-w-6xl">
+        <section
+          id="features"
+          aria-labelledby="features-title"
+          className="mx-auto mt-32 max-w-6xl scroll-mt-24"
+        >
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
