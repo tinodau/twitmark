@@ -36,7 +36,7 @@ coverage
 # Documentation
 README.md
 *.md
-!.docs/CF_DEPLOYMENT.md
+!.docs/deployment.md
 
 # CI/CD
 .github
