@@ -1,0 +1,31 @@
+# Cloudflare Pages configuration for Twitmark (Next.js 16)
+
+name = "twitmark"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables (set these in Cloudflare Dashboard)
+# [vars]
+# NEXT_PUBLIC_SUPABASE_URL = "your-supabase-url"
+# NEXT_PUBLIC_SUPABASE_ANON_KEY = "your-supabase-anon-key"
+
+# Build configuration
+[build]
+command = "npm run build"
+cwd = "."
+
+[site]
+bucket = ".next"
+
+# Edge runtime configuration
+[[build.upload.rules]]
+type = "CompiledWasm"
+globs = ["**/*.wasm"]
+
+[[build.upload.rules]]
+type = "ESModule"
+globs = ["**/*.js", "**/*.mjs"]
+
+[[build.upload.rules]]
+type = "Text"
+globs = ["**/*.txt", "**/*.html", "**/*.json", "**/*.css"]

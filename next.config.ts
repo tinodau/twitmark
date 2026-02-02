@@ -8,8 +8,10 @@ const nextConfig: NextConfig = {
   experimental: {
     // Optimize CSS
     optimizeCss: true,
+    // Use edge runtime for better Cloudflare Pages compatibility
+    serverComponentsExternalPackages: ["@supabase/supabase-js"],
   },
-  // Optimize images
+  // Optimize images - use unoptimized for Cloudflare Pages
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -18,6 +20,7 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+    unoptimized: false, // Set to true if you encounter image issues on CF Pages
   },
   // Compress responses
   compress: true,
@@ -29,6 +32,8 @@ const nextConfig: NextConfig = {
       transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
     },
   },
+  // Cloudflare Pages compatibility
+  output: "standalone",
 }
 
 export default nextConfig
