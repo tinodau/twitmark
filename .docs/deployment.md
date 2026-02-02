@@ -6,7 +6,228 @@ This guide will walk you through deploying Twitmark to Cloudflare Pages.
 
 1. A Cloudflare account (free tier works)
 2. GitHub account
-3. Supabase project credentials
+3. **Two** Supabase projects (one for development, one for production)
+
+## Supabase Projects Setup
+
+This project uses **separate Supabase projects** for development and production to ensure complete data isolation.
+
+### Step 1: Create Development Supabase Project
+
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Click **"New Project"**
+3. Name it `twitmark-dev` (or similar)
+4. Choose a region close to you
+5. Set database password (save it securely)
+6. Wait for project to be created (~2 minutes)
+
+### Step 2: Create Production Supabase Project
+
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Click **"New Project"**
+3. Name it `twitmark-prod` (or similar)
+4. Choose the same region as dev project
+5. Set database password (save it securely)
+6. Wait for project to be created (~2 minutes)
+
+### Step 3: Run Migrations on Both Projects
+
+For **each project** (dev and prod):
+
+1. Go to **SQL Editor** in Supabase Dashboard
+2. Run each migration file from `supabase/migrations/` in order:
+   - `001_initial_schema.sql` (if exists)
+   - `002_add_multiple_folders.sql`
+   - `003_add_folder_icon.sql`
+   - Any additional migrations
+
+Or use Supabase CLI:
+
+```bash
+# Install Supabase CLI
+npm install -g supabase
+
+# Link to development project
+supabase link --project-ref YOUR_DEV_PROJECT_REF
+
+# Push migrations to dev
+supabase db push
+
+# Link to production project
+supabase link --project-ref YOUR_PROD_PROJECT_REF
+
+# Push migrations to prod
+supabase db push
+```
+
+### Step 4: Get Credentials for Both Projects
+
+For **each project**, go to **Settings** → **API** and copy:
+
+**Development Project:**
+
+- Project URL → Save as `DEV_SUPABASE_URL`
+- anon/public key → Save as `DEV_SUPABASE_ANON_KEY`
+- Project reference (from URL) → Save as `DEV_SUPABASE_PROJECT_REF`
+
+**Production Project:**
+
+- Project URL → Save as `PROD_SUPABASE_URL`
+- anon/public key → Save as `PROD_SUPABASE_ANON_KEY`
+- Project reference (from URL) → Save as `PROD_SUPABASE_PROJECT_REF`
+
+### Step 5: Configure Local Development
+
+Create `.env.local` (or copy from `.env.example`):
+
+```bash
+# Local Development - Uses Dev Project
+NEXT_PUBLIC_SUPABASE_URL=https://your-dev-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-dev-anon-key
+```
+
+### Step 6: Configure Cloudflare Pages (Production)
+
+In Cloudflare Dashboard → **Settings** → **Environment Variables** → **Production**:
+
+```bash
+# Production - Uses Prod Project
+NEXT_PUBLIC_SUPABASE_URL=https://your-prod-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-prod-anon-key
+```
+
+## Environment Switching Guide
+
+### Development (Local)
+
+```bash
+# Uses .env.local (Dev Project)
+npm run dev
+```
+
+- Development data stays in `twitmark-dev`
+- Safe to test, delete, modify anything
+- No risk to production data
+
+### Production (Cloudflare Pages)
+
+```bash
+# Uses Cloudflare env vars (Prod Project)
+git push origin main
+# Cloudflare auto-deploys
+```
+
+- Production data stays in `twitmark-prod`
+- Clean separation from dev data
+- Real users access this
+
+### Switching Between Projects for Testing
+
+If you need to test against production data locally:
+
+```bash
+# Temporarily change .env.local
+NEXT_PUBLIC_SUPABASE_URL=https://your-prod-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-prod-anon-key
+
+# Or use a different file
+cp .env.prod .env.local
+npm run dev
+```
+
+⚠️ **Be careful** - any changes you make will affect production data!
+
+## Migration Sync Process
+
+When you make database changes:
+
+1. **Create new migration:**
+
+```bash
+# Create migration file
+supabase migration new your_migration_name
+```
+
+2. **Test on dev project:**
+
+```bash
+# Link to dev project (if not already)
+supabase link --project-ref DEV_PROJECT_REF
+
+# Push to dev
+supabase db push
+
+# Test locally
+npm run dev
+```
+
+3. **Deploy to production:**
+
+```bash
+# Commit migration files
+git add supabase/migrations/
+git commit -m "Add migration for new feature"
+git push
+
+# Link to prod project
+supabase link --project-ref PROD_PROJECT_REF
+
+# Push to prod
+supabase db push
+```
+
+4. **Verify production:**
+   - Check Cloudflare deployment succeeded
+   - Test production site manually
+   - Verify data integrity
+
+### Migration Checklist
+
+Before deploying to production:
+
+- [ ] Migration tested on dev project
+- [ ] No breaking changes to existing data
+- [ ] RLS policies updated (if needed)
+- [ ] Backed up production data (if risky change)
+- [ ] Tested locally with dev data
+- [ ] Committed migration files to git
+- [ ] Documented changes in migration file
+
+## Why Separate Projects?
+
+### Benefits:
+
+1. **Complete Data Isolation**
+   - Development data never mixes with production
+   - Safe to test destructive operations
+   - Real users never see test data
+
+2. **Safe Testing**
+   - Can test auth flows with test accounts
+   - Can delete/recreate data freely
+   - No risk to user data
+
+3. **Clear Separation**
+   - Easy to know which environment you're in
+   - Different projects have different users
+   - Billing separated (dev can be on free tier)
+
+### Considerations:
+
+1. **Need to Sync Migrations**
+   - Must apply migrations to both projects
+   - Need to track which migrations ran where
+   - Consider using Supabase CLI for easier sync
+
+2. **More Setup**
+   - Two projects to manage
+   - Two sets of credentials
+   - Need to keep schema in sync
+
+3. **Testing Against Prod**
+   - Requires switching env vars
+   - Riskier if not careful
+   - Recommend using prod only for final verification
 
 ## Step 1: Prepare Your Repository
 
@@ -35,25 +256,35 @@ git push
 
 ### Basic Configuration
 
-| Setting                    | Value                           |
-| -------------------------- | ------------------------------- |
-| **Project name**           | `twitmark` (or your preference) |
-| **Production branch**      | `main`                          |
-| **Framework preset**       | `Next.js`                       |
-| **Build command**          | `npm run build`                 |
-| **Build output directory** | `.next`                         |
-| **Root directory**         | `/` (leave blank)               |
+| Setting                    | Value                             |
+| -------------------------- | --------------------------------- |
+| **Project name**           | `twitmark` (or your preference)   |
+| **Production branch**      | `main`                            |
+| **Framework preset**       | `Next.js`                         |
+| **Build command**          | `npx @cloudflare/next-on-pages@1` |
+| **Build output directory** | `.vercel/output/static`           |
+| **Root directory**         | `/` (leave blank)                 |
 
 ### Advanced Configuration (Optional)
 
 Click **Show advanced** and configure:
 
-| Setting                   | Value           |
-| ------------------------- | --------------- |
-| **Node.js version**       | `18` or `20`    |
-| **Environment variables** | See below       |
-| **Build command**         | `npm run build` |
-| **Output directory**      | `.next`         |
+| Setting                   | Value                             |
+| ------------------------- | --------------------------------- |
+| **Node.js version**       | `20` or higher                    |
+| **Environment variables** | See below (Production Supabase)   |
+| **Build command**         | `npx @cloudflare/next-on-pages@1` |
+| **Output directory**      | `.vercel/output/static`           |
+
+### ⚠️ Important: Edge Runtime
+
+This project uses **Edge Runtime** for Cloudflare Pages compatibility. The following have been configured:
+
+- `src/app/layout.tsx` - Added `export const runtime = "edge"`
+- `src/app/auth/callback/route.ts` - Added `export const runtime = "edge"`
+- Client components (page.tsx, login/page.tsx, dashboard/\*) don't need this
+
+This allows all routes to run on Cloudflare's Edge Runtime for maximum performance.
 
 ## Step 4: Set Environment Variables ⚠️ **CRITICAL**
 
