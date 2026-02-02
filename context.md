@@ -11,11 +11,12 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 ### 1. The "Brain" (.docs/)
 
 - `spec.md`: Detailed business logic and user flows.
-- `tech-stack.md`: The 2026 tech stack (Next.js 16, Supabase, Magic UI).
+- `tech-stack.md`: The 2026 tech stack (Next.js 16, Supabase, Magic UI, Cloudflare Pages).
 - `architecture.md`: Data flow and folder structure conventions.
 - `design-system.md`: Visual guidelines (Bento Grid, Glassmorphism 2.0).
 - `testing-plan.md`: Testing strategy and implementation plan.
 - `performance.md`: Performance optimization details and best practices.
+- `deployment.md`: Cloudflare Pages deployment guide.
 - `mcp-tools.md`: MCP server documentation.
 - `database.md`: Database setup instructions and schema guide.
 
@@ -40,10 +41,12 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 
 - **Strategy**: Copy-Paste X URLs
 - **Rendering**: Using `react-tweet` for all tweet embeds (no custom styling, follows natural dimensions)
-- **Database**: Supabase (PostgreSQL with direct client access)
+- **Database**: Supabase (PostgreSQL with single project for dev and prod)
 - **Auth**: Supabase Auth with Google OAuth
 - **State Management**: TanStack Query with optimistic updates
 - **UI Framework**: Tailwind CSS 4.x with Prettier + tailwindcss-prettier plugin
+- **Deployment**: Cloudflare Pages with Edge Runtime (@cloudflare/next-on-pages)
+- **Runtime**: Edge Runtime for all server components
 
 ## 📦 Completed Features
 
@@ -87,6 +90,29 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Dedicated reading list view
 - Visual indicators for reading list items
 - Empty states
+
+### Phase 6: Deployment & Infrastructure ✅
+
+#### Cloudflare Pages Deployment ✅
+
+- Configured for Cloudflare Pages with Edge Runtime support
+- Build command: `npx @cloudflare/next-on-pages@1`
+- Build output: `.vercel/output/static`
+- Edge Runtime configured on `src/app/layout.tsx` and `src/app/auth/callback/route.ts`
+- Removed incompatible Next.js configs (cacheComponents, output standalone, serverExternalPackages)
+
+#### Supabase Configuration ✅
+
+- Single Supabase project: `twitmark`
+- Shared project for development and production environments
+- Configuration documented in `.docs/deployment.md`
+- Migration process with Supabase CLI
+
+#### Environment Variables ✅
+
+- `.env.example` template with Supabase credentials
+- Local development and production use same Supabase project
+- Security notes and setup instructions included
 
 ### Phase 7: Refinement & Polish ✅
 
@@ -152,6 +178,8 @@ Before performing any task:
 6. **Glassmorphism 2.0**: Consistent use of `backdrop-blur`, `saturate-180`, and `bg-white/5` (or `bg-background/95`) for glass effects across all components.
 
 7. **GPU Acceleration**: Using `willChange: "transform"` and spring physics for 60fps animations on interactive elements.
+
+8. **Single Supabase Project**: Using one project for both development and production environments.
 
 ## 🔧 Recent Improvements
 

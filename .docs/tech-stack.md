@@ -2,8 +2,8 @@
 
 ## 1. Core Framework
 
-- **Framework**: Next.js 16.x (App Router)
-- **Runtime**: Node.js 24.x LTS
+- **Framework**: Next.js 16.x (App Router with Edge Runtime support)
+- **Runtime**: Edge Runtime (Cloudflare Pages) / Node.js 20+ (local development)
 - **Language**: TypeScript 5.7+ (Strict Mode)
 - **Bundler**: Turbopack (Default)
 
@@ -17,18 +17,20 @@
 
 ## 3. Backend & Infrastructure
 
-- **Database**: **Supabase** (PostgreSQL with built-in authentication)
+- **Database**: **Supabase** (PostgreSQL with built-in authentication, single project for dev and prod)
 - **Authentication**: Supabase Auth (Google OAuth)
 - **Real-time**: Supabase Realtime (For live updates)
 - **Storage**: Supabase Storage (For future avatar/file uploads)
-- **Deployment**: Vercel (Optimized for Next.js 16 PPR)
+- **Deployment**: Cloudflare Pages with Edge Runtime (@cloudflare/next-on-pages)
+- **Build Adapter**: @cloudflare/next-on-pages@1
 
 ## 4. Data Fetching & State Management
 
 - **Server Side**: Next.js Server Actions for all mutations (Bookmark CRUD, Folder CRUD)
 - **Database Access**: Direct Supabase client (TypeScript SDK) in Server Components
-- **Client Side**: React hooks for state management
+- **Client Side**: @tanstack/react-query v6 for state management with optimistic updates
 - **Validation**: Custom URL validation for X/Twitter links
+- **Cache Management**: TanStack Query with automatic cache invalidation
 
 ## 5. Database Schema (Supabase PostgreSQL)
 
@@ -69,8 +71,30 @@
 
 ## 6. Development Tools
 
-- **Linter**: ESLint 10+
-- **Testing**: Vitest + Playwright (For E2E UI testing)
+- **Linter**: ESLint 9+
+- **Testing**: Vitest (unit tests) + Playwright (E2E tests)
+- **Code Formatting**: Prettier with tailwindcss-prettier plugin
 - **AI Tools**: Cursor/Cline with MCP (Model Context Protocol) enabled
-- **Database Management**: Supabase SQL Editor
-- **Environment**: Supabase Local (for local development - optional)
+- **Database Management**: Supabase SQL Editor + Supabase CLI
+- **Environment**: Separate dev and prod Supabase projects
+
+## 7. Edge Runtime Configuration
+
+### Server Components (Edge Runtime)
+
+- `src/app/layout.tsx`: Root layout with `export const runtime = "edge"`
+- `src/app/auth/callback/route.ts`: OAuth callback with `export const runtime = "edge"`
+
+### Client Components (No Runtime Export)
+
+- `src/app/page.tsx`: Landing page
+- `src/app/login/page.tsx`: Login page
+- `src/app/dashboard/layout.tsx`: Dashboard layout
+- `src/app/dashboard/page.tsx`: Dashboard page
+
+### Cloudflare Pages Compatibility
+
+- Removed incompatible Next.js configs: `cacheComponents`, `output: "standalone"`, `serverExternalPackages`
+- Build command: `npx @cloudflare/next-on-pages@1`
+- Build output: `.vercel/output/static`
+- All routes run on Edge Runtime for maximum performance

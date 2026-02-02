@@ -15,10 +15,10 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 
 ### Core Framework
 
-- **Next.js 16.1.6** - App Router with Partial Prerendering (PPR)
+- **Next.js 16.1.6** - App Router with Edge Runtime support
 - **Turbopack** - Lightning-fast bundler
 - **TypeScript 5.x** - Strict mode enabled
-- **Node.js 24.x** - Latest LTS runtime
+- **Node.js 20+** - Compatible with Cloudflare Pages
 
 ### Frontend & Styling
 
@@ -34,6 +34,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - **Supabase Auth** - Google OAuth provider with secure session management
 - **Zod 4.3.6** - Schema-based validation
 - **react-tweet 3.3.0** - Optimized tweet rendering for Next.js 16
+- **@cloudflare/next-on-pages** - Cloudflare Pages adapter for Next.js
 
 ### Development Tools
 
@@ -52,6 +53,7 @@ twitmark/
 │   ├── tech-stack.md        # Technology choices
 │   ├── testing-plan.md      # Testing strategy
 │   ├── performance.md       # Performance optimization
+│   ├── deployment.md       # Cloudflare Pages deployment guide
 │   ├── mcp-tools.md       # MCP server documentation
 │   └── database.md        # Database setup
 ├── src/
@@ -102,18 +104,23 @@ twitmark/
 
 ### Prerequisites
 
-- Node.js 24.x LTS
+- Node.js 20+ LTS
 - npm, yarn, pnpm, or bun
+- Supabase account (free tier works)
 
 ### Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/twitmark.git
+git clone https://github.com/tinodau/twitmark.git
 cd twitmark
 
 # Install dependencies
 npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
 
 # Start development server
 npm run dev
@@ -124,9 +131,37 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Build for Production
 
 ```bash
+# Build with Cloudflare Pages adapter
+npx @cloudflare/next-on-pages@1
+
+# Or regular Next.js build
 npm run build
 npm start
 ```
+
+## 🌐 Deployment
+
+Twitmark is deployed on **Cloudflare Pages** with Edge Runtime support.
+
+### Quick Deploy to Cloudflare Pages
+
+1. **Create Supabase project**:
+   - Single `twitmark` project used for both development and production
+
+2. **Run migrations** on the project (see `.docs/database.md`)
+
+3. **Configure Cloudflare Pages**:
+   - Build command: `npx @cloudflare/next-on-pages@1`
+   - Build directory: `.vercel/output/static`
+   - Add production environment variables:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+     ```
+
+4. **Deploy**: Push to `main` branch and Cloudflare auto-deploys
+
+**Full deployment guide:** See [`.docs/deployment.md`](./.docs/deployment.md)
 
 ## 🎯 Features
 
@@ -152,19 +187,27 @@ npm start
 
 ## 🔐 Environment Variables
 
-Create a `.env.local` file:
+### Local Development
+
+Copy `.env.example` to `.env.local` and fill in your Supabase credentials:
 
 ```env
-# Supabase Configuration
+# Supabase Project (shared for dev and prod)
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
-SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET="https://your-project.supabase.co/auth/v1/callback"
-
-# Application
-NODE_ENV="development"
 ```
 
-See `.docs/database.md` for detailed setup instructions.
+### Production (Cloudflare Pages)
+
+Set these in Cloudflare Dashboard → Workers & Pages → Settings → Environment Variables → Production:
+
+```env
+# Supabase Project (same as local development)
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
+```
+
+**Detailed setup:** See [`.docs/deployment.md`](./.docs/deployment.md) for complete Supabase project setup.
 
 ## 📄 License
 

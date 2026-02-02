@@ -66,3 +66,62 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - Ability to save and render an X link within < 2 seconds.
 - Functional folder filtering.
 - Responsive design (Mobile and Desktop).
+- Deployed to production (Cloudflare Pages).
+- Single Supabase project used for both dev and production.
+
+## 7. Deployment & Infrastructure
+
+### 7.1 Cloudflare Pages
+
+- **Platform**: Cloudflare Pages with Edge Runtime support
+- **Build Command**: `npx @cloudflare/next-on-pages@1`
+- **Build Output**: `.vercel/output/static`
+- **Runtime**: Edge Runtime for all server components
+- **Auto-Deployment**: Git push to `main` branch triggers automatic deployment
+
+### 7.2 Supabase Project
+
+- **Single Project**: One Supabase project (`twitmark`) used for both development and production
+- **Environment Configuration**:
+  - Local development uses `.env.local` with Supabase credentials
+  - Production uses Cloudflare Pages environment variables with same Supabase credentials
+- **Migration Process**: Apply migrations once to the project (see `.docs/deployment.md`)
+
+### 7.3 Environment Variables
+
+**Local Development (`.env.local`)**:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+**Production (Cloudflare Pages)**:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+**Detailed Setup**: See [`.docs/deployment.md`](./deployment.md) for complete deployment guide.
+
+## 8. Testing & Quality Assurance
+
+### 8.1 Unit Testing (Vitest)
+
+- **URL Validation**: 16 tests covering valid and invalid URL patterns
+- **Test Coverage**: Critical utility functions
+
+### 8.2 E2E Testing (Playwright)
+
+- **Authentication Flow**: Sign in with Google, sign out
+- **Dashboard Operations**: Create/delete bookmarks, folder management
+- **Responsive Design**: Mobile, tablet, desktop layouts
+- **Total Tests**: 15 E2E tests
+
+### 8.3 Performance
+
+- **Lighthouse Score**: Target > 90 (post-launch audit)
+- **Build Time**: < 10 seconds
+- **Animation Performance**: 60fps with GPU acceleration
+- **Bundle Size**: Optimized with code splitting and tree shaking
