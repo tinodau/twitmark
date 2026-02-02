@@ -2,8 +2,6 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  // Cache components for partial prerendering
-  cacheComponents: true,
   // Enable experimental features for better performance
   experimental: {
     // Optimize CSS
