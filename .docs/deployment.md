@@ -55,7 +55,9 @@ Click **Show advanced** and configure:
 | **Build command**         | `npm run build` |
 | **Output directory**      | `.next`         |
 
-## Step 4: Set Environment Variables
+## Step 4: Set Environment Variables ⚠️ **CRITICAL**
+
+**You MUST set these environment variables BEFORE deploying, or the build will fail.**
 
 Add these in **Settings** → **Environment Variables**:
 
@@ -73,6 +75,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 3. Settings → API
 4. Copy **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
 5. Copy **anon public** key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### ⚠️ Important Notes
+
+- **Set these BEFORE clicking "Save and Deploy"**
+- Without these variables, the build will fail with: "Supabase URL and Anon Key are required"
+- These variables are available both at **build time** and **runtime**
+- Make sure you're setting them for **Production** (not just Preview)
 
 ### Optional: Preview Environment Variables
 
