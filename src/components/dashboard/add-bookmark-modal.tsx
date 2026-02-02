@@ -24,7 +24,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [isFoldersLoading, setIsFoldersLoading] = useState(false)
   const [error, setError] = useState("")
   const [isFolderDropdownOpen, setIsFolderDropdownOpen] = useState(false)
-  const { selectedFolderId: currentFolderId, setIsAddModalOpen } = useFolder()
+  const { selectedFolderId: currentFolderId, setIsAddModalOpen, isAddModalOpen } = useFolder()
   const { success, error: showError } = useToast()
   const modalRef = useRef<HTMLDivElement>(null)
   const urlInputRef = useRef<HTMLInputElement>(null)
@@ -45,10 +45,12 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
     }
   }, [isFolderDropdownOpen])
 
-  async function loadFolders() {
-    const data = await getFolders()
-    setFolders(data)
-  }
+  // Refresh folders when Add Folder modal closes (new folder was created)
+  useEffect(() => {
+    if (!isAddModalOpen && isOpen) {
+      getFolders().then((data) => setFolders(data))
+    }
+  }, [isAddModalOpen, isOpen])
 
   // Focus trap and management
   useEffect(() => {
@@ -191,7 +193,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur"
+              className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 overflow w-full max-w-md rounded-2xl border shadow-2xl backdrop-blur"
             >
               {/* Header */}
               <div className="border-border/40 flex items-center justify-between border-b p-6">
