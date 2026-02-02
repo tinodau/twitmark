@@ -9,8 +9,6 @@ const nextConfig: NextConfig = {
     // Optimize CSS
     optimizeCss: true,
   },
-  // Use edge runtime for better Cloudflare Pages compatibility
-  serverExternalPackages: ["@supabase/supabase-js"],
   // Optimize images - use unoptimized for Cloudflare Pages
   images: {
     formats: ["image/avif", "image/webp"],
