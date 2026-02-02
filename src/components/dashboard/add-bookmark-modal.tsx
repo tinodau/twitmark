@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Link as LinkIcon, Check, Folder } from "lucide-react"
+import { X, Link as LinkIcon, Check, Folder, Plus, ChevronDown } from "lucide-react"
 import { createBookmark } from "@/app/actions/bookmarks"
 import { getFolders } from "@/app/actions/folders"
 import { useFolder } from "@/contexts/folder-context"
@@ -23,12 +23,27 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isFoldersLoading, setIsFoldersLoading] = useState(false)
   const [error, setError] = useState("")
-  const { selectedFolderId: currentFolderId } = useFolder()
+  const [isFolderDropdownOpen, setIsFolderDropdownOpen] = useState(false)
+  const { selectedFolderId: currentFolderId, setIsAddModalOpen } = useFolder()
   const { success, error: showError } = useToast()
   const modalRef = useRef<HTMLDivElement>(null)
   const urlInputRef = useRef<HTMLInputElement>(null)
+  const folderDropdownRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const lastFocusableRef = useRef<HTMLButtonElement>(null)
+
+  // Close folder dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (folderDropdownRef.current && !folderDropdownRef.current.contains(e.target as Node)) {
+        setIsFolderDropdownOpen(false)
+      }
+    }
+    if (isFolderDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isFolderDropdownOpen])
 
   async function loadFolders() {
     const data = await getFolders()
@@ -243,71 +258,136 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                     )}
                   </div>
 
-                  {/* Folder Selection */}
-                  <fieldset className="space-y-2">
-                    <legend className="text-foreground text-sm font-medium">
+                  {/* Folder Selection Dropdown */}
+                  <div className="space-y-2" ref={folderDropdownRef}>
+                    <label htmlFor="folder-select" className="text-foreground text-sm font-medium">
                       Folder (Optional)
-                    </legend>
-                    {isFoldersLoading ? (
-                      <div className="border-border/40 bg-muted/50 flex items-center gap-2 rounded-lg border px-4 py-3">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <span className="text-muted-foreground text-sm">Loading folders...</span>
-                      </div>
-                    ) : folders.length > 0 ? (
-                      <div className="grid gap-2" role="group" aria-label="Select folders">
-                        {folders.map((folder) => {
-                          const isSelected = selectedFolderIds.includes(folder.id)
-                          return (
-                            <button
-                              key={folder.id}
-                              type="button"
-                              onClick={() => {
-                                if (isSelected) {
-                                  setSelectedFolderIds(
-                                    selectedFolderIds.filter((id) => id !== folder.id)
-                                  )
-                                } else {
-                                  setSelectedFolderIds([...selectedFolderIds, folder.id])
-                                }
-                              }}
-                              aria-pressed={isSelected}
-                              disabled={isLoading}
-                              className={`focus:ring-primary/50 flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                                isSelected
-                                  ? "border-primary bg-primary/10 text-primary"
-                                  : "border-border hover:bg-accent"
-                              }`}
-                            >
-                              <div
-                                className="flex h-4 w-4 shrink-0 items-center justify-center rounded border-2"
-                                style={{
-                                  borderColor: isSelected ? folder.color : "currentColor",
-                                  backgroundColor: isSelected ? folder.color : "transparent",
+                    </label>
+                    <div className="relative">
+                      <button
+                        id="folder-select"
+                        type="button"
+                        onClick={() => setIsFolderDropdownOpen(!isFolderDropdownOpen)}
+                        disabled={isFoldersLoading}
+                        className="border-input bg-background hover:bg-accent focus:ring-primary/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-expanded={isFolderDropdownOpen}
+                        aria-haspopup="listbox"
+                      >
+                        <div className="flex items-center gap-2">
+                          {isFoldersLoading ? (
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          ) : selectedFolderIds.length > 0 ? (
+                            <div className="flex items-center gap-1">
+                              {selectedFolderIds.slice(0, 2).map((folderId) => {
+                                const folder = folders.find((f) => f.id === folderId)
+                                if (!folder) return null
+                                return (
+                                  <div key={folder.id} className="flex items-center gap-1.5">
+                                    <div
+                                      className="h-2 w-2 shrink-0 rounded-full"
+                                      style={{ backgroundColor: folder.color }}
+                                      aria-hidden="true"
+                                    />
+                                    <span className="truncate">{folder.name}</span>
+                                  </div>
+                                )
+                              })}
+                              {selectedFolderIds.length > 2 && (
+                                <span className="text-muted-foreground">
+                                  +{selectedFolderIds.length - 2} more
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">Select folder...</span>
+                          )}
+                        </div>
+                        <ChevronDown
+                          className={`text-muted-foreground h-4 w-4 transition-transform ${
+                            isFolderDropdownOpen ? "rotate-180" : ""
+                          }`}
+                          aria-hidden="true"
+                        />
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      <AnimatePresence>
+                        {isFolderDropdownOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.15 }}
+                            className="border-border bg-background/95 absolute z-50 mt-1.5 max-h-[320px] w-full overflow-hidden rounded-lg border shadow-xl backdrop-blur"
+                            role="listbox"
+                            aria-labelledby="folder-select"
+                          >
+                            <div className="flex max-h-[280px] flex-col overflow-y-auto p-1.5">
+                              {folders.map((folder) => {
+                                const isSelected = selectedFolderIds.includes(folder.id)
+                                return (
+                                  <button
+                                    key={folder.id}
+                                    type="button"
+                                    onClick={() => {
+                                      if (isSelected) {
+                                        setSelectedFolderIds(
+                                          selectedFolderIds.filter((id) => id !== folder.id)
+                                        )
+                                      } else {
+                                        setSelectedFolderIds([...selectedFolderIds, folder.id])
+                                      }
+                                    }}
+                                    role="option"
+                                    aria-selected={isSelected}
+                                    disabled={isLoading}
+                                    className={`focus:ring-primary/50 flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                                      isSelected ? "bg-primary/10 text-primary" : "hover:bg-accent"
+                                    }`}
+                                  >
+                                    <div
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border-2"
+                                      style={{
+                                        borderColor: isSelected ? folder.color : "currentColor",
+                                        backgroundColor: isSelected ? folder.color : "transparent",
+                                      }}
+                                      aria-hidden="true"
+                                    >
+                                      {isSelected && (
+                                        <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                                      )}
+                                    </div>
+                                    <div
+                                      className="h-2 w-2 shrink-0 rounded-full"
+                                      style={{ backgroundColor: folder.color }}
+                                      aria-hidden="true"
+                                    />
+                                    <span className="flex-1 truncate">{folder.name}</span>
+                                  </button>
+                                )
+                              })}
+                            </div>
+
+                            {/* Sticky "Add Folder" Button */}
+                            <div className="border-border/40 bg-background/95 sticky bottom-0 flex items-center gap-2 border-t p-2 backdrop-blur">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsFolderDropdownOpen(false)
+                                  setIsAddModalOpen(true)
                                 }}
-                                aria-hidden="true"
+                                disabled={isLoading}
+                                className="focus:ring-primary/50 bg-accent hover:bg-accent/80 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                               >
-                                {isSelected && (
-                                  <div className="h-1.5 w-1.5 rounded-full bg-white" />
-                                )}
-                              </div>
-                              <div
-                                className="h-2 w-2 shrink-0 rounded-full"
-                                style={{ backgroundColor: folder.color }}
-                                aria-hidden="true"
-                              />
-                              <span className="truncate">{folder.name}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    ) : (
-                      <div className="border-border/40 bg-muted/30 rounded-lg border border-dashed px-4 py-3 text-center">
-                        <p className="text-muted-foreground text-sm">
-                          We automatically fetch tweet
-                        </p>
-                      </div>
-                    )}
-                  </fieldset>
+                                <Plus className="h-4 w-4" aria-hidden="true" />
+                                Add Folder
+                              </button>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
 
                   <div
                     className={`bg-muted/50 flex items-center gap-2 rounded-lg p-3 ${
