@@ -32,8 +32,6 @@ const nextConfig: NextConfig = {
       transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
     },
   },
-  // Cloudflare Pages compatibility
-  output: "standalone",
 }
 
 export default nextConfig
