@@ -3,7 +3,21 @@
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, FolderPlus } from "lucide-react"
+import {
+  X,
+  Folder,
+  Star,
+  Heart,
+  Bookmark,
+  Zap,
+  Book,
+  Target,
+  Tag,
+  Briefcase,
+  Code2,
+  ChevronUp,
+  Check,
+} from "lucide-react"
 import { createFolder } from "@/app/actions/folders"
 import { useToast } from "@/contexts/toast-context"
 
@@ -24,16 +38,42 @@ const FOLDER_COLORS = [
   "#06B6D4", // Cyan
 ]
 
+// Predefined icons
+const FOLDER_ICONS = [
+  { id: "folder", icon: Folder, name: "Folder" },
+  { id: "star", icon: Star, name: "Star" },
+  { id: "heart", icon: Heart, name: "Heart" },
+  { id: "bookmark", icon: Bookmark, name: "Bookmark" },
+  { id: "zap", icon: Zap, name: "Zap" },
+  { id: "book", icon: Book, name: "Book" },
+  { id: "target", icon: Target, name: "Target" },
+  { id: "tag", icon: Tag, name: "Tag" },
+  { id: "briefcase", icon: Briefcase, name: "Briefcase" },
+  { id: "code", icon: Code2, name: "Code" },
+]
+
+// Map icon IDs to Lucide components
+const ICON_MAP: Record<string, React.ElementType> = {}
+FOLDER_ICONS.forEach((i) => {
+  ICON_MAP[i.id] = i.icon
+})
+
 export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
   const [name, setName] = useState("")
   const [color, setColor] = useState(FOLDER_COLORS[0])
+  const [icon, setIcon] = useState(FOLDER_ICONS[0].id)
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isPickerOpen, setIsPickerOpen] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
   const nameInputRef = useRef<HTMLInputElement>(null)
+  const pickerTriggerRef = useRef<HTMLButtonElement>(null)
+  const pickerDropdownRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const lastFocusableRef = useRef<HTMLButtonElement>(null)
   const { success, error: showError } = useToast()
+
+  const SelectedIcon = ICON_MAP[icon]
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -43,6 +83,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
     const formData = new FormData()
     formData.append("name", name)
     formData.append("color", color)
+    formData.append("icon", icon)
 
     const result = await createFolder(formData)
 
@@ -55,6 +96,8 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
       success(`Folder "${name}" created`)
       setName("")
       setColor(FOLDER_COLORS[0])
+      setIcon(FOLDER_ICONS[0].id)
+      setIsPickerOpen(false)
       onClose()
     }
   }
@@ -80,12 +123,41 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        onClose()
+        if (isPickerOpen) {
+          setIsPickerOpen(false)
+        } else {
+          onClose()
+        }
       }
     }
     document.addEventListener("keydown", handleEscape)
     return () => document.removeEventListener("keydown", handleEscape)
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, isPickerOpen])
+
+  // Close picker when clicking outside (but not inside picker)
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isPickerOpen && pickerDropdownRef.current) {
+        const dropdownRect = pickerDropdownRef.current.getBoundingClientRect()
+        const isClickInsideDropdown =
+          e.clientX >= dropdownRect.left &&
+          e.clientX <= dropdownRect.right &&
+          e.clientY >= dropdownRect.top &&
+          e.clientY <= dropdownRect.bottom
+
+        if (!isClickInsideDropdown) {
+          setIsPickerOpen(false)
+        }
+      }
+    }
+
+    if (isPickerOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isPickerOpen])
 
   // Focus trap within modal
   useEffect(() => {
@@ -149,7 +221,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md"
             >
-              <div className="rounded-2xl border border-white/10 bg-[rgba(18,18,18,0.8)] p-6 shadow-2xl backdrop-blur-xl">
+              <div className="bg-background/95 supports-backdrop-filter:bg-background/60 relative rounded-2xl border border-white/10 p-6 shadow-2xl backdrop-blur-xl">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -157,7 +229,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                       className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20"
                       aria-hidden="true"
                     >
-                      <FolderPlus className="h-5 w-5 text-blue-400" />
+                      <Folder className="h-5 w-5 text-blue-400" />
                     </div>
                     <div>
                       <h2 id="folder-modal-title" className="text-xl font-semibold text-white">
@@ -177,27 +249,137 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Name Input */}
-                  <div>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Name Input with Icon and Color */}
+                  <div className="space-y-2">
                     <label
                       htmlFor="folder-name"
-                      className="mb-2 block text-sm font-medium text-white/90"
+                      className="block text-sm font-medium text-white/90"
                     >
                       Folder Name
                     </label>
-                    <input
-                      id="folder-name"
-                      ref={nameInputRef}
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g., Tech News, Dev Tips..."
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white transition-all placeholder:text-white/40 focus:border-transparent focus:ring-2 focus:ring-blue-500/50 focus:outline-none"
-                      maxLength={50}
-                      aria-describedby="folder-name-counter"
-                      aria-invalid={!!error}
-                    />
+                    <div className="relative">
+                      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2 transition-all focus-within:border-white/20">
+                        {/* Icon Selector Button */}
+                        <button
+                          ref={pickerTriggerRef}
+                          type="button"
+                          onClick={() => !isPickerOpen && setIsPickerOpen(true)}
+                          aria-expanded={isPickerOpen}
+                          aria-label="Select icon and color"
+                          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all hover:scale-105 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                          style={{ backgroundColor: color }}
+                        >
+                          <SelectedIcon className="h-5 w-5 text-white" />
+                        </button>
+
+                        {/* Name Input */}
+                        <input
+                          id="folder-name"
+                          ref={nameInputRef}
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="e.g., Tech News, Dev Tips..."
+                          className="flex-1 bg-transparent text-white placeholder:text-white/40 focus:outline-none"
+                          maxLength={50}
+                          aria-describedby="folder-name-counter"
+                          aria-invalid={!!error}
+                        />
+                      </div>
+
+                      {/* Icon & Color Dropdown */}
+                      <AnimatePresence>
+                        {isPickerOpen && (
+                          <motion.div
+                            ref={pickerDropdownRef}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-background/95 supports-backdrop-filter:bg-background absolute top-full left-0 z-10 mt-2 max-h-[400px] w-full overflow-x-hidden overflow-y-auto rounded-xl border border-white/10 p-4 shadow-xl backdrop-blur-xl"
+                          >
+                            {/* Icon Picker */}
+                            <fieldset className="mb-4">
+                              <legend className="mb-3 block text-sm font-medium text-white/90">
+                                Icon
+                              </legend>
+                              <div
+                                className="grid grid-cols-5 gap-2"
+                                role="radiogroup"
+                                aria-label="Select folder icon"
+                              >
+                                {FOLDER_ICONS.map((i) => {
+                                  const Icon = i.icon
+                                  return (
+                                    <button
+                                      key={i.id}
+                                      type="button"
+                                      onClick={() => setIcon(i.id)}
+                                      aria-pressed={icon === i.id}
+                                      aria-label={`Icon ${i.name}`}
+                                      className={`flex h-9 w-full cursor-pointer items-center justify-center rounded-lg border transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
+                                        icon === i.id
+                                          ? "border-white bg-white/10"
+                                          : "border-white/10 bg-white/5 hover:border-white/20"
+                                      }`}
+                                    >
+                                      <Icon className="h-5 w-5 text-white/80" aria-hidden="true" />
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </fieldset>
+
+                            {/* Color Picker */}
+                            <fieldset>
+                              <legend className="mb-3 block text-sm font-medium text-white/90">
+                                Color
+                              </legend>
+                              <div
+                                className="flex flex-wrap gap-2"
+                                role="radiogroup"
+                                aria-label="Select folder color"
+                              >
+                                {FOLDER_COLORS.map((c) => (
+                                  <button
+                                    key={c}
+                                    type="button"
+                                    onClick={() => setColor(c)}
+                                    aria-pressed={color === c}
+                                    aria-label={`Color ${c}`}
+                                    className={`h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
+                                      color === c
+                                        ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-[rgba(18,18,18,0.95)]"
+                                        : "hover:scale-110"
+                                    }`}
+                                    style={{ backgroundColor: c }}
+                                  >
+                                    {color === c && (
+                                      <Check
+                                        className="mx-auto h-5 w-5 text-white"
+                                        aria-hidden="true"
+                                      />
+                                    )}
+                                  </button>
+                                ))}
+                              </div>
+                            </fieldset>
+
+                            {/* Close Button */}
+                            <button
+                              type="button"
+                              onClick={() => setIsPickerOpen(false)}
+                              className="mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm text-white transition-colors hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                            >
+                              <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                              Done
+                            </button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                     <p
                       id="folder-name-counter"
                       className="mt-1.5 text-xs text-white/40"
@@ -205,52 +387,6 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                     >
                       {name.length}/50 characters
                     </p>
-                  </div>
-
-                  {/* Color Picker */}
-                  <div>
-                    <fieldset>
-                      <legend className="mb-3 block text-sm font-medium text-white/90">
-                        Folder Color
-                      </legend>
-                      <div
-                        className="flex flex-wrap gap-2"
-                        role="radiogroup"
-                        aria-label="Select folder color"
-                      >
-                        {FOLDER_COLORS.map((c) => (
-                          <button
-                            key={c}
-                            type="button"
-                            onClick={() => setColor(c)}
-                            aria-pressed={color === c}
-                            aria-label={`Color ${c}`}
-                            className={`h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
-                              color === c
-                                ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-[rgba(18,18,18,0.8)]"
-                                : "hover:scale-110"
-                            }`}
-                            style={{ backgroundColor: c }}
-                          />
-                        ))}
-                      </div>
-                    </fieldset>
-                  </div>
-
-                  {/* Preview */}
-                  <div
-                    className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-3"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    <div
-                      className="flex h-8 w-8 items-center justify-center rounded-lg"
-                      style={{ backgroundColor: color }}
-                      aria-hidden="true"
-                    >
-                      <FolderPlus className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="font-medium text-white/90">{name || "Untitled Folder"}</span>
                   </div>
 
                   {/* Error */}
@@ -276,7 +412,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                       ref={lastFocusableRef}
                       type="submit"
                       disabled={isSubmitting || !name.trim()}
-                      className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 font-medium text-white transition-all hover:cursor-pointer hover:from-blue-500 hover:to-purple-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                      className="bg-primary hover:bg-primary/90 focus:ring-primary/50 flex-1 rounded-xl px-4 py-3 font-medium text-white transition-all hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       aria-busy={isSubmitting}
                     >
                       {isSubmitting ? "Creating..." : "Create Folder"}

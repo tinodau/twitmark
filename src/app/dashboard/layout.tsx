@@ -9,6 +9,9 @@ import { EditFolderModal } from "@/components/dashboard/edit-folder-modal"
 import { AddFolderModal } from "@/components/dashboard/add-folder-modal"
 import { FolderProvider } from "@/contexts/folder-context"
 import { useFolder } from "@/contexts/folder-context"
+import { ConfirmModal } from "@/components/ui/confirm-modal"
+import { deleteFolder } from "@/app/actions/folders"
+import { useToast } from "@/contexts/toast-context"
 import { User } from "@supabase/supabase-js"
 
 function EditFolderModalContent() {
@@ -32,6 +35,61 @@ function AddFolderModalContent() {
   return <AddFolderModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
 }
 
+function DeleteFolderModalContent() {
+  const {
+    deletingFolder,
+    setDeletingFolder,
+    isDeleteConfirmOpen,
+    setIsDeleteConfirmOpen,
+    selectedFolderId,
+    setSelectedFolderId,
+  } = useFolder()
+  const [isDeleting, setIsDeleting] = useState(false)
+  const { success, error: showError } = useToast()
+
+  const handleDelete = async () => {
+    if (!deletingFolder) return
+
+    setIsDeleting(true)
+    const result = await deleteFolder(deletingFolder.id)
+
+    if ("error" in result) {
+      showError("Failed to delete folder", result.error)
+      setIsDeleting(false)
+    } else {
+      success("Folder deleted")
+      // Deselect if the deleted folder was selected
+      if (selectedFolderId === deletingFolder.id) {
+        setSelectedFolderId(null)
+      }
+      setIsDeleting(false)
+      setDeletingFolder(null)
+      setIsDeleteConfirmOpen(false)
+    }
+  }
+
+  return (
+    <ConfirmModal
+      isOpen={isDeleteConfirmOpen}
+      onClose={() => {
+        setIsDeleteConfirmOpen(false)
+        setDeletingFolder(null)
+      }}
+      onConfirm={handleDelete}
+      title="Delete Folder"
+      description={
+        deletingFolder
+          ? `This will remove folder "${deletingFolder.name}". Bookmarks in this folder will not be deleted.`
+          : ""
+      }
+      confirmText="Delete"
+      cancelText="Cancel"
+      variant="danger"
+      isLoading={isDeleting}
+    />
+  )
+}
+
 function DashboardLayoutWithProvider({ children }: { children: React.ReactNode }) {
   return (
     <FolderProvider>
@@ -41,6 +99,7 @@ function DashboardLayoutWithProvider({ children }: { children: React.ReactNode }
       </div>
       <AddFolderModalContent />
       <EditFolderModalContent />
+      <DeleteFolderModalContent />
     </FolderProvider>
   )
 }

@@ -278,7 +278,7 @@ export function ManageFoldersModal({
                       Saving...
                     </>
                   ) : (
-                    "Save Changes"
+                    "Save"
                   )}
                 </button>
               </div>

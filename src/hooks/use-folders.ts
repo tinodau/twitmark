@@ -18,10 +18,11 @@ export function useCreateFolder() {
   const { success, error: showError } = useToast()
 
   return useMutation({
-    mutationFn: async (data: { name: string; color: string }) => {
+    mutationFn: async (data: { name: string; color: string; icon: string }) => {
       const formData = new FormData()
       formData.append("name", data.name)
       formData.append("color", data.color)
+      formData.append("icon", data.icon)
       return createFolder(formData)
     },
     onSuccess: () => {
@@ -39,9 +40,18 @@ export function useUpdateFolder() {
   const { success, error: showError } = useToast()
 
   return useMutation({
-    mutationFn: ({ id, name, color }: { id: string; name: string; color: string }) =>
-      updateFolder(id, name, color),
-    onMutate: async ({ id, name, color }) => {
+    mutationFn: ({
+      id,
+      name,
+      color,
+      icon,
+    }: {
+      id: string
+      name: string
+      color: string
+      icon: string
+    }) => updateFolder(id, name, color, icon),
+    onMutate: async ({ id, name, color, icon }) => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: foldersKeys.lists() })
 
@@ -51,7 +61,7 @@ export function useUpdateFolder() {
       // Optimistically update folder
       queryClient.setQueryData(foldersKeys.lists(), (old: Folder[] | undefined) => {
         if (!old) return old
-        return old.map((f) => (f.id === id ? { ...f, name, color } : f))
+        return old.map((f) => (f.id === id ? { ...f, name, color, icon } : f))
       })
 
       return { previousFolders }

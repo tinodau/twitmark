@@ -9,8 +9,8 @@ import {
 import type { Folder } from "@/types"
 
 // Update a folder with direct parameters
-export async function updateFolder(folderId: string, name: string, color: string) {
-  const result = await dbUpdateFolder(folderId, name, color)
+export async function updateFolder(folderId: string, name: string, color: string, icon: string) {
+  const result = await dbUpdateFolder(folderId, name, color, icon)
 
   if (result.error) {
     return result
@@ -65,6 +65,7 @@ export async function getFolders(): Promise<Folder[]> {
       id: folder.id,
       name: folder.name,
       color: folder.color,
+      icon: folder.icon || "folder",
       userId: folder.user_id,
       createdAt: new Date(folder.created_at),
       bookmarkCount: folder.bookmarks?.[0]?.count || 0,
@@ -85,6 +86,7 @@ export async function createFolder(formData: FormData) {
 
   const name = formData.get("name") as string
   const color = (formData.get("color") as string) || "#1D9BF0"
+  const icon = (formData.get("icon") as string) || "folder"
 
   if (!name || name.trim().length === 0) {
     return { error: "Folder name is required" }
@@ -97,6 +99,7 @@ export async function createFolder(formData: FormData) {
   const { error } = await supabase.from("folders").insert({
     name: name.trim(),
     color,
+    icon,
     user_id: user.id,
   })
 
@@ -135,6 +138,7 @@ export async function getFolderById(id: string): Promise<Folder | null> {
     id: folder.id,
     name: folder.name,
     color: folder.color,
+    icon: folder.icon || "folder",
     userId: folder.user_id,
     createdAt: new Date(folder.created_at),
   }

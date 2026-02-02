@@ -3,6 +3,7 @@ export type Folder = {
   id: string
   name: string
   color: string
+  icon: string
   userId: string
   createdAt: Date
   bookmarkCount?: number
@@ -27,6 +28,7 @@ export type BookmarkWithFolders = {
     id: string
     name: string
     color: string
+    icon: string
   }>
 }
 

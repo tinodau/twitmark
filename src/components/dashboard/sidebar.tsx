@@ -3,6 +3,15 @@
 import { useState, useEffect } from "react"
 import {
   Folder,
+  Star,
+  Heart,
+  Bookmark,
+  Zap,
+  Book,
+  Target,
+  Tag,
+  Briefcase,
+  Code2,
   Plus,
   LayoutDashboard,
   BookOpen,
@@ -18,6 +27,20 @@ import { AddFolderModal } from "./add-folder-modal"
 import { useFolder } from "@/contexts/folder-context"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
+// Map icon IDs to Lucide components
+const ICON_MAP: Record<string, React.ElementType> = {
+  folder: Folder,
+  star: Star,
+  heart: Heart,
+  bookmark: Bookmark,
+  zap: Zap,
+  book: Book,
+  target: Target,
+  tag: Tag,
+  briefcase: Briefcase,
+  code: Code2,
+}
+
 export function Sidebar() {
   const {
     selectedFolderId,
@@ -28,6 +51,10 @@ export function Sidebar() {
     setIsEditModalOpen,
     isAddModalOpen,
     setIsAddModalOpen,
+    deletingFolder,
+    setDeletingFolder,
+    isDeleteConfirmOpen,
+    setIsDeleteConfirmOpen,
   } = useFolder()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [folders, setFolders] = useState<FolderType[]>([])
@@ -40,7 +67,7 @@ export function Sidebar() {
   useEffect(() => {
     loadFolders()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAddModalOpen, isEditModalOpen])
+  }, [isAddModalOpen, isEditModalOpen, isDeleteConfirmOpen])
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", id: null },
@@ -104,10 +131,15 @@ export function Sidebar() {
                           } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
                         >
                           <div
-                            className="h-2 w-2 shrink-0 rounded-full"
+                            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
                             style={{ backgroundColor: folder.color }}
                             aria-hidden="true"
-                          />
+                          >
+                            {(() => {
+                              const IconComponent = ICON_MAP[folder.icon] || Folder
+                              return <IconComponent className="h-3 w-3 text-white" />
+                            })()}
+                          </div>
                           <span className="truncate">{folder.name}</span>
                           <span
                             className="text-muted-foreground ml-auto text-xs"
@@ -137,8 +169,8 @@ export function Sidebar() {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => {
-                              setEditingFolder(folder)
-                              setIsEditModalOpen(true)
+                              setDeletingFolder(folder)
+                              setIsDeleteConfirmOpen(true)
                             }}
                             icon={<Trash2 className="h-4 w-4" />}
                             variant="danger"

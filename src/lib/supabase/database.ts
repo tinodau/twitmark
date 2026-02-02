@@ -29,6 +29,7 @@ type Folder = {
   user_id: string
   name: string
   color: string
+  icon: string
   created_at: string
 }
 
@@ -313,7 +314,8 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
         folders (
           id,
           name,
-          color
+          color,
+          icon
         )
       )
     `
@@ -337,17 +339,18 @@ export async function getUserBookmarks(): Promise<BookmarkWithFolders[]> {
     createdAt: new Date(bookmark.created_at),
     folders:
       bookmark.bookmark_folders?.map(
-        (bf: { folders: { id: string; name: string; color: string } }) => ({
+        (bf: { folders: { id: string; name: string; color: string; icon: string } }) => ({
           id: bf.folders.id,
           name: bf.folders.name,
           color: bf.folders.color,
+          icon: bf.folders.icon,
         })
       ) || [],
   }))
 }
 
 // Update a folder
-export async function updateFolder(folderId: string, name: string, color: string) {
+export async function updateFolder(folderId: string, name: string, color: string, icon: string) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -374,6 +377,7 @@ export async function updateFolder(folderId: string, name: string, color: string
     .update({
       name: name.trim(),
       color,
+      icon,
     })
     .eq("id", folderId)
     .eq("user_id", user.id)

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { X, AlertTriangle, Trash2 } from "lucide-react"
 
 interface ConfirmModalProps {
@@ -15,24 +15,6 @@ interface ConfirmModalProps {
   cancelText?: string
   variant?: "danger" | "warning" | "info"
   isLoading?: boolean
-}
-
-const variantStyles = {
-  danger: {
-    icon: <AlertTriangle className="h-6 w-6" />,
-    iconBg: "bg-destructive/20 text-destructive",
-    confirmBtn: "bg-destructive hover:bg-destructive/90 text-destructive-foreground",
-  },
-  warning: {
-    icon: <AlertTriangle className="h-6 w-6" />,
-    iconBg: "bg-yellow-500/20 text-yellow-400",
-    confirmBtn: "bg-primary hover:bg-primary/90 text-primary-foreground",
-  },
-  info: {
-    icon: <AlertTriangle className="h-6 w-6" />,
-    iconBg: "bg-blue-500/20 text-blue-400",
-    confirmBtn: "bg-primary hover:bg-primary/90 text-primary-foreground",
-  },
 }
 
 export function ConfirmModal({
@@ -107,98 +89,114 @@ export function ConfirmModal({
     return () => modal.removeEventListener("keydown", handleTab)
   }, [isOpen])
 
-  const style = variantStyles[variant]
+  const getIconBg = () => {
+    if (variant === "danger") return "bg-red-500/20 text-red-400"
+    if (variant === "warning") return "bg-yellow-500/20 text-yellow-400"
+    return "bg-blue-500/20 text-blue-400"
+  }
 
-  if (!isOpen) return null
+  const getConfirmBtnClass = () => {
+    if (variant === "danger") {
+      return "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
+    }
+    return "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
+  }
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        onClick={isLoading ? undefined : onClose}
-        className="absolute inset-0 z-0 bg-black/50 backdrop-blur-sm"
-        aria-hidden="true"
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={isLoading ? undefined : onClose}
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
+            aria-hidden="true"
+          />
 
-      {/* Modal */}
-      <motion.div
-        ref={modalRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="confirm-modal-title"
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
-        className="border-border/40 bg-background/95 relative z-10 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl saturate-180 backdrop-blur-md"
-        style={{ willChange: "transform, opacity" }}
-      >
-        <div className="p-6">
-          {/* Header with Icon */}
-          <div className="mb-4 flex items-start gap-4">
-            <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${style.iconBg}`}
-              aria-hidden="true"
+          {/* Modal */}
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+            onClick={isLoading ? undefined : onClose}
+          >
+            <motion.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="confirm-modal-title"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur"
             >
-              {variant === "danger" ? <Trash2 className="h-6 w-6" /> : style.icon}
-            </div>
-            <div className="flex-1">
-              <h2 id="confirm-modal-title" className="text-foreground text-xl font-semibold">
-                {title}
-              </h2>
-              {description && <p className="text-muted-foreground mt-1 text-sm">{description}</p>}
-            </div>
-            <button
-              ref={firstFocusableRef}
-              onClick={isLoading ? undefined : onClose}
-              aria-label="Close modal"
-              disabled={isLoading}
-              className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
+              {/* Header */}
+              <div className="border-border/40 flex items-start justify-between border-b p-6">
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg ${getIconBg()}`}
+                    aria-hidden="true"
+                  >
+                    {variant === "danger" ? (
+                      <Trash2 className="h-4 w-4" />
+                    ) : (
+                      <AlertTriangle className="h-4 w-4" />
+                    )}
+                  </div>
+                  <div>
+                    <h2 id="confirm-modal-title" className="text-foreground text-xl font-semibold">
+                      {title}
+                    </h2>
+                    {description && <p className="text-muted-foreground text-sm">{description}</p>}
+                  </div>
+                </div>
+                <button
+                  ref={firstFocusableRef}
+                  onClick={isLoading ? undefined : onClose}
+                  aria-label="Close modal"
+                  disabled={isLoading}
+                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex cursor-pointer items-start rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
+                </button>
+              </div>
 
-          {/* Actions */}
-          <div className="mt-6 flex gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isLoading}
-              className="border-input hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex-1 cursor-pointer rounded-lg border bg-transparent px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {cancelText}
-            </button>
-            <button
-              ref={lastFocusableRef}
-              type="button"
-              onClick={onConfirm}
-              disabled={isLoading}
-              className={`focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                variant === "danger"
-                  ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-                  : "bg-primary hover:bg-primary/90 text-primary-foreground"
-              }`}
-              aria-busy={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  Deleting...
-                </>
-              ) : (
-                confirmText
-              )}
-            </button>
+              {/* Actions */}
+              <div className="items-startgap-3 flex gap-4 p-6">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  disabled={isLoading}
+                  className="border-input hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border bg-transparent px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {cancelText}
+                </button>
+                <button
+                  ref={lastFocusableRef}
+                  type="button"
+                  onClick={onConfirm}
+                  disabled={isLoading}
+                  className={`focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-all focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${getConfirmBtnClass()}`}
+                  aria-busy={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-transparent" />
+                      Deleting...
+                    </>
+                  ) : (
+                    confirmText
+                  )}
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      </motion.div>
-    </div>,
+        </>
+      )}
+    </AnimatePresence>,
     document.body
   )
 }
