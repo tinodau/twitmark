@@ -1,5 +1,7 @@
+"use client"
+
 import { createClient } from "@/lib/supabase/client"
-import { LogOut, User } from "lucide-react"
+import { LogOut, User, Menu } from "lucide-react"
 
 interface HeaderProps {
   user: {
@@ -9,9 +11,11 @@ interface HeaderProps {
       avatar_url?: string
     }
   }
+  onMobileMenuToggle: () => void
+  isMobileMenuOpen: boolean
 }
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, onMobileMenuToggle, isMobileMenuOpen }: HeaderProps) {
   const supabase = createClient()
 
   const handleSignOut = async () => {
@@ -23,6 +27,16 @@ export function Header({ user }: HeaderProps) {
     <header className="bg-secondary supports-backdrop-filter:bg-background fixed top-0 right-0 left-0 z-30 border-b backdrop-blur">
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-2">
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={onMobileMenuToggle}
+            aria-expanded={isMobileMenuOpen}
+            aria-label="Toggle menu"
+            className="text-foreground hover:bg-accent focus:ring-primary/50 mr-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none lg:hidden"
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          </button>
+
           <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
             <span className="text-primary-foreground text-lg font-bold">T</span>
           </div>

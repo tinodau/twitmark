@@ -90,11 +90,31 @@ function DeleteFolderModalContent() {
   )
 }
 
-function DashboardLayoutWithProvider({ children }: { children: React.ReactNode }) {
+function DashboardLayoutWithProvider({
+  children,
+  isMobileMenuOpen,
+  onMobileMenuToggle,
+}: {
+  children: React.ReactNode
+  isMobileMenuOpen: boolean
+  onMobileMenuToggle: () => void
+}) {
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMobileMenuOpen])
+
   return (
     <FolderProvider>
       <div className="flex min-h-screen">
-        <Sidebar />
+        <Sidebar isMobileMenuOpen={isMobileMenuOpen} onMobileMenuToggle={onMobileMenuToggle} />
         <main className="flex-1 p-6 pt-[80px] sm:pl-20 md:pl-72 lg:pl-[280px]">{children}</main>
       </div>
       <AddFolderModalContent />
@@ -109,6 +129,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -135,8 +156,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="bg-background min-h-screen">
-      <Header user={user!} />
-      <DashboardLayoutWithProvider>{children}</DashboardLayoutWithProvider>
+      <Header
+        user={user!}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isMobileMenuOpen={isMobileMenuOpen}
+      />
+      <DashboardLayoutWithProvider
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      >
+        {children}
+      </DashboardLayoutWithProvider>
     </div>
   )
 }

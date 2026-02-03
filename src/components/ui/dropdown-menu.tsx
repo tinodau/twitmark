@@ -20,6 +20,18 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   const menuRef = React.useRef<HTMLDivElement>(null)
 
+  // Lock body scroll when menu is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
+
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -40,6 +52,11 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscape)
     }
+  }, [])
+
+  // Close menu on route change
+  React.useEffect(() => {
+    setIsOpen(false)
   }, [])
 
   return (
