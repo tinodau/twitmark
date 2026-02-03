@@ -4,7 +4,6 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
-import { cn } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/client"
 import { User } from "@supabase/supabase-js"
 
@@ -37,11 +36,14 @@ export default function Navbar() {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
+      document.body.style.height = "100vh"
     } else {
       document.body.style.overflow = ""
+      document.body.style.height = ""
     }
     return () => {
       document.body.style.overflow = ""
+      document.body.style.height = ""
     }
   }, [isOpen])
 
@@ -118,27 +120,27 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="border-t border-white/10 bg-black/40 backdrop-blur-lg sm:hidden"
+            className="border-t border-white/10 sm:hidden"
             role="navigation"
             aria-label="Mobile navigation"
           >
-            <ul className="flex flex-col gap-4 px-4 py-6">
+            <ul className="flex h-[calc(100vh-4.5rem)] flex-col items-center justify-center gap-6 px-4 pt-6 pb-40">
               {navLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.name} className="hover:text-muted w-full text-center">
                   <Link
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-muted-foreground focus:ring-primary/50 block rounded-lg px-2 py-2 text-sm font-medium transition-colors hover:text-white focus:ring-2 focus:outline-none"
+                    className="focus:ring-primary/50 hover:text-muted-foreground block rounded-lg px-2 py-2 text-lg font-medium text-white transition-colors focus:ring-2 focus:outline-none"
                   >
                     {link.name}
                   </Link>
                 </li>
               ))}
-              <li>
+              <li className="mt-2">
                 <Link
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
-                  className="focus:ring-primary/50 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-sm font-medium text-white transition-all focus:ring-2 focus:outline-none"
+                  className="focus:ring-primary/50 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-lg font-medium text-white transition-all focus:ring-2 focus:outline-none"
                   aria-label={user ? "Go to dashboard" : "Get started"}
                 >
                   {loading ? "..." : buttonText}
