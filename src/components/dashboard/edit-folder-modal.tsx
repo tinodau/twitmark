@@ -240,7 +240,7 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
                         onClick={() => !isPickerOpen && setIsPickerOpen(true)}
                         aria-expanded={isPickerOpen}
                         aria-label="Select icon and color"
-                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all hover:scale-105 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all focus:ring-2 focus:ring-white/50 focus:outline-none"
                         style={{ backgroundColor: color }}
                       >
                         <SelectedIcon className="h-5 w-5 text-white" />
@@ -325,7 +325,7 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
                                   className={`h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:ring-white/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                                     color === c
                                       ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-slate-400"
-                                      : "hover:scale-110"
+                                      : ""
                                   }`}
                                   style={{ backgroundColor: c }}
                                 >

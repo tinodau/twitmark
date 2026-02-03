@@ -62,7 +62,7 @@ export default function Navbar() {
           className="focus:ring-primary/50 flex items-center gap-2 rounded-lg focus:ring-2 focus:outline-none"
         >
           <div
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 font-bold text-white"
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-600 to-blue-700 font-bold text-white"
             aria-hidden="true"
           >
             T
@@ -85,7 +85,7 @@ export default function Navbar() {
           <li>
             <Link
               href="/dashboard"
-              className="group focus:ring-primary/50 relative inline-flex h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-sm font-medium text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
+              className="group focus:ring-primary/50 relative inline-flex h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
               aria-label={user ? "Go to dashboard" : "Get started"}
             >
               {loading ? "..." : buttonText}
@@ -138,7 +138,7 @@ export default function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
-                  className="focus:ring-primary/50 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-sm font-medium text-white transition-all hover:scale-105 focus:ring-2 focus:outline-none"
+                  className="focus:ring-primary/50 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-sm font-medium text-white transition-all focus:ring-2 focus:outline-none"
                   aria-label={user ? "Go to dashboard" : "Get started"}
                 >
                   {loading ? "..." : buttonText}

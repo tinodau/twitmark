@@ -78,7 +78,7 @@ export default function Home() {
             >
               <Link
                 href="/dashboard"
-                className="group focus:ring-primary/50 relative flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
+                className="group focus:ring-primary/50 relative flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
                 aria-label={user ? "Go to dashboard" : "Get started free"}
               >
                 {loading ? "..." : buttonText}
@@ -153,7 +153,7 @@ export default function Home() {
         <section
           id="about"
           aria-labelledby="about-title"
-          className="mx-auto mt-24 max-w-md px-4 text-center sm:mt-32 sm:px-0 md:max-w-lg lg:max-w-4xl"
+          className="mx-auto mt-24 max-w-md scroll-mt-20 px-4 text-center sm:mt-32 sm:scroll-mt-24 sm:px-0 md:max-w-lg lg:max-w-4xl"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -175,7 +175,7 @@ export default function Home() {
               way you do.
             </p>
             <div className="flex items-center justify-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-xl font-bold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 text-xl font-bold text-white">
                 T
               </div>
               <div className="text-left">
@@ -215,7 +215,7 @@ export default function Home() {
             </p>
             <Link
               href="/dashboard"
-              className="group focus:ring-primary/50 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-base font-medium text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:h-14 sm:w-auto sm:px-10 sm:text-lg"
+              className="group focus:ring-primary/50 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-base font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:h-14 sm:w-auto sm:px-10 sm:text-lg"
             >
               Start Now
               <ArrowRight

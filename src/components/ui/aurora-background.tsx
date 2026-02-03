@@ -44,7 +44,7 @@ export default function AuroraBackground({
             repeat: Number.POSITIVE_INFINITY,
             ease: "linear",
           }}
-          className="absolute -right-[20%] -bottom-[20%] h-[60%] w-[60%] rounded-full bg-purple-500/20 blur-3xl"
+          className="absolute -right-[20%] -bottom-[20%] h-[60%] w-[60%] rounded-full bg-cyan-500/20 blur-3xl"
         />
         <motion.div
           animate={{

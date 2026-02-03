@@ -226,7 +226,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20"
                       aria-hidden="true"
                     >
                       <Folder className="h-5 w-5 text-blue-400" />
@@ -267,7 +267,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                           onClick={() => !isPickerOpen && setIsPickerOpen(true)}
                           aria-expanded={isPickerOpen}
                           aria-label="Select icon and color"
-                          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all hover:scale-105 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all focus:ring-2 focus:ring-white/50 focus:outline-none"
                           style={{ backgroundColor: color }}
                         >
                           <SelectedIcon className="h-5 w-5 text-white" />
@@ -352,7 +352,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                                     className={`h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
                                       color === c
                                         ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-[rgba(18,18,18,0.95)]"
-                                        : "hover:scale-110"
+                                        : ""
                                     }`}
                                     style={{ backgroundColor: c }}
                                   >

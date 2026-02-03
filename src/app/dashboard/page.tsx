@@ -173,13 +173,13 @@ export default function DashboardPage() {
           <div className="absolute inset-0 overflow-hidden">
             <div className="bg-primary/5 absolute -top-24 -right-24 h-48 w-48 animate-pulse rounded-full" />
             <div
-              className="absolute -bottom-24 -left-24 h-48 w-48 animate-pulse rounded-full bg-purple-500/5"
+              className="absolute -bottom-24 -left-24 h-48 w-48 animate-pulse rounded-full bg-cyan-500/5"
               style={{ animationDelay: "1s" }}
             />
           </div>
 
           <div className="relative">
-            <div className="from-primary/20 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br to-purple-500/20">
+            <div className="from-primary/20 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br to-cyan-500/20">
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}

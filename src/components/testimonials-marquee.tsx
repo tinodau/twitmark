@@ -58,7 +58,7 @@ export default function TestimonialsMarquee() {
   const displayTestimonials = isMobile ? testimonials.slice(0, totalCardsMobile) : testimonials
 
   return (
-    <section className="-mx-4 mt-24 overflow-hidden border-y border-white/10 bg-black/20 px-4 py-16 backdrop-blur-sm sm:mx-0 sm:px-0">
+    <section className="-mx-4 mt-24 overflow-hidden border-y border-white/10 bg-black/20 px-4 py-16 backdrop-blur-sm sm:px-0">
       <div className="mb-12 px-4 text-center">
         <h2 className="mb-4 text-2xl font-bold sm:text-4xl">
           Loved by <span className="text-gradient">curators</span>
@@ -95,7 +95,7 @@ export default function TestimonialsMarquee() {
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
@@ -132,7 +132,7 @@ export default function TestimonialsMarquee() {
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>

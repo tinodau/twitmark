@@ -99,7 +99,7 @@ export function ConfirmModal({
     if (variant === "danger") {
       return "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
     }
-    return "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
+    return "bg-gradient-to-r from-cyan-700 to-blue-800 hover:from-cyan-600 hover:to-blue-700"
   }
 
   return createPortal(
