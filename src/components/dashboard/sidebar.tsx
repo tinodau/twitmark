@@ -18,6 +18,8 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
+  PanelLeftClose,
+  PanelRight,
 } from "lucide-react"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
@@ -100,12 +102,22 @@ export function Sidebar({
       )}
 
       <aside
-        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-16 left-0 z-30 h-[calc(100vh-64px)] border-r backdrop-blur transition-all duration-300 ${
+        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-0 left-0 z-30 h-screen border-r backdrop-blur transition-all duration-300 ${
           isCollapsed ? "w-64 lg:w-16" : "w-64"
         } ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         aria-label="Main navigation sidebar"
       >
         <div className="flex h-full flex-col">
+          {/* Logo Section */}
+          <div className="flex h-16 items-center px-4 pt-2">
+            <div className="flex items-center gap-2">
+              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+                <span className="text-primary-foreground text-lg font-bold">T</span>
+              </div>
+              <span className={isCollapsed ? "hidden lg:hidden" : "font-semibold"}>Twitmark</span>
+            </div>
+          </div>
+
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto py-4">
             <nav className="space-y-2 px-3" aria-label="Main navigation">

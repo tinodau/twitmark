@@ -125,7 +125,7 @@ function DashboardLayoutWithProvider({
           setIsCollapsed={onSidebarToggle}
         />
         <main
-          className={`flex-1 p-6 pt-[80px] transition-all duration-300 ${
+          className={`flex-1 p-6 pt-20 transition-all duration-300 ${
             isSidebarCollapsed ? "" : "lg:pl-[280px]"
           }`}
         >

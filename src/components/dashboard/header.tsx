@@ -1,7 +1,7 @@
 "use client"
 
 import { createClient } from "@/lib/supabase/client"
-import { LogOut, User, Menu, PanelLeftClose, PanelRight } from "lucide-react"
+import { LogOut, User, PanelLeftClose, PanelRight } from "lucide-react"
 
 interface HeaderProps {
   user: {
@@ -32,33 +32,23 @@ export function Header({
   }
 
   return (
-    <header className="bg-secondary supports-backdrop-filter:bg-background fixed top-0 right-0 left-0 z-30 border-b backdrop-blur">
+    <header
+      className={`bg-secondary supports-backdrop-filter:bg-background fixed top-0 right-0 left-0 z-20 border-b backdrop-blur transition-all duration-300 ${isSidebarCollapsed ? "lg:left-16 lg:w-[calc(100vw-64px)]" : "lg:left-[255px] lg:w-[calc(100vw-255px)]"}`}
+    >
       <div className="flex h-16 items-center justify-between px-6">
-        {/* Left section - Logo area matching sidebar width */}
-        <div className="hidden items-center justify-between lg:flex" style={{ width: "225px" }}>
-          <div className="flex w-full items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
-                <span className="text-primary-foreground text-lg font-bold">T</span>
-              </div>
-              <span className="font-semibold">Twitmark</span>
-            </div>
-
-            {/* Sidebar Collapse Toggle */}
-            <button
-              onClick={onSidebarToggle}
-              aria-expanded={!isSidebarCollapsed}
-              aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
-            >
-              {isSidebarCollapsed ? (
-                <PanelRight className="h-5 w-5" aria-hidden="true" />
-              ) : (
-                <PanelLeftClose className="h-5 w-5" aria-hidden="true" />
-              )}
-            </button>
-          </div>
-        </div>
+        {/* Desktop Sidebar Collapse Toggle */}
+        <button
+          onClick={onSidebarToggle}
+          aria-expanded={!isSidebarCollapsed}
+          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 hidden h-9 w-9 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none lg:flex"
+        >
+          {isSidebarCollapsed ? (
+            <PanelRight className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <PanelLeftClose className="h-5 w-5" aria-hidden="true" />
+          )}
+        </button>
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
@@ -67,16 +57,15 @@ export function Header({
             <button
               onClick={onMobileMenuToggle}
               aria-expanded={isMobileMenuOpen}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? "Close sidebar" : "Open sidebar"}
               className="text-foreground hover:bg-accent focus:ring-primary/50 mr-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
             >
-              <Menu className="h-5 w-5" aria-hidden="true" />
+              {isMobileMenuOpen ? (
+                <PanelLeftClose className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <PanelRight className="h-5 w-5" aria-hidden="true" />
+              )}
             </button>
-
-            <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
-              <span className="text-primary-foreground text-lg font-bold">T</span>
-            </div>
-            <span className="font-semibold">Twitmark</span>
           </div>
 
           <div className="flex items-center gap-3">
