@@ -94,10 +94,14 @@ function DashboardLayoutWithProvider({
   children,
   isMobileMenuOpen,
   onMobileMenuToggle,
+  isSidebarCollapsed,
+  onSidebarToggle,
 }: {
   children: React.ReactNode
   isMobileMenuOpen: boolean
   onMobileMenuToggle: () => void
+  isSidebarCollapsed: boolean
+  onSidebarToggle: () => void
 }) {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -114,8 +118,19 @@ function DashboardLayoutWithProvider({
   return (
     <FolderProvider>
       <div className="flex min-h-screen">
-        <Sidebar isMobileMenuOpen={isMobileMenuOpen} onMobileMenuToggle={onMobileMenuToggle} />
-        <main className="flex-1 p-6 pt-[80px] sm:pl-20 md:pl-72 lg:pl-[280px]">{children}</main>
+        <Sidebar
+          isMobileMenuOpen={isMobileMenuOpen}
+          onMobileMenuToggle={onMobileMenuToggle}
+          isCollapsed={isSidebarCollapsed}
+          setIsCollapsed={onSidebarToggle}
+        />
+        <main
+          className={`flex-1 p-6 pt-[80px] transition-all duration-300 ${
+            isSidebarCollapsed ? "" : "lg:pl-[280px]"
+          }`}
+        >
+          {children}
+        </main>
       </div>
       <AddFolderModalContent />
       <EditFolderModalContent />
@@ -130,6 +145,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -160,10 +176,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         user={user!}
         onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         isMobileMenuOpen={isMobileMenuOpen}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onSidebarToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
       <DashboardLayoutWithProvider
         isMobileMenuOpen={isMobileMenuOpen}
         onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onSidebarToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       >
         {children}
       </DashboardLayoutWithProvider>

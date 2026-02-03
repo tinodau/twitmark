@@ -15,8 +15,6 @@ import {
   Plus,
   LayoutDashboard,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
   MoreVertical,
   Edit2,
   Trash2,
@@ -44,9 +42,13 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export function Sidebar({
   isMobileMenuOpen,
   onMobileMenuToggle,
+  isCollapsed,
+  setIsCollapsed,
 }: {
   isMobileMenuOpen: boolean
   onMobileMenuToggle: () => void
+  isCollapsed: boolean
+  setIsCollapsed: (collapsed: boolean) => void
 }) {
   const {
     selectedFolderId,
@@ -62,7 +64,6 @@ export function Sidebar({
     isDeleteConfirmOpen,
     setIsDeleteConfirmOpen,
   } = useFolder()
-  const [isCollapsed, setIsCollapsed] = useState(false)
   const [folders, setFolders] = useState<FolderType[]>([])
 
   // Close mobile menu on route change
@@ -212,25 +213,6 @@ export function Sidebar({
                 )}
               </div>
             )}
-          </div>
-
-          {/* Collapse Toggle */}
-          <div className="border-t p-3">
-            <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              aria-expanded={!isCollapsed}
-              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
-            >
-              {isCollapsed ? (
-                <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <>
-                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-                  <span>Collapse</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
       </aside>

@@ -20,18 +20,6 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   const menuRef = React.useRef<HTMLDivElement>(null)
 
-  // Lock body scroll when menu is open
-  React.useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isOpen])
-
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -66,28 +54,16 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
       </div>
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Backdrop to prevent clicking outside */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="fixed inset-0 z-[50] bg-transparent"
-              aria-hidden="true"
-            />
-            {/* Menu */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.15 }}
-              className="bg-secondary border-border/40 fixed top-[64px] right-0 z-[60] flex h-[calc(100vh-64px)] w-full items-center justify-center overflow-hidden border shadow-lg backdrop-blur sm:absolute sm:top-auto sm:h-auto sm:w-auto sm:min-w-[180px] sm:items-stretch"
-              role="menu"
-            >
-              <div className="w-full max-w-md px-6">{children}</div>
-            </motion.div>
-          </>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.15 }}
+            className="bg-background/95 border-border/40 absolute right-0 z-50 min-w-[180px] overflow-hidden rounded-xl border shadow-lg backdrop-blur"
+            role="menu"
+          >
+            {children}
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

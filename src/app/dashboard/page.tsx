@@ -246,7 +246,7 @@ export default function DashboardPage() {
       ) : (
         <>
           <section
-            className="grid auto-rows-min items-start gap-4 md:grid-cols-2 lg:grid-cols-3"
+            className="grid auto-rows-min items-start gap-4 md:grid-cols-2 xl:grid-cols-3"
             aria-label="Bookmarks grid"
           >
             {displayedBookmarks.map((bookmark) => (
