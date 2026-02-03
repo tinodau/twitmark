@@ -1,5 +1,7 @@
 # Twitmark 📌
 
+[![Live Site](https://img.shields.io/badge/Live-Site-blue?style=flat-square)](https://twitmark.pages.dev/)
+
 Your personal X bookmark manager. Save tweets, organize with folders, read later.
 
 ## 🌟 Overview
@@ -75,12 +77,18 @@ twitmark/
 │   │   │   ├── add-bookmark-modal.tsx
 │   │   │   ├── add-folder-modal.tsx
 │   │   │   ├── bookmark-card.tsx
-│   │   │   ├── header.tsx
-│   │   │   └── sidebar.tsx
+│   │   │   ├── edit-folder-modal.tsx
+│   │   │   ├── header.tsx    # Dashboard header (navbar)
+│   │   │   ├── manage-folders-modal.tsx
+│   │   │   └── sidebar.tsx   # Full-height navigation sidebar
 │   │   ├── ui/             # Base UI components
 │   │   │   ├── aurora-background.tsx
-│   │   │   └── bento-grid.tsx
-│   │   ├── navbar.tsx       # Responsive navigation
+│   │   │   ├── bento-grid.tsx
+│   │   │   ├── confirm-modal.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── mobile-menu.tsx
+│   │   │   └── toast.tsx
+│   │   ├── navbar.tsx       # Public site navigation
 │   │   └── testimonials-marquee.tsx
 │   ├── contexts/           # React contexts
 │   │   └── folder-context.tsx
@@ -174,7 +182,11 @@ Twitmark is deployed on **Cloudflare Pages** with Edge Runtime support.
 
 ### Dashboard
 
+- **Full-height sidebar** - Navigation sidebar spans entire viewport height
+- **Collapsible sidebar** - Desktop users can expand/collapse sidebar for more content space
 - **Responsive design** - Works on desktop, tablet, and mobile
+- **Logo in sidebar** - Clean branding integrated into navigation
+- **Smart header** - Navbar only fills remaining width after sidebar
 - **Real-time updates** - Instant feedback on all actions
 - **Folder filtering** - View bookmarks by folder
 - **Reading List view** - Dedicated view for to-read items
