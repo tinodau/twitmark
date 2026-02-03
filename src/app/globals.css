@@ -74,13 +74,16 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   * {
     @apply border-border;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground overflow-x-hidden antialiased;
   }
 }
 

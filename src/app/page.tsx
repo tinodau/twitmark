@@ -37,35 +37,35 @@ export default function Home() {
       >
         Skip to main content
       </a>
-      <main id="main-content" className="relative z-10 mx-auto pt-32">
+      <main id="main-content" className="relative z-10 mx-auto px-4 pt-24 sm:pt-32">
         {/* Hero Section */}
         <section aria-labelledby="hero-title">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mx-auto max-w-4xl text-center"
+            className="mx-auto max-w-md px-4 text-center md:max-w-lg lg:max-w-4xl"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm backdrop-blur-sm"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs backdrop-blur-sm sm:mb-6 sm:px-4 sm:py-2 sm:text-sm"
             >
-              <Sparkles className="h-4 w-4 text-blue-400" />
+              <Sparkles className="h-3 w-3 text-blue-400 sm:h-4 sm:w-4" />
               <span className="text-muted-foreground">Your personal X bookmark manager</span>
             </motion.div>
 
             <h1
               id="hero-title"
-              className="mb-6 bg-gradient-to-br from-white via-white to-white/70 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-7xl"
+              className="mb-4 bg-gradient-to-br from-white via-white to-white/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl"
             >
               Save tweets. Read later.
               <br />
               Never lose gems.
             </h1>
 
-            <p className="text-muted-foreground mb-10 text-lg sm:text-xl">
+            <p className="text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-lg sm:text-xl">
               Organize your X bookmarks with folders, search instantly, and build your personal
               knowledge base.
             </p>
@@ -74,11 +74,11 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+              className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4"
             >
               <Link
                 href="/dashboard"
-                className="group focus:ring-primary/50 relative flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-8 text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
+                className="group focus:ring-primary/50 relative flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
                 aria-label={user ? "Go to dashboard" : "Get started free"}
               >
                 {loading ? "..." : buttonText}
@@ -91,7 +91,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#features"
-                className="focus:ring-primary/50 flex h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 focus:ring-2 focus:outline-none"
+                className="focus:ring-primary/50 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
               >
                 Learn More
               </Link>
@@ -103,19 +103,22 @@ export default function Home() {
         <section
           id="features"
           aria-labelledby="features-title"
-          className="mx-auto mt-32 max-w-6xl scroll-mt-24"
+          className="mx-auto mt-24 max-w-md scroll-mt-20 px-4 sm:mt-32 sm:scroll-mt-24 sm:px-0 lg:max-w-5xl xl:max-w-6xl"
         >
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="mb-12 text-center"
+            className="mb-8 text-center sm:mb-12"
           >
-            <h2 id="features-title" className="mb-4 text-4xl font-bold sm:text-5xl">
+            <h2
+              id="features-title"
+              className="mb-3 text-2xl font-bold sm:mb-4 sm:text-4xl lg:text-5xl"
+            >
               Everything you need to <span className="text-gradient">curate</span>
             </h2>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground px-2 text-base sm:px-0 sm:text-lg">
               Simple, powerful, and beautiful bookmark management
             </p>
           </motion.div>
@@ -133,8 +136,8 @@ export default function Home() {
             />
             <BentoGridItem
               title={
-                <div className="flex items-center gap-2">
-                  Search & Filter
+                <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+                  <span>Search & Filter</span>
                   <span className="text-muted-foreground rounded-full bg-white/10 px-2 py-0.5 text-xs">
                     Coming Soon
                   </span>
@@ -150,7 +153,7 @@ export default function Home() {
         <section
           id="about"
           aria-labelledby="about-title"
-          className="mx-auto mt-32 max-w-4xl text-center"
+          className="mx-auto mt-24 max-w-md px-4 text-center sm:mt-32 sm:px-0 md:max-w-lg lg:max-w-4xl"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -158,16 +161,16 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 id="about-title" className="mb-6 text-4xl font-bold sm:text-5xl">
+            <h2 id="about-title" className="mb-6 text-2xl font-bold sm:text-4xl lg:text-5xl">
               Built for <span className="text-gradient">curators</span>, by a curator
             </h2>
-            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+            <p className="text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
               Twitmark was born from a simple frustration: losing track of valuable X content. But
-              folder is a premium feature, so as a developer who constantly discovers gems on the
+              folders are a premium feature, so as a developer who constantly discovers gems on the
               platform, I needed a better way to save, organize, and actually read what matters.
             </p>
-            <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
-              No more losing tweets to the void. No more scrolling through likes and bookmark to
+            <p className="text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
+              No more losing tweets to the void. No more scrolling through likes and bookmarks to
               find that one perfect thread. Just clean, simple bookmark management that works the
               way you do.
             </p>
@@ -187,27 +190,36 @@ export default function Home() {
         <TestimonialsMarquee />
 
         {/* CTA Section */}
-        <section aria-labelledby="cta-title" className="mx-auto mt-32 max-w-4xl text-center">
+        <section
+          aria-labelledby="cta-title"
+          className="mx-auto mt-24 max-w-4xl px-4 text-center sm:mt-32 sm:px-0"
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="rounded-3xl p-12 sm:p-16"
+            className="rounded-3xl border border-white/10 bg-white/5 p-8 sm:border-0 sm:bg-transparent sm:p-12 lg:p-16"
           >
-            <h2 id="cta-title" className="mb-4 text-4xl font-bold sm:text-5xl">
-              Ready to build your <span className="text-gradient">knowledge base</span>?
+            <h2
+              id="cta-title"
+              className="mb-4 flex flex-col text-2xl font-bold sm:text-4xl lg:text-5xl"
+            >
+              <span>Ready to build your</span>
+              <span>
+                <span className="text-gradient">knowledge base</span>?
+              </span>
             </h2>
-            <p className="text-muted-foreground mb-8 text-lg">
+            <p className="text-muted-foreground mb-6 px-2 text-base sm:mb-8 sm:px-0 sm:text-lg">
               Join thousands of users who save tweets daily. No credit card required.
             </p>
             <Link
               href="/dashboard"
-              className="group focus:ring-primary/50 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-10 text-lg font-medium text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none"
+              className="group focus:ring-primary/50 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 text-base font-medium text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:h-14 sm:w-auto sm:px-10 sm:text-lg"
             >
-              Start Bookmarking Now
+              Start Now
               <ArrowRight
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5"
                 aria-hidden="true"
               />
             </Link>
@@ -216,7 +228,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer
-          className="text-muted-foreground mx-auto mt-32 border-t border-white/10 py-8 text-center text-sm"
+          className="text-muted-foreground mx-auto mt-24 border-t border-white/10 px-4 py-6 text-center text-xs sm:mt-32 sm:py-8 sm:text-sm"
           role="contentinfo"
         >
           <p>Built by Tino Dau</p>
