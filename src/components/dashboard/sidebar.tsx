@@ -100,8 +100,8 @@ export function Sidebar({
       )}
 
       <aside
-        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-[64px] left-0 z-30 h-[calc(100vh-64px)] border-r backdrop-blur transition-all duration-300 ${
-          isCollapsed ? "w-16" : "w-64"
+        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-16 left-0 z-30 h-[calc(100vh-64px)] border-r backdrop-blur transition-all duration-300 ${
+          isCollapsed ? "w-64 lg:w-16" : "w-64"
         } ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         aria-label="Main navigation sidebar"
       >
@@ -122,7 +122,7 @@ export function Sidebar({
                   } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
                 >
                   <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  <span className={isCollapsed ? "flex lg:hidden" : ""}>{item.label}</span>
                 </button>
               ))}
             </nav>
