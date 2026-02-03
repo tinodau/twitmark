@@ -738,6 +738,20 @@ Route (app)
 - **Phase 7.7**: Performance Optimization (Lighthouse audit, image optimization, code splitting)
 - **Phase 8**: Deployment (0/9 tasks)
 
+## 2026-02-03 | testimonials-marquee.tsx Spacing Rules
+
+### UI/UX Notes
+
+**IMPORTANT: Do NOT modify padding or margin in `src/components/testimonials-marquee.tsx` unless explicitly told by user**
+
+The user manually fixed the spacing/padding/margin in this component. These settings include:
+
+- Custom negative margins (`-mx-4`) on the section wrapper
+- Specific padding values (`px-4 py-16`) that were manually tuned
+- Responsive breakpoint adjustments (`sm:px-0`)
+
+These spacing values should be preserved and only changed when the user explicitly requests it.
+
 ---
 
-_Last Updated: 2026-02-01 4:16 PM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-03 2:16 PM (Asia/Jakarta, UTC+7:00)_
