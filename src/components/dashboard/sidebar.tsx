@@ -18,14 +18,13 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-  PanelLeftClose,
-  PanelRight,
 } from "lucide-react"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
 import { AddFolderModal } from "./add-folder-modal"
 import { useFolder } from "@/contexts/folder-context"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Map icon IDs to Lucide components
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -120,101 +119,163 @@ export function Sidebar({
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto py-4">
-            <nav className="space-y-2 px-3" aria-label="Main navigation">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => setSelectedFolderId(item.id)}
-                  aria-pressed={selectedFolderId === item.id}
-                  aria-current={selectedFolderId === item.id ? "page" : undefined}
-                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    selectedFolderId === item.id
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
-                >
-                  <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span className={isCollapsed ? "flex lg:hidden" : ""}>{item.label}</span>
-                </button>
-              ))}
-            </nav>
+            <TooltipProvider>
+              <nav className="space-y-2 px-3" aria-label="Main navigation">
+                {navItems.map((item) => (
+                  <div key={item.label}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => setSelectedFolderId(item.id)}
+                          aria-pressed={selectedFolderId === item.id}
+                          aria-current={selectedFolderId === item.id ? "page" : undefined}
+                          className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                            selectedFolderId === item.id
+                              ? "bg-accent text-accent-foreground"
+                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          } ${isCollapsed ? "justify-center px-0 lg:justify-start lg:px-3" : ""} focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
+                        >
+                          <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          <span className={isCollapsed ? "flex lg:hidden" : ""}>{item.label}</span>
+                        </button>
+                      </TooltipTrigger>
+                      {isCollapsed && (
+                        <TooltipContent side="right">
+                          <p>{item.label}</p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </div>
+                ))}
+              </nav>
 
-            {/* Folders Section */}
-            {!isCollapsed && (
-              <div className="mt-6 px-3">
-                <div className="mb-2 flex items-center justify-between px-3">
-                  <h2 className="text-muted-foreground text-xs font-semibold uppercase">Folders</h2>
-                  <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    aria-label="Add new folder"
-                    className="text-muted-foreground hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
-                  >
-                    <Plus className="h-3 w-3" aria-hidden="true" />
-                  </button>
-                </div>
+              {/* Folders Section */}
+              <div className={`mt-6 ${isCollapsed ? "px-2" : "px-3"}`}>
+                {isCollapsed ? (
+                  <div className="mb-4">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => setIsAddModalOpen(true)}
+                          className="group hover:bg-accent focus:ring-primary/50 mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
+                          aria-label="Add new folder"
+                        >
+                          <Plus className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>Add Folder</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                ) : (
+                  <div className="mb-2 flex items-center justify-between px-3">
+                    <h2 className="text-muted-foreground text-xs font-semibold uppercase">
+                      Folders
+                    </h2>
+                    <button
+                      onClick={() => setIsAddModalOpen(true)}
+                      aria-label="Add new folder"
+                      className="text-muted-foreground hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
+                    >
+                      <Plus className="h-3 w-3" aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
                 {folders.length > 0 ? (
-                  <ul className="space-y-1" role="list" aria-label="Your folders">
+                  <ul
+                    className={`${isCollapsed ? "space-y-3" : "space-y-1"}`}
+                    role="list"
+                    aria-label="Your folders"
+                  >
                     {folders.map((folder) => (
-                      <li key={folder.id} className="group">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => setSelectedFolderId(folder.id)}
-                            aria-pressed={selectedFolderId === folder.id}
-                            className={`flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                              selectedFolderId === folder.id
-                                ? "bg-accent text-accent-foreground"
-                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                            } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
-                          >
-                            <div
-                              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
-                              style={{ backgroundColor: folder.color }}
-                              aria-hidden="true"
+                      <li key={folder.id} className={`${isCollapsed ? "" : "group"}`}>
+                        {isCollapsed ? (
+                          <div>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button
+                                  onClick={() => setSelectedFolderId(folder.id)}
+                                  className="group hover:bg-accent focus:ring-primary/50 relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
+                                  aria-label={`Select ${folder.name}`}
+                                >
+                                  <div
+                                    className="flex h-6 w-6 items-center justify-center rounded-md"
+                                    style={{ backgroundColor: folder.color }}
+                                  >
+                                    {(() => {
+                                      const IconComponent = ICON_MAP[folder.icon] || Folder
+                                      return <IconComponent className="h-3.5 w-3.5 text-white" />
+                                    })()}
+                                  </div>
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                <p>{folder.name}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => setSelectedFolderId(folder.id)}
+                              aria-pressed={selectedFolderId === folder.id}
+                              className={`flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                                selectedFolderId === folder.id
+                                  ? "bg-accent text-accent-foreground"
+                                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                              } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
                             >
-                              {(() => {
-                                const IconComponent = ICON_MAP[folder.icon] || Folder
-                                return <IconComponent className="h-3 w-3 text-white" />
-                              })()}
-                            </div>
-                            <span className="truncate">{folder.name}</span>
-                            <span
-                              className="text-muted-foreground ml-auto text-xs"
-                              aria-label={`${folder.bookmarkCount || 0} bookmarks`}
-                            >
-                              {folder.bookmarkCount || 0}
-                            </span>
-                          </button>
-                          <DropdownMenu
-                            trigger={
-                              <button
-                                className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
-                                aria-label="Folder options"
+                              <div
+                                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
+                                style={{ backgroundColor: folder.color }}
+                                aria-hidden="true"
                               >
-                                <MoreVertical className="h-4 w-4" aria-hidden="true" />
-                              </button>
-                            }
-                          >
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setEditingFolder(folder)
-                                setIsEditModalOpen(true)
-                              }}
-                              icon={<Edit2 className="h-4 w-4" />}
+                                {(() => {
+                                  const IconComponent = ICON_MAP[folder.icon] || Folder
+                                  return <IconComponent className="h-3 w-3 text-white" />
+                                })()}
+                              </div>
+                              <span className="truncate">{folder.name}</span>
+                              <span
+                                className="text-muted-foreground ml-auto text-xs"
+                                aria-label={`${folder.bookmarkCount || 0} bookmarks`}
+                              >
+                                {folder.bookmarkCount || 0}
+                              </span>
+                            </button>
+                            <DropdownMenu
+                              trigger={
+                                <button
+                                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
+                                  aria-label="Folder options"
+                                >
+                                  <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                                </button>
+                              }
                             >
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setDeletingFolder(folder)
-                                setIsDeleteConfirmOpen(true)
-                              }}
-                              icon={<Trash2 className="h-4 w-4" />}
-                              variant="danger"
-                            >
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenu>
-                        </div>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setEditingFolder(folder)
+                                  setIsEditModalOpen(true)
+                                }}
+                                icon={<Edit2 className="h-4 w-4" />}
+                              >
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setDeletingFolder(folder)
+                                  setIsDeleteConfirmOpen(true)
+                                }}
+                                icon={<Trash2 className="h-4 w-4" />}
+                                variant="danger"
+                              >
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenu>
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -224,7 +285,7 @@ export function Sidebar({
                   </p>
                 )}
               </div>
-            )}
+            </TooltipProvider>
           </div>
         </div>
       </aside>
