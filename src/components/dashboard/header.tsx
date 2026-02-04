@@ -32,9 +32,7 @@ export function Header({
   }
 
   return (
-    <header
-      className={`bg-secondary supports-backdrop-filter:bg-background fixed top-0 right-0 left-0 z-20 border-b backdrop-blur transition-all duration-300 ${isSidebarCollapsed ? "lg:left-16 lg:w-[calc(100vw-64px)]" : "lg:left-[255px] lg:w-[calc(100vw-255px)]"}`}
-    >
+    <header className="bg-secondary supports-backdrop-filter:bg-background sticky top-0 z-20 border-b backdrop-blur">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Desktop Sidebar Collapse Toggle */}
         <button

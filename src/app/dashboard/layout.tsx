@@ -96,12 +96,14 @@ function DashboardLayoutWithProvider({
   onMobileMenuToggle,
   isSidebarCollapsed,
   onSidebarToggle,
+  user,
 }: {
   children: React.ReactNode
   isMobileMenuOpen: boolean
   onMobileMenuToggle: () => void
   isSidebarCollapsed: boolean
   onSidebarToggle: () => void
+  user: User
 }) {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -124,13 +126,18 @@ function DashboardLayoutWithProvider({
           isCollapsed={isSidebarCollapsed}
           setIsCollapsed={onSidebarToggle}
         />
-        <main
-          className={`flex-1 p-6 pt-20 transition-all duration-300 ${
-            isSidebarCollapsed ? "" : "lg:pl-[280px]"
-          }`}
+        <div
+          className={`flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-[16rem]"}`}
         >
-          {children}
-        </main>
+          <Header
+            user={user!}
+            onMobileMenuToggle={onMobileMenuToggle}
+            isMobileMenuOpen={isMobileMenuOpen}
+            isSidebarCollapsed={isSidebarCollapsed}
+            onSidebarToggle={onSidebarToggle}
+          />
+          <main className="flex-1 p-6">{children}</main>
+        </div>
       </div>
       <AddFolderModalContent />
       <EditFolderModalContent />
@@ -172,18 +179,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="bg-background min-h-screen">
-      <Header
-        user={user!}
-        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        isMobileMenuOpen={isMobileMenuOpen}
-        isSidebarCollapsed={isSidebarCollapsed}
-        onSidebarToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-      />
       <DashboardLayoutWithProvider
         isMobileMenuOpen={isMobileMenuOpen}
         onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         isSidebarCollapsed={isSidebarCollapsed}
         onSidebarToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        user={user!}
       >
         {children}
       </DashboardLayoutWithProvider>
