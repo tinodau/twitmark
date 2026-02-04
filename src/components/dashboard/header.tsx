@@ -1,7 +1,8 @@
 "use client"
 
 import { createClient } from "@/lib/supabase/client"
-import { LogOut, User, PanelLeftClose, PanelRight } from "lucide-react"
+import { LogOut, User, UserRound, PanelLeftClose, PanelRight } from "lucide-react"
+import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 interface HeaderProps {
   user: {
@@ -50,52 +51,65 @@ export function Header({
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
-          <div className="flex items-center gap-2">
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={onMobileMenuToggle}
-              aria-expanded={isMobileMenuOpen}
-              aria-label={isMobileMenuOpen ? "Close sidebar" : "Open sidebar"}
-              className="text-foreground hover:bg-accent focus:ring-primary/50 mr-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
-            >
-              {isMobileMenuOpen ? (
-                <PanelLeftClose className="h-5 w-5" aria-hidden="true" />
-              ) : (
-                <PanelRight className="h-5 w-5" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+          <button
+            onClick={onMobileMenuToggle}
+            aria-expanded={isMobileMenuOpen}
+            aria-label={isMobileMenuOpen ? "Close sidebar" : "Open sidebar"}
+            className="text-foreground hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
+          >
+            {isMobileMenuOpen ? (
+              <PanelLeftClose className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <PanelRight className="h-5 w-5" aria-hidden="true" />
+            )}
+          </button>
 
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm font-medium">{user.user_metadata?.full_name || "User"}</p>
-              <p className="text-muted-foreground text-xs">{user.email}</p>
-            </div>
-            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
-              <User className="text-muted-foreground h-5 w-5" />
-            </div>
-          </div>
+          <DropdownMenu
+            trigger={
+              <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">
+                <User className="text-muted-foreground h-5 w-5" />
+              </div>
+            }
+          >
+            <DropdownMenuItem>
+              <div className="flex flex-col items-start">
+                <p className="font-medium">{user.user_metadata?.full_name || "User"}</p>
+                <p className="text-muted-foreground text-xs">{user.email}</p>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleSignOut}
+              icon={<LogOut className="h-4 w-4" />}
+              variant="danger"
+            >
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenu>
         </div>
 
-        {/* Desktop User Section - Only visible on large screens */}
+        {/* Desktop Header - User Dropdown */}
         <div className="hidden lg:flex lg:items-center lg:gap-4">
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm font-medium">{user.user_metadata?.full_name || "User"}</p>
-              <p className="text-muted-foreground text-xs">{user.email}</p>
-            </div>
-            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
-              <User className="text-muted-foreground h-5 w-5" />
-            </div>
-          </div>
-
-          <button
-            onClick={handleSignOut}
-            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+          <DropdownMenu
+            trigger={
+              <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">
+                <User className="text-muted-foreground h-5 w-5" />
+              </div>
+            }
           >
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </button>
+            <DropdownMenuItem>
+              <div className="flex flex-col items-start">
+                <p className="font-medium">{user.user_metadata?.full_name || "User"}</p>
+                <p className="text-muted-foreground text-xs">{user.email}</p>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleSignOut}
+              icon={<LogOut className="h-4 w-4" />}
+              variant="danger"
+            >
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenu>
         </div>
       </div>
     </header>

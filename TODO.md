@@ -70,6 +70,14 @@
 - [x] Implement collapsible folder sidebar
 - [x] Set up main content area
 - [x] Add "Add Bookmark" prominent button with modal
+- [x] Implement responsive sidebar behavior
+  - [x] Mobile: Full-screen overlay with hamburger menu toggle
+  - [x] Desktop: Sidebar with open/close toggle and collapse functionality (256px ↔ 64px)
+  - [x] Header automatically adjusts positioning based on sidebar state
+- [x] Implement user dropdown menu
+  - [x] Shows user name and email in one item
+  - [x] Shows Sign Out button
+  - [x] Visible on both mobile and desktop
 
 ### 3.2 Bookmark Card Component ✅ COMPLETED
 
@@ -181,6 +189,10 @@
 - [x] Add GPU acceleration with willChange property
 - [x] Implement spring physics for smooth, natural motion
 - [x] Verify dark mode contrast ratios
+- [x] Enhance dashboard layout with improved responsive behavior
+  - [x] Mobile sidebar as full-screen overlay with smooth transitions
+  - [x] Desktop sidebar with toggleable visibility and collapsible width
+  - [x] Header with user dropdown accessible on all screen sizes
 
 ### 7.4 Code Quality ✅ COMPLETED
 
@@ -282,9 +294,19 @@
 
 ---
 
-## 📝 Recent Updates (2026-02-02)
+## 📝 Recent Updates (2026-02-04)
 
 ### Completed Today
+
+- **Dashboard Layout Enhancement**: Improved sidebar and header responsiveness
+  - Mobile: Full-screen sidebar overlay with hamburger menu
+  - Desktop: Toggleable sidebar visibility with collapse functionality (256px ↔ 64px)
+  - Header automatically adjusts positioning based on sidebar state
+  - User dropdown accessible on all screen sizes
+- **User Dropdown**: Simplified to show name, email, and Sign Out (removed "Account" item)
+- **Cursor Pointers**: Verified proper cursor pointers on all interactive elements
+
+### Completed Previously (2026-02-02)
 
 - **Deployment**: Successfully deployed to Cloudflare Pages
 - **Edge Runtime**: Configured for Cloudflare Pages compatibility
@@ -304,4 +326,4 @@
 
 **Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
 
-_Last Updated: 2026-02-01 5:02 PM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-04 11:58 PM (Asia/Jakarta, UTC+7:00)_

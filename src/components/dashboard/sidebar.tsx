@@ -129,7 +129,7 @@ export function Sidebar({
                           onClick={() => setSelectedFolderId(item.id)}
                           aria-pressed={selectedFolderId === item.id}
                           aria-current={selectedFolderId === item.id ? "page" : undefined}
-                          className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          className={`group hover:bg-primary/10 relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                             selectedFolderId === item.id
                               ? "bg-accent text-accent-foreground"
                               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
@@ -157,7 +157,7 @@ export function Sidebar({
                       <TooltipTrigger asChild>
                         <button
                           onClick={() => setIsAddModalOpen(true)}
-                          className="group hover:bg-accent focus:ring-primary/50 mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
+                          className="group hover:bg-primary/10 focus:ring-primary/50 mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
                           aria-label="Add new folder"
                         >
                           <Plus className="h-4 w-4" aria-hidden="true" />
@@ -196,7 +196,7 @@ export function Sidebar({
                               <TooltipTrigger asChild>
                                 <button
                                   onClick={() => setSelectedFolderId(folder.id)}
-                                  className="group hover:bg-accent focus:ring-primary/50 relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none"
+                                  className="group hover:bg-primary/10 focus:ring-primary/50 relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
                                   aria-label={`Select ${folder.name}`}
                                 >
                                   <div
@@ -220,7 +220,7 @@ export function Sidebar({
                             <button
                               onClick={() => setSelectedFolderId(folder.id)}
                               aria-pressed={selectedFolderId === folder.id}
-                              className={`flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                              className={`hover:bg-primary/10 flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                                 selectedFolderId === folder.id
                                   ? "bg-accent text-accent-foreground"
                                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"

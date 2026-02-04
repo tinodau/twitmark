@@ -67,12 +67,17 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 
 ### Phase 3: Dashboard Core ✅
 
-- Dashboard layout with sidebar
+- Dashboard layout with responsive sidebar
+  - Mobile: Full-screen overlay with hamburger menu toggle
+  - Desktop: Sidebar with open/close toggle and collapse functionality (256px ↔ 64px)
+  - Header automatically adjusts positioning based on sidebar state
 - Add bookmark modal (URL validation for x.com/twitter.com)
 - Bookmark cards with `react-tweet` embed
 - Delete bookmark action
 - Loading states
 - Pagination for large bookmark lists
+- User dropdown menu (name, email, Sign Out) - visible on both mobile and desktop
+- Proper cursor pointers on all interactive elements
 
 ### Phase 4: Folder System ✅
 
@@ -133,11 +138,15 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 #### UI/UX Refinement ✅
 
 - Consistent cursor pointers on all clickable elements
-- Glassmorphism 2.0 implementation across all components
+- Glassmorphism2.0 implementation across all components
 - 60fps animations with GPU acceleration
 - Spring physics for smooth, natural motion
 - `willChange` property for optimized rendering
 - Saturate-180 backdrop filter for glass effects
+- Enhanced dashboard layout with improved responsive behavior
+  - Mobile sidebar as full-screen overlay with smooth transitions
+  - Desktop sidebar with toggleable visibility and collapsible width
+  - Header with user dropdown accessible on all screen sizes
 
 #### Code Quality ✅
 
