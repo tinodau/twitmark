@@ -89,10 +89,6 @@ export function Header({
 
         {/* Desktop Header - User Dropdown */}
         <div className="hidden lg:flex lg:items-center lg:gap-4">
-          <div className="text-right">
-            <p className="text-sm font-medium">{user.user_metadata?.full_name || "User"}</p>
-            <p className="text-muted-foreground text-xs">{user.email}</p>
-          </div>
           <DropdownMenu
             trigger={
               <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">
