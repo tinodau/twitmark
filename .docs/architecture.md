@@ -168,6 +168,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 
 - **Local State**: `useState` for modals and form inputs
 - **React Context**: FolderContext for folder selection across dashboard
+- **Layout State**: Dashboard layout manages sidebar state (open/close, collapse) and mobile menu toggle
 - **URL State**: Folder filtering via query params (`/dashboard?folder=id`)
 - **Toast Context**: Notification system for user feedback
 

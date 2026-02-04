@@ -232,15 +232,23 @@
 ### Mobile Considerations
 
 - Full-width cards on small screens
-- Hamburger menu for navigation (if needed)
+- **Dashboard Sidebar**: Full-screen overlay (w-72) with hamburger menu toggle in header
+- **User Menu**: Dropdown accessible via avatar click on right side of header
 - Touch-friendly tap targets (min 44x44px)
 - Proper spacing for thumb reach
+- Smooth slide transitions for sidebar overlay
 
 ### Desktop Enhancements
 
 - Hover states only on desktop
-- Sidebar on larger screens
+- **Dashboard Sidebar**:
+  - Toggleable visibility using Menu icon in header
+  - Collapsible width (256px expanded ↔ 64px collapsed)
+  - Collapse button beside logo when sidebar is open
+  - Header automatically adjusts left padding based on sidebar state
+- **User Menu**: Dropdown in header shows user name, email, and Sign Out
 - Grid layouts expand to show more content
+- Proper cursor pointers on all interactive elements
 
 ## 12. Performance
 

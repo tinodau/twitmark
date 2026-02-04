@@ -28,6 +28,13 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 ### 3.3 The Dashboard (Core Engine)
 
 - **Manual Input**: A prominent "Add Bookmark" button that opens a modal to paste an X URL.
+- **Dashboard Layout**:
+  - **Responsive Sidebar**:
+    - Mobile: Full-screen overlay with hamburger menu toggle
+    - Desktop: Toggleable visibility with collapse functionality (256px ↔ 64px)
+    - Header automatically adjusts positioning based on sidebar state
+  - **User Dropdown**: Shows user name, email, and Sign Out (accessible on all screen sizes)
+  - **Navigation**: Folder-based filtering with active state indicators
 - **Bookmark Card**:
   - Uses `react-tweet` for standard rendering at natural dimensions.
   - Shows metadata (Date added, Folder name).
