@@ -225,64 +225,32 @@ export function Sidebar({
                             </Tooltip>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2">
-                            <Link
-                              href={`/dashboard/folder/${folder.id}`}
-                              className={`hover:bg-primary/10 focus:ring-primary/50 flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
-                                isActive(`/dashboard/folder/${folder.id}`)
-                                  ? "bg-accent text-accent-foreground"
-                                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                              }`}
+                          <Link
+                            href={`/dashboard/folder/${folder.id}`}
+                            className={`hover:bg-primary/10 focus:ring-primary/50 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
+                              isActive(`/dashboard/folder/${folder.id}`)
+                                ? "bg-accent text-accent-foreground"
+                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                            }`}
+                          >
+                            <div
+                              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
+                              style={{ backgroundColor: folder.color }}
+                              aria-hidden="true"
                             >
-                              <div
-                                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
-                                style={{ backgroundColor: folder.color }}
-                                aria-hidden="true"
-                              >
-                                {(() => {
-                                  const IconComponent = ICON_MAP[folder.icon] || Folder
-                                  return <IconComponent className="h-3 w-3 text-white" />
-                                })()}
-                              </div>
-                              <span className="truncate">{folder.name}</span>
-                              <span
-                                className="text-muted-foreground ml-auto text-xs"
-                                aria-label={`${folder.bookmarkCount || 0} bookmarks`}
-                              >
-                                {folder.bookmarkCount || 0}
-                              </span>
-                            </Link>
-                            <DropdownMenu
-                              trigger={
-                                <button
-                                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
-                                  aria-label="Folder options"
-                                >
-                                  <MoreVertical className="h-4 w-4" aria-hidden="true" />
-                                </button>
-                              }
+                              {(() => {
+                                const IconComponent = ICON_MAP[folder.icon] || Folder
+                                return <IconComponent className="h-3 w-3 text-white" />
+                              })()}
+                            </div>
+                            <span className="truncate">{folder.name}</span>
+                            <span
+                              className="text-muted-foreground ml-auto text-xs"
+                              aria-label={`${folder.bookmarkCount || 0} bookmarks`}
                             >
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setEditingFolder(folder)
-                                  setIsEditModalOpen(true)
-                                }}
-                                icon={<Edit2 className="h-4 w-4" />}
-                              >
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setDeletingFolder(folder)
-                                  setIsDeleteConfirmOpen(true)
-                                }}
-                                icon={<Trash2 className="h-4 w-4" />}
-                                variant="danger"
-                              >
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenu>
-                          </div>
+                              {folder.bookmarkCount || 0}
+                            </span>
+                          </Link>
                         )}
                       </li>
                     ))}

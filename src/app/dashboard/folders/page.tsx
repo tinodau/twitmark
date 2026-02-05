@@ -13,13 +13,17 @@ import {
   Briefcase,
   Code2,
   Plus,
-  BookOpen,
+  MoreVertical,
+  Edit2,
+  Trash2,
 } from "lucide-react"
 import { motion } from "framer-motion"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
 import { AddFolderModal } from "@/components/dashboard/add-folder-modal"
+import { EditFolderModal } from "@/components/dashboard/edit-folder-modal"
 import { useFolder } from "@/contexts/folder-context"
+import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 // Map icon IDs to Lucide components
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -38,7 +42,18 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export default function FoldersPage() {
   const [folders, setFolders] = useState<FolderType[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const { isAddModalOpen, setIsAddModalOpen } = useFolder()
+  const {
+    editingFolder,
+    setEditingFolder,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isAddModalOpen,
+    setIsAddModalOpen,
+    deletingFolder,
+    setDeletingFolder,
+    isDeleteConfirmOpen,
+    setIsDeleteConfirmOpen,
+  } = useFolder()
 
   async function loadFolders() {
     setIsLoading(true)
@@ -52,7 +67,7 @@ export default function FoldersPage() {
       await loadFolders()
     }
     fetchFolders()
-  }, [isAddModalOpen])
+  }, [isAddModalOpen, isEditModalOpen, isDeleteConfirmOpen])
 
   const totalBookmarks = folders.reduce((sum, folder) => sum + (folder.bookmarkCount || 0), 0)
 
@@ -109,15 +124,17 @@ export default function FoldersPage() {
           {folders.map((folder, index) => {
             const IconComponent = ICON_MAP[folder.icon] || Folder
             return (
-              <motion.a
+              <motion.div
                 key={folder.id}
-                href={`/dashboard/folder/${folder.id}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="border-border/40 bg-background/95 hover:bg-accent hover:border-accent/50 group focus:ring-primary/50 relative overflow-hidden rounded-xl border p-6 transition-all hover:cursor-pointer focus:ring-2 focus:outline-none"
+                className="border-border/40 bg-background/95 hover:bg-accent hover:border-accent/50 group relative overflow-hidden rounded-xl border p-6 transition-all"
               >
-                <div className="flex items-start gap-4">
+                <a
+                  href={`/dashboard/folder/${folder.id}`}
+                  className="focus:ring-primary/50 flex items-start gap-4 outline-none focus:ring-2"
+                >
                   <div
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
                     style={{ backgroundColor: folder.color }}
@@ -131,15 +148,49 @@ export default function FoldersPage() {
                       {folder.bookmarkCount === 1 ? "bookmark" : "bookmarks"}
                     </p>
                   </div>
-                  <BookOpen className="text-muted-foreground group-hover:text-foreground h-4 w-4 transition-colors" />
-                </div>
-              </motion.a>
+                </a>
+                <DropdownMenu
+                  trigger={
+                    <button
+                      className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 absolute top-6 right-4 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
+                      aria-label="Folder options"
+                    >
+                      <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  }
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setEditingFolder(folder)
+                      setIsEditModalOpen(true)
+                    }}
+                    icon={<Edit2 className="h-4 w-4" />}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setDeletingFolder(folder)
+                      setIsDeleteConfirmOpen(true)
+                    }}
+                    icon={<Trash2 className="h-4 w-4" />}
+                    variant="danger"
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </motion.div>
             )
           })}
         </section>
       )}
 
       <AddFolderModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      <EditFolderModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        folder={editingFolder}
+      />
     </div>
   )
 }
