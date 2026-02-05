@@ -298,7 +298,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-background/95 supports-backdrop-filter:bg-background absolute top-full left-0 z-10 mt-2 max-h-[400px] w-full overflow-x-hidden overflow-y-auto rounded-xl border border-white/10 p-4 shadow-xl backdrop-blur-xl"
+                            className="bg-background/95 supports-backdrop-filter:bg-background absolute top-full left-0 z-10 mt-2 max-h-96 w-full overflow-x-hidden overflow-y-auto rounded-xl border border-white/10 p-4 shadow-xl backdrop-blur-xl"
                           >
                             {/* Icon Picker */}
                             <fieldset className="mb-4">

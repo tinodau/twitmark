@@ -320,11 +320,11 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.15 }}
-                            className="border-border bg-background/95 absolute z-50 mt-1.5 max-h-[320px] w-full overflow-hidden rounded-lg border shadow-xl backdrop-blur"
+                            className="border-border bg-background/95 absolute z-50 mt-1.5 max-h-80 w-full overflow-hidden rounded-lg border shadow-xl backdrop-blur"
                             role="listbox"
                             aria-labelledby="folder-select"
                           >
-                            <div className="flex max-h-[280px] flex-col overflow-y-auto p-1.5">
+                            <div className="flex max-h-72 flex-col overflow-y-auto p-1.5">
                               {folders.map((folder) => {
                                 const isSelected = selectedFolderIds.includes(folder.id)
                                 return (

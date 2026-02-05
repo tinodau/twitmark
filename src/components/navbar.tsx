@@ -124,7 +124,7 @@ export default function Navbar() {
             role="navigation"
             aria-label="Mobile navigation"
           >
-            <ul className="flex h-[calc(100vh-4.5rem)] flex-col items-center justify-center gap-6 px-4 pt-6 pb-40">
+            <ul className="flex h-[calc(100vh-5rem)] flex-col items-center justify-center gap-6 px-4 pt-6 pb-40">
               {navLinks.map((link) => (
                 <li key={link.name} className="hover:text-muted w-full text-center">
                   <Link
