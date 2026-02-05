@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Sidebar } from "@/components/dashboard/sidebar"
@@ -86,18 +86,25 @@ function DeleteFolderModalContent() {
 function DashboardLayoutWithProvider({
   children,
   isMobileMenuOpen,
-  onMobileMenuToggle,
+  setIsMobileMenuOpen,
   isSidebarCollapsed,
-  onSidebarToggle,
+  setIsSidebarCollapsed,
   user,
 }: {
   children: React.ReactNode
   isMobileMenuOpen: boolean
-  onMobileMenuToggle: () => void
+  setIsMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
   isSidebarCollapsed: boolean
-  onSidebarToggle: () => void
+  setIsSidebarCollapsed: React.Dispatch<React.SetStateAction<boolean>>
   user: User
 }) {
+  const onMobileMenuToggle = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev)
+  }, [setIsMobileMenuOpen])
+
+  const onSidebarToggle = useCallback(() => {
+    setIsSidebarCollapsed((prev) => !prev)
+  }, [setIsSidebarCollapsed])
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -120,7 +127,7 @@ function DashboardLayoutWithProvider({
           setIsCollapsed={onSidebarToggle}
         />
         <div
-          className={`flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-[16rem]"}`}
+          className={`relative flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-[16rem]"}`}
         >
           <Header
             user={user!}
@@ -174,9 +181,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="bg-background min-h-screen">
       <DashboardLayoutWithProvider
         isMobileMenuOpen={isMobileMenuOpen}
-        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
         isSidebarCollapsed={isSidebarCollapsed}
-        onSidebarToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        setIsSidebarCollapsed={setIsSidebarCollapsed}
         user={user!}
       >
         {children}
