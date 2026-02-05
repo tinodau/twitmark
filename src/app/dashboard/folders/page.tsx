@@ -18,6 +18,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
 import { AddFolderModal } from "@/components/dashboard/add-folder-modal"
@@ -129,11 +130,11 @@ export default function FoldersPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="border-border/40 bg-background/95 hover:bg-accent hover:border-accent/50 group relative overflow-hidden rounded-xl border p-6 transition-all"
+                className="border-border/40 bg-background/95 hover:bg-accent hover:border-accent/50 group overflow relative rounded-xl border transition-all"
               >
-                <a
+                <Link
                   href={`/dashboard/folder/${folder.id}`}
-                  className="focus:ring-primary/50 flex items-start gap-4 outline-none focus:ring-2"
+                  className="focus:ring-primary/50 flex h-full items-start gap-4 p-6 outline-none focus:ring-2"
                 >
                   <div
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
@@ -148,37 +149,40 @@ export default function FoldersPage() {
                       {folder.bookmarkCount === 1 ? "bookmark" : "bookmarks"}
                     </p>
                   </div>
-                </a>
-                <DropdownMenu
-                  trigger={
-                    <button
-                      className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 absolute top-6 right-4 cursor-pointer rounded-lg p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
-                      aria-label="Folder options"
+                </Link>
+                <div className="absolute top-6 right-4 z-50">
+                  <DropdownMenu
+                    trigger={
+                      <button
+                        type="button"
+                        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+                        aria-label="Folder options"
+                      >
+                        <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    }
+                  >
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setEditingFolder(folder)
+                        setIsEditModalOpen(true)
+                      }}
+                      icon={<Edit2 className="h-4 w-4" />}
                     >
-                      <MoreVertical className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  }
-                >
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setEditingFolder(folder)
-                      setIsEditModalOpen(true)
-                    }}
-                    icon={<Edit2 className="h-4 w-4" />}
-                  >
-                    Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setDeletingFolder(folder)
-                      setIsDeleteConfirmOpen(true)
-                    }}
-                    icon={<Trash2 className="h-4 w-4" />}
-                    variant="danger"
-                  >
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenu>
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setDeletingFolder(folder)
+                        setIsDeleteConfirmOpen(true)
+                      }}
+                      icon={<Trash2 className="h-4 w-4" />}
+                      variant="danger"
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </div>
               </motion.div>
             )
           })}

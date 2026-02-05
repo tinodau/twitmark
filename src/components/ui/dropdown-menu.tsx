@@ -49,7 +49,13 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
 
   return (
     <div className="relative" ref={menuRef}>
-      <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+      <div
+        className="cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation()
+          setIsOpen(!isOpen)
+        }}
+      >
         {trigger}
       </div>
       <AnimatePresence>
@@ -59,7 +65,7 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="bg-background/95 border-border/40 absolute right-0 z-50 min-w-[180px] overflow-hidden rounded-xl border shadow-lg backdrop-blur"
+            className="bg-background/95 border-border/40 absolute right-0 z-[9999] min-w-[180px] overflow-hidden rounded-xl border shadow-lg backdrop-blur"
             role="menu"
           >
             {children}
