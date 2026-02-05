@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import {
   Folder,
   Star,
@@ -19,6 +20,7 @@ import {
   Edit2,
   Trash2,
 } from "lucide-react"
+import Link from "next/link"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
 import { AddFolderModal } from "./add-folder-modal"
@@ -37,7 +39,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   target: Target,
   tag: Tag,
   briefcase: Briefcase,
-  code: Code2,
+  code2: Code2,
 }
 
 export function Sidebar({
@@ -51,9 +53,8 @@ export function Sidebar({
   isCollapsed: boolean
   setIsCollapsed: (collapsed: boolean) => void
 }) {
+  const pathname = usePathname()
   const {
-    selectedFolderId,
-    setSelectedFolderId,
     editingFolder,
     setEditingFolder,
     isEditModalOpen,
@@ -72,7 +73,7 @@ export function Sidebar({
     if (isMobileMenuOpen) {
       onMobileMenuToggle()
     }
-  }, [])
+  }, [pathname, isMobileMenuOpen, onMobileMenuToggle])
 
   async function loadFolders() {
     const data = await getFolders()
@@ -85,9 +86,11 @@ export function Sidebar({
   }, [isAddModalOpen, isEditModalOpen, isDeleteConfirmOpen])
 
   const navItems = [
-    { icon: LayoutDashboard, label: "All Bookmarks", id: null },
-    { icon: BookOpen, label: "Reading List", id: "reading-list" },
+    { icon: LayoutDashboard, label: "All Bookmarks", href: "/dashboard" },
+    { icon: BookOpen, label: "Reading List", href: "/dashboard/reading-list" },
   ]
+
+  const isActive = (href: string) => pathname === href
 
   return (
     <>
@@ -109,44 +112,47 @@ export function Sidebar({
         <div className="flex h-full flex-col">
           {/* Logo Section */}
           <div className="flex h-16 items-center px-4 pt-2">
-            <div className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2">
               <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
                 <span className="text-primary-foreground text-lg font-bold">T</span>
               </div>
               <span className={isCollapsed ? "hidden lg:hidden" : "font-semibold"}>Twitmark</span>
-            </div>
+            </Link>
           </div>
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto py-4">
             <TooltipProvider>
               <nav className="space-y-2 px-3" aria-label="Main navigation">
-                {navItems.map((item) => (
-                  <div key={item.label}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => setSelectedFolderId(item.id)}
-                          aria-pressed={selectedFolderId === item.id}
-                          aria-current={selectedFolderId === item.id ? "page" : undefined}
-                          className={`group hover:bg-primary/10 relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                            selectedFolderId === item.id
-                              ? "bg-accent text-accent-foreground"
-                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                          } ${isCollapsed ? "justify-center px-0 lg:justify-start lg:px-3" : ""} focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
-                        >
-                          <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                          <span className={isCollapsed ? "flex lg:hidden" : ""}>{item.label}</span>
-                        </button>
-                      </TooltipTrigger>
-                      {isCollapsed && (
+                {navItems.map((item) => {
+                  const link = (
+                    <Link
+                      href={item.href}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                      className={`group hover:bg-primary/10 focus:ring-primary/50 relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
+                        isActive(item.href)
+                          ? "bg-accent text-accent-foreground"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      } ${isCollapsed ? "justify-center px-0 lg:justify-start lg:px-3" : ""}`}
+                    >
+                      <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <span className={isCollapsed ? "flex lg:hidden" : ""}>{item.label}</span>
+                    </Link>
+                  )
+
+                  return isCollapsed ? (
+                    <div key={item.href}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>{link}</TooltipTrigger>
                         <TooltipContent side="right">
                           <p>{item.label}</p>
                         </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </div>
-                ))}
+                      </Tooltip>
+                    </div>
+                  ) : (
+                    <div key={item.href}>{link}</div>
+                  )
+                })}
               </nav>
 
               {/* Folders Section */}
@@ -170,9 +176,12 @@ export function Sidebar({
                   </div>
                 ) : (
                   <div className="mb-2 flex items-center justify-between px-3">
-                    <h2 className="text-muted-foreground text-xs font-semibold uppercase">
+                    <Link
+                      href="/dashboard/folders"
+                      className="text-muted-foreground hover:text-foreground text-xs font-semibold uppercase transition-colors"
+                    >
                       Folders
-                    </h2>
+                    </Link>
                     <button
                       onClick={() => setIsAddModalOpen(true)}
                       aria-label="Add new folder"
@@ -194,10 +203,10 @@ export function Sidebar({
                           <div>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <button
-                                  onClick={() => setSelectedFolderId(folder.id)}
+                                <Link
+                                  href={`/dashboard/folder/${folder.id}`}
                                   className="group hover:bg-primary/10 focus:ring-primary/50 relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
-                                  aria-label={`Select ${folder.name}`}
+                                  aria-label={`View ${folder.name}`}
                                 >
                                   <div
                                     className="flex h-6 w-6 items-center justify-center rounded-md"
@@ -208,7 +217,7 @@ export function Sidebar({
                                       return <IconComponent className="h-3.5 w-3.5 text-white" />
                                     })()}
                                   </div>
-                                </button>
+                                </Link>
                               </TooltipTrigger>
                               <TooltipContent side="right">
                                 <p>{folder.name}</p>
@@ -217,14 +226,13 @@ export function Sidebar({
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => setSelectedFolderId(folder.id)}
-                              aria-pressed={selectedFolderId === folder.id}
-                              className={`hover:bg-primary/10 flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                                selectedFolderId === folder.id
+                            <Link
+                              href={`/dashboard/folder/${folder.id}`}
+                              className={`hover:bg-primary/10 focus:ring-primary/50 flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
+                                isActive(`/dashboard/folder/${folder.id}`)
                                   ? "bg-accent text-accent-foreground"
                                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                              } focus:ring-primary/50 cursor-pointer focus:ring-2 focus:outline-none`}
+                              }`}
                             >
                               <div
                                 className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md"
@@ -243,7 +251,7 @@ export function Sidebar({
                               >
                                 {folder.bookmarkCount || 0}
                               </span>
-                            </button>
+                            </Link>
                             <DropdownMenu
                               trigger={
                                 <button

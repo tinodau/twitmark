@@ -8,6 +8,13 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 
 ## 🗺️ Project Map & Navigation
 
+### Dashboard Routes
+
+- `/dashboard` - All Bookmarks (default dashboard view)
+- `/dashboard/reading-list` - Reading List view (placeholder, feature coming soon)
+- `/dashboard/folders` - Folders overview page with folder cards
+- `/dashboard/folder/[id]` - Individual folder view with filtered bookmarks
+
 ### 1. The "Brain" (.docs/)
 
 - `spec.md`: Detailed business logic and user flows.

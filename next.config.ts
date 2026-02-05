@@ -2,11 +2,6 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  // Enable experimental features for better performance
-  experimental: {
-    // Optimize CSS
-    optimizeCss: true,
-  },
   // Optimize images - use unoptimized for Cloudflare Pages
   images: {
     formats: ["image/avif", "image/webp"],

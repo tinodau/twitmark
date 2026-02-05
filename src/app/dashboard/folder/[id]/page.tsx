@@ -1,22 +1,30 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Plus, ChevronDown } from "lucide-react"
+import { useRouter, useParams } from "next/navigation"
+import { Plus, ChevronDown, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal"
 import { BookmarkCard } from "@/components/dashboard/bookmark-card"
 import { getUserBookmarks } from "@/app/actions/bookmarks"
+import { getFolderById } from "@/app/actions/folders"
 import type { BookmarkWithFolder } from "@/types"
 
 const ITEMS_PER_PAGE = 12
 const SCROLL_THRESHOLD = 80
 
-export default function DashboardPage() {
+export default function FolderPage() {
+  const router = useRouter()
+  const params = useParams()
+  const folderId = params.id as string
+
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [bookmarks, setBookmarks] = useState<BookmarkWithFolder[]>([])
+  const [allBookmarks, setAllBookmarks] = useState<BookmarkWithFolder[]>([])
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(true)
+  const [folderName, setFolderName] = useState<string>("")
   const [showFloatingButton, setShowFloatingButton] = useState(false)
+  const [folderExists, setFolderExists] = useState(true)
   const mountedRef = useRef(true)
 
   const fetchBookmarks = async () => {
@@ -24,29 +32,50 @@ export default function DashboardPage() {
     setIsLoading(true)
     const data = await getUserBookmarks()
     if (mountedRef.current) {
-      setBookmarks(data as BookmarkWithFolder[])
+      setAllBookmarks(data as BookmarkWithFolder[])
       setIsLoading(false)
     }
   }
 
   useEffect(() => {
     mountedRef.current = true
-    fetchBookmarks()
+    ;(async () => {
+      // Check if folder exists
+      const folder = await getFolderById(folderId)
+      if (mountedRef.current && !folder) {
+        setFolderExists(false)
+        setIsLoading(false)
+        return
+      }
+
+      if (mountedRef.current && folder) {
+        setFolderName(folder.name)
+      }
+
+      await fetchBookmarks()
+    })()
+
     return () => {
       mountedRef.current = false
     }
-  }, [])
+  }, [folderId])
 
   const handleModalClose = () => {
     setIsModalOpen(false)
     setTimeout(fetchBookmarks, 100)
   }
 
-  const displayedBookmarks = bookmarks.slice(0, displayCount)
-  const hasMore = bookmarks.length > displayCount
+  // Filter bookmarks for this folder
+  const filteredBookmarks = allBookmarks.filter((b) => b.folders.some((f) => f.id === folderId))
+  const displayedBookmarks = filteredBookmarks.slice(0, displayCount)
+  const hasMore = filteredBookmarks.length > displayCount
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + ITEMS_PER_PAGE)
+  }
+
+  const handleBack = () => {
+    router.push("/dashboard/folders")
   }
 
   // Accessibility keyboard handler
@@ -88,14 +117,39 @@ export default function DashboardPage() {
     }
   }, [])
 
+  if (!folderExists) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16">
+        <h2 className="mb-2 text-xl font-semibold">Folder Not Found</h2>
+        <p className="text-muted-foreground mb-4">This folder may have been deleted</p>
+        <button
+          onClick={handleBack}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Folders
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6" onKeyDown={handleKeyDown}>
       <header className="flex items-center justify-between" role="banner">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">All Bookmarks</h1>
-          <p className="text-muted-foreground">
-            {bookmarks.length} {bookmarks.length === 1 ? "bookmark" : "bookmarks"}
-          </p>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleBack}
+            aria-label="Go back to folders"
+            className="text-muted-foreground hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{folderName}</h1>
+            <p className="text-muted-foreground">
+              {filteredBookmarks.length} {filteredBookmarks.length === 1 ? "bookmark" : "bookmarks"}
+            </p>
+          </div>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
@@ -113,7 +167,7 @@ export default function DashboardPage() {
             <div key={i} className="bg-muted/50 h-64 animate-pulse rounded-xl" />
           ))}
         </div>
-      ) : bookmarks.length === 0 ? (
+      ) : filteredBookmarks.length === 0 ? (
         <div
           className="border-border/40 flex flex-col items-center justify-center rounded-xl border border-dashed py-16"
           role="status"

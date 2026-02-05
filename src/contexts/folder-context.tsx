@@ -4,8 +4,6 @@ import { createContext, useContext, useState, ReactNode } from "react"
 import type { Folder } from "@/types"
 
 interface FolderContextType {
-  selectedFolderId: string | null
-  setSelectedFolderId: (folderId: string | null) => void
   editingFolder: Folder | null
   setEditingFolder: (folder: Folder | null) => void
   isEditModalOpen: boolean
@@ -21,7 +19,6 @@ interface FolderContextType {
 const FolderContext = createContext<FolderContextType | undefined>(undefined)
 
 export function FolderProvider({ children }: { children: ReactNode }) {
-  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -31,8 +28,6 @@ export function FolderProvider({ children }: { children: ReactNode }) {
   return (
     <FolderContext.Provider
       value={{
-        selectedFolderId,
-        setSelectedFolderId,
         editingFolder,
         setEditingFolder,
         isEditModalOpen,

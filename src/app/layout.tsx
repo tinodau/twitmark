@@ -15,8 +15,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-export const runtime = "edge"
-
 export const metadata: Metadata = {
   title: "Twitmark - Your Personal X Bookmark Manager",
   description:

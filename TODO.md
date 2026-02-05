@@ -241,6 +241,31 @@
 
 ---
 
+## 🚀 Phase 9: URL-Based Routing ✅ COMPLETED
+
+### 9.1 Dashboard Routes ✅ COMPLETED
+
+- [x] Create `/dashboard` route for all bookmarks
+- [x] Create `/dashboard/reading-list` route for reading list view
+- [x] Create `/dashboard/folders` route for folders overview
+- [x] Create `/dashboard/folder/[id]` dynamic route for individual folders
+
+### 9.2 Sidebar Navigation ✅ COMPLETED
+
+- [x] Update sidebar to use Next.js Link components
+- [x] Add `usePathname` hook for active route detection
+- [x] Implement proper active state styling for all routes
+- [x] Close mobile menu on route change
+
+### 9.3 Folder Context Simplification ✅ COMPLETED
+
+- [x] Remove `selectedFolderId` from folder context
+- [x] Update dashboard layout to redirect on folder delete
+- [x] Simplify folder context to only manage modal states
+- [x] Use URL-based routing for folder selection
+
+---
+
 ## 🚀 Phase 8: Deployment & Infrastructure ✅ COMPLETED
 
 ### 8.1 Deployment Prep ✅ COMPLETED
