@@ -103,13 +103,13 @@ export function Sidebar({
             e.stopPropagation()
             onMobileMenuToggle()
           }}
-          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
           aria-hidden="true"
         />
       )}
 
       <aside
-        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-0 left-0 z-[100000] h-screen border-r backdrop-blur transition-all duration-300 ${
+        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-0 left-0 z-10000 h-screen border-r backdrop-blur transition-all duration-300 ${
           isCollapsed ? "w-64 lg:w-16" : "w-64"
         } ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         aria-label="Main navigation sidebar"
