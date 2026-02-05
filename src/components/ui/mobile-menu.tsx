@@ -75,7 +75,7 @@ export function MobileMenu({ trigger, isOpen, onToggle }: MobileMenuProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="fixed inset-0 z-[50] bg-black/50"
+              className="fixed inset-0 z-50 bg-black/50"
               aria-hidden="true"
             />
             {/* Menu */}
@@ -84,7 +84,7 @@ export function MobileMenu({ trigger, isOpen, onToggle }: MobileMenuProps) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.15 }}
-              className="bg-secondary border-border/40 fixed top-[64px] right-0 z-[60] flex h-[calc(100vh-64px)] w-full items-center justify-center overflow-hidden border shadow-lg backdrop-blur"
+              className="bg-secondary border-border/40 fixed top-[64px] right-0 z-50 flex h-[calc(100vh-64px)] w-full items-center justify-center overflow-hidden border shadow-lg backdrop-blur"
               role="menu"
             >
               <div className="w-full max-w-md px-6" />

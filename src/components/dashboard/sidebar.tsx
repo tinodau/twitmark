@@ -109,7 +109,7 @@ export function Sidebar({
       )}
 
       <aside
-        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-0 left-0 z-10000 h-screen border-r backdrop-blur transition-all duration-300 ${
+        className={`bg-background/95 supports-backdrop-filter:bg-background/60 fixed top-0 left-0 z-50 h-screen border-r backdrop-blur transition-all duration-300 ${
           isCollapsed ? "w-64 lg:w-16" : "w-64"
         } ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         aria-label="Main navigation sidebar"
