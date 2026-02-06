@@ -81,6 +81,14 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Add bookmark modal (URL validation for x.com/twitter.com)
 - Bookmark cards with `react-tweet` embed
 - Delete bookmark action
+- **Edit bookmark feature**
+  - Edit bookmark title (Tweet URL disabled/read-only)
+  - Multi-folder selection in dropdown
+  - "Add Folder" button in dropdown for creating new folders
+  - Close button in dropdown header
+  - Matches AddBookmarkModal UI/UX pattern
+  - Full accessibility support (focus trap, keyboard nav, ARIA labels)
+  - Loading states, error handling, and toast notifications
 - Loading states
 - Pagination for large bookmark lists
 - User dropdown menu (name, email, Sign Out) - visible on both mobile and desktop
@@ -102,6 +110,20 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Dedicated reading list view
 - Visual indicators for reading list items
 - Empty states
+
+### Phase 5.5: Edit Bookmark Feature ✅
+
+- Created EditBookmarkModal component with title editing
+- Tweet URL field is read-only (disabled)
+- Multi-folder selection with dropdown UI matching AddBookmarkModal
+- "Add Folder" button in dropdown for creating new folders
+- Close button in folder dropdown header (also added to AddBookmarkModal)
+- Updated bookmark card menu from "Edit Title" to "Edit Bookmark"
+- Changed icon from Edit2 to PenLine
+- Full accessibility support (focus trap, keyboard navigation, ARIA labels)
+- Loading states, error handling, and toast notifications
+- Refresh folder list after creating new folder
+- Synced UI/UX patterns between Add and Edit modals
 
 ### Phase 6: Deployment & Infrastructure ✅
 
@@ -197,9 +219,16 @@ Before performing any task:
 
 8. **Single Supabase Project**: Using one project for both development and production environments.
 
-## 🔧 Recent Improvements
+## 🔧 Recent Improvements (2026-02-07)
 
-### Performance Optimizations
+### Edit Bookmark Feature
+
+- Comprehensive bookmark editing capabilities with modal-based UI
+- Multi-folder selection support with visual color indicators
+- Inline folder creation via dropdown "Add Folder" button
+- Consistent UI/UX across Add and Edit bookmark modals
+- Close button in folder dropdown headers for better control
+- Full accessibility compliance with proper ARIA labels and keyboard navigation
 
 - Pagination implemented for bookmark lists to handle large datasets
 - Optimistic updates reduce perceived latency
@@ -211,6 +240,7 @@ Before performing any task:
 - Smooth 60fps animations with proper GPU acceleration
 - Enhanced contrast ratios for better readability
 - Interactive hover states with spring physics
+- Close button in folder dropdown headers for improved UX
 
 ### Code Quality
 

@@ -101,7 +101,22 @@
 - [x] Add "Add to Reading List" toggle
 - [x] Show success notifications (toast)
 
-### 3.5 Performance ✅ COMPLETED
+### 3.5 Edit Bookmark Feature ✅ COMPLETED
+
+- [x] Create "Edit Bookmark" modal component
+- [x] Allow editing bookmark title
+- [x] Keep Tweet URL read-only (disabled)
+- [x] Implement multi-folder selection in dropdown
+- [x] Add "Add Folder" button in dropdown for creating new folders
+- [x] Add close button in folder dropdown header
+- [x] Update bookmark to edit bookmark card menu (PenLine icon)
+- [x] Update bookmark action to handle title and folder changes
+- [x] Add loading states and error handling
+- [x] Sync with AddBookmarkModal UI/UX pattern
+- [x] Refresh folder list after creating new folder
+- [x] Implement proper accessibility (focus trap, keyboard nav, ARIA)
+
+### 3.6 Performance ✅ COMPLETED
 
 - [x] Implement pagination or infinite scroll
 - [x] Optimize database queries with Supabase
@@ -319,9 +334,25 @@
 
 ---
 
-## 📝 Recent Updates (2026-02-04)
+## 📝 Recent Updates (2026-02-07)
 
 ### Completed Today
+
+- **Edit Bookmark Feature**: Added comprehensive bookmark editing capabilities
+  - Created EditBookmarkModal with title editing (Tweet URL disabled)
+  - Multi-folder selection with dropdown UI matching AddBookmarkModal
+  - "Add Folder" button in dropdown for creating new folders on the fly
+  - Close button in folder dropdown header
+  - Updated bookmark card menu from "Edit Title" to "Edit Bookmark"
+  - Changed icon from Edit2 to PenLine
+  - Refresh folder list after creating new folder
+  - Full accessibility support (focus trap, keyboard nav, ARIA labels)
+  - Loading states, error handling, and toast notifications
+- **Add Bookmark Enhancement**: Added close button to folder dropdown header for consistency
+  - Matches EditBookmarkModal UI/UX pattern
+  - Improved user experience with better dropdown control
+
+### Completed Previously (2026-02-04)
 
 - **Dashboard Layout Enhancement**: Improved sidebar and header responsiveness
   - Mobile: Full-screen sidebar overlay with hamburger menu
@@ -351,4 +382,4 @@
 
 **Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
 
-_Last Updated: 2026-02-04 11:58 PM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-07 1:46 AM (Asia/Jakarta, UTC+7:00)_
