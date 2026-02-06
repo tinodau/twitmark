@@ -60,7 +60,10 @@ export default function FolderPage() {
 
   const handleModalClose = () => {
     setIsModalOpen(false)
-    setTimeout(fetchBookmarks, 100)
+  }
+
+  const handleBookmarkAdded = () => {
+    fetchBookmarks()
   }
 
   // Filter bookmarks for this folder
@@ -87,7 +90,6 @@ export default function FolderPage() {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) {
         setIsModalOpen(false)
-        setTimeout(fetchBookmarks, 100)
       }
     }
 
@@ -211,7 +213,11 @@ export default function FolderPage() {
         </>
       )}
 
-      <AddBookmarkModal isOpen={isModalOpen} onClose={handleModalClose} />
+      <AddBookmarkModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSuccess={handleBookmarkAdded}
+      />
 
       {/* Floating Add Bookmark Button */}
       <motion.button

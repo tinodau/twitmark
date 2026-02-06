@@ -14,9 +14,10 @@ import type { Folder as FolderType } from "@/types"
 interface AddBookmarkModalProps {
   isOpen: boolean
   onClose: () => void
+  onSuccess?: () => void
 }
 
-export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
+export function AddBookmarkModal({ isOpen, onClose, onSuccess }: AddBookmarkModalProps) {
   const pathname = usePathname()
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
@@ -165,6 +166,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
       setTitle("")
       setUrl("")
       setSelectedFolderIds([])
+      onSuccess?.()
     }
   }
 

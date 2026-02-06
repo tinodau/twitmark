@@ -47,7 +47,10 @@ export default function DashboardPage() {
 
   const handleModalClose = () => {
     setIsModalOpen(false)
-    setTimeout(fetchBookmarks, 100)
+  }
+
+  const handleBookmarkAdded = () => {
+    fetchBookmarks()
   }
 
   const displayedBookmarks = bookmarks.slice(0, displayCount)
@@ -68,7 +71,6 @@ export default function DashboardPage() {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) {
         setIsModalOpen(false)
-        setTimeout(fetchBookmarks, 100)
       }
     }
 
@@ -171,7 +173,11 @@ export default function DashboardPage() {
         </>
       )}
 
-      <AddBookmarkModal isOpen={isModalOpen} onClose={handleModalClose} />
+      <AddBookmarkModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSuccess={handleBookmarkAdded}
+      />
 
       {/* Floating Add Bookmark Button */}
       <motion.button
