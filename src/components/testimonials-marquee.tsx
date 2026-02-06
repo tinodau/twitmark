@@ -72,8 +72,8 @@ export default function TestimonialsMarquee() {
         {/* Fade edges only on desktop */}
         {!isMobile && (
           <>
-            <div className="from-background pointer-events-none absolute top-0 left-0 z-10 h-full w-12 bg-gradient-to-r to-transparent sm:w-20" />
-            <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-12 bg-gradient-to-l to-transparent sm:w-20" />
+            <div className="from-background pointer-events-none absolute top-0 left-0 z-10 h-full w-12 bg-linear-to-r to-transparent sm:w-20" />
+            <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-12 bg-linear-to-l to-transparent sm:w-20" />
           </>
         )}
 
@@ -95,7 +95,7 @@ export default function TestimonialsMarquee() {
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
@@ -121,7 +121,7 @@ export default function TestimonialsMarquee() {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="glass min-w-[280px] overflow-hidden rounded-2xl border border-white/10 p-4 backdrop-blur-sm transition-all hover:border-white/20 sm:min-w-[320px] sm:p-6 lg:min-w-[350px]"
+                className="glass min-w-70 overflow-hidden rounded-2xl border border-white/10 p-4 backdrop-blur-sm transition-all hover:border-white/20 sm:min-w-[320px] sm:p-6 lg:min-w-87.5"
               >
                 <div className="mb-4 flex items-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -132,7 +132,7 @@ export default function TestimonialsMarquee() {
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>

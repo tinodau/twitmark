@@ -226,7 +226,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20"
                       aria-hidden="true"
                     >
                       <Folder className="h-5 w-5 text-blue-400" />

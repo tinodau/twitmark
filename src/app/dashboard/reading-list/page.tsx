@@ -20,7 +20,7 @@ export default function ReadingListPage() {
       </div>
 
       <div className="relative">
-        <div className="from-primary/20 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br to-cyan-500/20">
+        <div className="from-primary/20 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-linear-to-br to-cyan-500/20">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}

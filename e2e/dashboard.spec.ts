@@ -16,9 +16,7 @@ test.describe("Dashboard CRUD Operations", () => {
     await page.waitForLoadState("networkidle")
 
     // Check for empty state message
-    const emptyState = page
-      .getByText(/no bookmarks yet/i)
-      .or(page.getByText(/add your first bookmark/i))
+    page.getByText(/no bookmarks yet/i).or(page.getByText(/add your first bookmark/i))
     // Note: This might fail if user has bookmarks - adjust as needed
   })
 

@@ -43,7 +43,7 @@ const BentoGridItem = ({ className, title, description, icon, children }: BentoG
     >
       <div className="flex flex-col gap-2">
         {icon && (
-          <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-blue-400 sm:h-10 sm:w-10">
+          <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-blue-400 sm:h-10 sm:w-10">
             {icon}
           </div>
         )}
@@ -56,7 +56,7 @@ const BentoGridItem = ({ className, title, description, icon, children }: BentoG
         {children}
       </div>
       {/* Hover glow effect */}
-      <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-blue-500/0 via-cyan-500/0 to-blue-500/0 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
+      <div className="absolute -inset-px rounded-2xl bg-linear-to-br from-blue-500/0 via-cyan-500/0 to-blue-500/0 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
     </motion.div>
   )
 }

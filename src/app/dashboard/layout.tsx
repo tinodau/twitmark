@@ -126,7 +126,7 @@ function DashboardLayoutWithProvider({
           isCollapsed={isSidebarCollapsed}
         />
         <div
-          className={`relative flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-[16rem]"}`}
+          className={`relative flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-64"}`}
         >
           <Header
             user={user!}

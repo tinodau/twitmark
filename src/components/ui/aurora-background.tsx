@@ -60,7 +60,7 @@ export default function AuroraBackground({
         />
       </div>
       {showRadialGradient && (
-        <div className="from-background absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
+        <div className="from-background absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
       )}
       <div className="relative z-10">{children}</div>
     </div>

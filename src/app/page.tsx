@@ -58,14 +58,14 @@ export default function Home() {
 
             <h1
               id="hero-title"
-              className="mb-4 bg-gradient-to-br from-white via-white to-white/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl"
+              className="mb-4 bg-linear-to-br from-white via-white to-white/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl"
             >
               Save tweets. Read later.
               <br />
               Never lose gems.
             </h1>
 
-            <p className="text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-lg sm:text-xl">
+            <p className="text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-xl">
               Organize your X bookmarks with folders, search instantly, and build your personal
               knowledge base.
             </p>
@@ -78,7 +78,7 @@ export default function Home() {
             >
               <Link
                 href="/dashboard"
-                className="group focus:ring-primary/50 relative flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
+                className="group focus:ring-primary/50 relative flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-r from-cyan-600 to-blue-700 px-6 text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
                 aria-label={user ? "Go to dashboard" : "Get started free"}
               >
                 {loading ? "..." : buttonText}
@@ -175,7 +175,7 @@ export default function Home() {
               way you do.
             </p>
             <div className="flex items-center justify-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 text-xl font-bold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-cyan-600 to-blue-700 text-xl font-bold text-white">
                 T
               </div>
               <div className="text-left">
@@ -215,7 +215,7 @@ export default function Home() {
             </p>
             <Link
               href="/dashboard"
-              className="group focus:ring-primary/50 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-700 px-6 text-base font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:h-14 sm:w-auto sm:px-10 sm:text-lg"
+              className="group focus:ring-primary/50 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-linear-to-r from-cyan-600 to-blue-700 px-6 text-base font-medium text-white transition-all hover:shadow-lg hover:shadow-blue-500/25 focus:ring-2 focus:outline-none sm:h-14 sm:w-auto sm:px-10 sm:text-lg"
             >
               Start Now
               <ArrowRight

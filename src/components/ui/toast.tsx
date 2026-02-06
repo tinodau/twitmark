@@ -61,7 +61,7 @@ function ToastItem({ toast, onClose }: ToastProps) {
       role="alert"
       aria-live="polite"
     >
-      <div className="flex-shrink-0 pt-0.5">{toastIcons[toast.type]}</div>
+      <div className="shrink-0 pt-0.5">{toastIcons[toast.type]}</div>
 
       <div className="flex flex-1 flex-col gap-1">
         <p className="text-sm font-semibold">{toast.title}</p>
@@ -70,7 +70,7 @@ function ToastItem({ toast, onClose }: ToastProps) {
 
       <button
         onClick={() => onClose(toast.id)}
-        className="focus:ring-primary/50 flex-shrink-0 cursor-pointer rounded-lg p-1 transition-opacity hover:opacity-80 focus:ring-2 focus:outline-none"
+        className="focus:ring-primary/50 shrink-0 cursor-pointer rounded-lg p-1 transition-opacity hover:opacity-80 focus:ring-2 focus:outline-none"
         aria-label="Close notification"
       >
         <X className="h-4 w-4" />
