@@ -84,9 +84,10 @@ export async function getUserBookmarks() {
   return await dbGetUserBookmarks()
 }
 
-// Update bookmark title
+// Update bookmark title and folders
 export async function updateBookmark(id: string, formData: FormData) {
   const title = formData.get("title") as string
+  const folderIds = formData.getAll("folderIds") as string[]
 
   if (!title || title.trim() === "") {
     return { error: "Title is required" }
@@ -96,6 +97,31 @@ export async function updateBookmark(id: string, formData: FormData) {
 
   if (result.error) {
     return result
+  }
+
+  // Get current bookmark's folders
+  const bookmarks = await dbGetUserBookmarks()
+  const bookmark = bookmarks.find((b) => b.id === id)
+  const currentFolderIds = bookmark?.folders.map((f) => f.id) || []
+
+  // Calculate folders to add and remove
+  const foldersToAdd = folderIds.filter((id) => !currentFolderIds.includes(id))
+  const foldersToRemove = currentFolderIds.filter((id) => !folderIds.includes(id))
+
+  // Add new folders
+  if (foldersToAdd.length > 0) {
+    const addResult = await dbAddBookmarkToFolders(id, foldersToAdd)
+    if (addResult.error) {
+      return addResult
+    }
+  }
+
+  // Remove folders
+  if (foldersToRemove.length > 0) {
+    const removeResult = await dbRemoveBookmarkFromFolders(id, foldersToRemove)
+    if (removeResult.error) {
+      return removeResult
+    }
   }
 
   revalidatePath("/dashboard")
