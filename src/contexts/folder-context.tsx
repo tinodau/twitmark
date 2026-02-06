@@ -14,6 +14,8 @@ interface FolderContextType {
   setDeletingFolder: (folder: Folder | null) => void
   isDeleteConfirmOpen: boolean
   setIsDeleteConfirmOpen: (open: boolean) => void
+  bookmarkAddedTrigger: number
+  triggerBookmarkRefresh: () => void
 }
 
 const FolderContext = createContext<FolderContextType | undefined>(undefined)
@@ -24,6 +26,11 @@ export function FolderProvider({ children }: { children: ReactNode }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [deletingFolder, setDeletingFolder] = useState<Folder | null>(null)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [bookmarkAddedTrigger, setBookmarkAddedTrigger] = useState(0)
+
+  const triggerBookmarkRefresh = () => {
+    setBookmarkAddedTrigger((prev) => prev + 1)
+  }
 
   return (
     <FolderContext.Provider
@@ -38,6 +45,8 @@ export function FolderProvider({ children }: { children: ReactNode }) {
         setDeletingFolder,
         isDeleteConfirmOpen,
         setIsDeleteConfirmOpen,
+        bookmarkAddedTrigger,
+        triggerBookmarkRefresh,
       }}
     >
       {children}

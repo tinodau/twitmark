@@ -27,7 +27,7 @@ export function AddBookmarkModal({ isOpen, onClose, onSuccess }: AddBookmarkModa
   const [isFoldersLoading, setIsFoldersLoading] = useState(false)
   const [error, setError] = useState("")
   const [isFolderDropdownOpen, setIsFolderDropdownOpen] = useState(false)
-  const { setIsAddModalOpen, isAddModalOpen } = useFolder()
+  const { setIsAddModalOpen, isAddModalOpen, triggerBookmarkRefresh } = useFolder()
   const { success, error: showError } = useToast()
   const modalRef = useRef<HTMLDivElement>(null)
   const urlInputRef = useRef<HTMLInputElement>(null)
@@ -166,6 +166,7 @@ export function AddBookmarkModal({ isOpen, onClose, onSuccess }: AddBookmarkModa
       setTitle("")
       setUrl("")
       setSelectedFolderIds([])
+      triggerBookmarkRefresh()
       onSuccess?.()
     }
   }

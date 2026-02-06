@@ -47,7 +47,7 @@ export function Sidebar({
   isCollapsed: boolean
 }) {
   const pathname = usePathname()
-  const { isAddModalOpen, setIsAddModalOpen } = useFolder()
+  const { isAddModalOpen, setIsAddModalOpen, bookmarkAddedTrigger } = useFolder()
   const [folders, setFolders] = useState<FolderType[]>([])
   const prevPathnameRef = useRef(pathname)
 
@@ -70,7 +70,7 @@ export function Sidebar({
     return () => {
       controller.abort()
     }
-  }, [isAddModalOpen])
+  }, [isAddModalOpen, bookmarkAddedTrigger])
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", href: "/dashboard" },
