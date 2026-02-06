@@ -17,23 +17,31 @@ export default function DashboardPage() {
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(true)
   const [showFloatingButton, setShowFloatingButton] = useState(false)
-  const mountedRef = useRef(true)
 
   const fetchBookmarks = async () => {
-    if (!mountedRef.current) return
     setIsLoading(true)
     const data = await getUserBookmarks()
-    if (mountedRef.current) {
-      setBookmarks(data as BookmarkWithFolder[])
-      setIsLoading(false)
-    }
+    setBookmarks(data as BookmarkWithFolder[])
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    mountedRef.current = true
-    fetchBookmarks()
+    const controller = new AbortController()
+    ;(async () => {
+      try {
+        const data = await getUserBookmarks()
+        if (!controller.signal.aborted) {
+          setBookmarks(data as BookmarkWithFolder[])
+          setIsLoading(false)
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setIsLoading(false)
+        }
+      }
+    })()
     return () => {
-      mountedRef.current = false
+      controller.abort()
     }
   }, [])
 
@@ -142,7 +150,11 @@ export default function DashboardPage() {
             aria-label="Bookmarks grid"
           >
             {displayedBookmarks.map((bookmark) => (
-              <BookmarkCard key={bookmark.id} bookmark={bookmark} onUpdate={fetchBookmarks} />
+              <BookmarkCard
+                key={bookmark.id}
+                bookmark={bookmark}
+                onUpdate={() => fetchBookmarks()}
+              />
             ))}
           </section>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Link as LinkIcon, Check, Folder, Plus, ChevronDown } from "lucide-react"
@@ -16,6 +17,7 @@ interface AddBookmarkModalProps {
 }
 
 export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
+  const pathname = usePathname()
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([])
@@ -24,13 +26,16 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
   const [isFoldersLoading, setIsFoldersLoading] = useState(false)
   const [error, setError] = useState("")
   const [isFolderDropdownOpen, setIsFolderDropdownOpen] = useState(false)
-  const { selectedFolderId: currentFolderId, setIsAddModalOpen, isAddModalOpen } = useFolder()
+  const { setIsAddModalOpen, isAddModalOpen } = useFolder()
   const { success, error: showError } = useToast()
   const modalRef = useRef<HTMLDivElement>(null)
   const urlInputRef = useRef<HTMLInputElement>(null)
   const folderDropdownRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const lastFocusableRef = useRef<HTMLButtonElement>(null)
+
+  // Get current folder ID from pathname
+  const currentFolderId = pathname.match(/\/folder\/([^/]+)/)?.[1] || null
 
   // Close folder dropdown when clicking outside
   useEffect(() => {
@@ -63,7 +68,7 @@ export function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
         setFolders(data)
         setIsFoldersLoading(false)
         // Pre-select folder if viewing a specific folder
-        if (currentFolderId && currentFolderId !== "reading-list") {
+        if (currentFolderId) {
           setSelectedFolderIds([currentFolderId])
         }
       }
