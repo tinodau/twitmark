@@ -12,10 +12,10 @@ export async function createClient() {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: { path?: string }) {
+        set(name: string, value: string) {
           cookieStore.set(name, value)
         },
-        remove(name: string, options: { path?: string }) {
+        remove(name: string) {
           cookieStore.delete(name)
         },
       },

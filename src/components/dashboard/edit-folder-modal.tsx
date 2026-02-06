@@ -75,22 +75,25 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
   const pickerDropdownRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const lastFocusableRef = useRef<HTMLButtonElement>(null)
+  const initializedFolderIdRef = useRef<string | null>(null)
 
   const SelectedIcon = ICON_MAP[icon]
 
   useEffect(() => {
-    if (isOpen) {
-      if (folder) {
-        setName(folder.name)
-        setColor(folder.color)
-        setIcon(folder.icon || "folder")
-        setIsPickerOpen(false)
+    if (isOpen && folder) {
+      if (initializedFolderIdRef.current !== folder.id) {
+        initializedFolderIdRef.current = folder.id
+        setTimeout(() => {
+          setName(folder.name)
+          setColor(folder.color)
+          setIcon(folder.icon || "folder")
+          setIsPickerOpen(false)
+        }, 0)
       }
       setTimeout(() => {
         nameInputRef.current?.focus()
       }, 100)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, folder])
 
   const handleUpdate = async (e: React.FormEvent) => {

@@ -124,7 +124,6 @@ function DashboardLayoutWithProvider({
           isMobileMenuOpen={isMobileMenuOpen}
           onMobileMenuToggle={onMobileMenuToggle}
           isCollapsed={isSidebarCollapsed}
-          setIsCollapsed={onSidebarToggle}
         />
         <div
           className={`relative flex flex-1 flex-col ${isSidebarCollapsed ? "lg:ml-16" : "lg:ml-[16rem]"}`}

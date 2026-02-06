@@ -50,7 +50,6 @@ export default function FoldersPage() {
     setIsEditModalOpen,
     isAddModalOpen,
     setIsAddModalOpen,
-    deletingFolder,
     setDeletingFolder,
     isDeleteConfirmOpen,
     setIsDeleteConfirmOpen,

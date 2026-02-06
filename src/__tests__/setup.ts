@@ -8,8 +8,6 @@ process.env.NEXT_PUBLIC_APP_URL = "http://localhost:3000"
 
 // Mock Supabase
 vi.mock("@supabase/supabase-js", async () => {
-  const { createClient } =
-    await vi.importActual<typeof import("@supabase/supabase-js")>("@supabase/supabase-js")
   return {
     createClient: vi.fn(() => ({
       auth: {

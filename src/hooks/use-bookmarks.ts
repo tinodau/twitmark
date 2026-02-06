@@ -81,7 +81,7 @@ export function useDeleteBookmark() {
 
 export function useToggleReadingList() {
   const queryClient = useQueryClient()
-  const { success, error: showError } = useToast()
+  const { error: showError } = useToast()
 
   return useMutation({
     mutationFn: toggleReadingList,

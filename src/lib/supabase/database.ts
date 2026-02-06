@@ -1,38 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import type { BookmarkWithFolders } from "@/types"
 
-// Database types (snake_case from Supabase)
-type Bookmark = {
-  id: string
-  url: string
-  content_type: "tweet" | "article"
-  metadata: Record<string, unknown> | null
-  user_id: string
-  reading_list: boolean
-  created_at: string
-  bookmark_folders?: Array<{
-    folders: {
-      name: string
-      color: string
-    }
-  }>
-}
-
-type BookmarkFolder = {
-  bookmark_id: string
-  folder_id: string
-  created_at: string
-}
-
-type Folder = {
-  id: string
-  user_id: string
-  name: string
-  color: string
-  icon: string
-  created_at: string
-}
-
 // Ensure user has a profile
 async function ensureUserProfile(userId: string, email: string) {
   const supabase = await createClient()
@@ -97,7 +65,7 @@ async function fetchTweetMetadata(url: string) {
     }
     const data = await response.json()
     return data
-  } catch (error) {
+  } catch {
     return null
   }
 }

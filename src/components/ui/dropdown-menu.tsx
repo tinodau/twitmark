@@ -40,7 +40,7 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscape)
     }
-  }, [])
+  }, [menuRef])
 
   // Close menu on route change
   React.useEffect(() => {

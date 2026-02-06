@@ -55,11 +55,13 @@ export function MobileMenu({ trigger, isOpen, onToggle }: MobileMenuProps) {
   }, [onToggle])
 
   // Close menu on route change
+  const prevIsOpenRef = React.useRef(isOpen)
   React.useEffect(() => {
-    if (isOpen) {
+    if (prevIsOpenRef.current && !isOpen) {
       onToggle()
     }
-  }, [])
+    prevIsOpenRef.current = isOpen
+  }, [isOpen, onToggle])
 
   return (
     <div className="relative" ref={menuRef}>

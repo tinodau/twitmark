@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Plus, ChevronDown } from "lucide-react"
 import { motion } from "framer-motion"
 import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal"
@@ -34,7 +34,7 @@ export default function DashboardPage() {
           setBookmarks(data as BookmarkWithFolder[])
           setIsLoading(false)
         }
-      } catch (error) {
+      } catch {
         if (!controller.signal.aborted) {
           setIsLoading(false)
         }
@@ -60,24 +60,23 @@ export default function DashboardPage() {
   // Accessibility keyboard handler
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape" && isModalOpen) {
-      setIsModalOpen(false)
+      handleModalClose()
     }
   }
 
   useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false)
+        setTimeout(fetchBookmarks, 100)
+      }
+    }
+
     if (isModalOpen) {
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          handleModalClose()
-        }
-      })
+      document.addEventListener("keydown", handleEscape)
     }
     return () => {
-      document.removeEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          handleModalClose()
-        }
-      })
+      document.removeEventListener("keydown", handleEscape)
     }
   }, [isModalOpen])
 

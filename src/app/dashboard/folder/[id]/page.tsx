@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Plus, ChevronDown, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
@@ -25,30 +25,28 @@ export default function FolderPage() {
   const [folderName, setFolderName] = useState<string>("")
   const [showFloatingButton, setShowFloatingButton] = useState(false)
   const [folderExists, setFolderExists] = useState(true)
-  const mountedRef = useRef(true)
 
   const fetchBookmarks = async () => {
-    if (!mountedRef.current) return
     setIsLoading(true)
     const data = await getUserBookmarks()
-    if (mountedRef.current) {
-      setAllBookmarks(data as BookmarkWithFolder[])
-      setIsLoading(false)
-    }
+    setAllBookmarks(data as BookmarkWithFolder[])
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    mountedRef.current = true
+    const controller = new AbortController()
     ;(async () => {
       // Check if folder exists
       const folder = await getFolderById(folderId)
-      if (mountedRef.current && !folder) {
+      if (controller.signal.aborted) return
+
+      if (!folder) {
         setFolderExists(false)
         setIsLoading(false)
         return
       }
 
-      if (mountedRef.current && folder) {
+      if (folder) {
         setFolderName(folder.name)
       }
 
@@ -56,7 +54,7 @@ export default function FolderPage() {
     })()
 
     return () => {
-      mountedRef.current = false
+      controller.abort()
     }
   }, [folderId])
 
@@ -81,24 +79,23 @@ export default function FolderPage() {
   // Accessibility keyboard handler
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape" && isModalOpen) {
-      setIsModalOpen(false)
+      handleModalClose()
     }
   }
 
   useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false)
+        setTimeout(fetchBookmarks, 100)
+      }
+    }
+
     if (isModalOpen) {
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          handleModalClose()
-        }
-      })
+      document.addEventListener("keydown", handleEscape)
     }
     return () => {
-      document.removeEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          handleModalClose()
-        }
-      })
+      document.removeEventListener("keydown", handleEscape)
     }
   }, [isModalOpen])
 

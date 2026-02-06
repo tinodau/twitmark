@@ -1,7 +1,7 @@
 "use client"
 
 import { createClient } from "@/lib/supabase/client"
-import { LogOut, User, UserRound, PanelLeftClose, PanelRight } from "lucide-react"
+import { LogOut, User, PanelLeftClose, PanelRight } from "lucide-react"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 interface HeaderProps {

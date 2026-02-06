@@ -16,16 +16,11 @@ import {
   Plus,
   LayoutDashboard,
   BookOpen,
-  MoreVertical,
-  Edit2,
-  Trash2,
 } from "lucide-react"
 import Link from "next/link"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
-import { AddFolderModal } from "./add-folder-modal"
 import { useFolder } from "@/contexts/folder-context"
-import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Map icon IDs to Lucide components
@@ -46,26 +41,13 @@ export function Sidebar({
   isMobileMenuOpen,
   onMobileMenuToggle,
   isCollapsed,
-  setIsCollapsed,
 }: {
   isMobileMenuOpen: boolean
   onMobileMenuToggle: () => void
   isCollapsed: boolean
-  setIsCollapsed: (collapsed: boolean) => void
 }) {
   const pathname = usePathname()
-  const {
-    editingFolder,
-    setEditingFolder,
-    isEditModalOpen,
-    setIsEditModalOpen,
-    isAddModalOpen,
-    setIsAddModalOpen,
-    deletingFolder,
-    setDeletingFolder,
-    isDeleteConfirmOpen,
-    setIsDeleteConfirmOpen,
-  } = useFolder()
+  const { isAddModalOpen, setIsAddModalOpen } = useFolder()
   const [folders, setFolders] = useState<FolderType[]>([])
   const prevPathnameRef = useRef(pathname)
 
@@ -77,15 +59,18 @@ export function Sidebar({
     prevPathnameRef.current = pathname
   }, [pathname, isMobileMenuOpen, onMobileMenuToggle])
 
-  async function loadFolders() {
-    const data = await getFolders()
-    setFolders(data)
-  }
-
   useEffect(() => {
-    loadFolders()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAddModalOpen, isEditModalOpen, isDeleteConfirmOpen])
+    const controller = new AbortController()
+    ;(async () => {
+      const data = await getFolders()
+      if (!controller.signal.aborted) {
+        setFolders(data)
+      }
+    })()
+    return () => {
+      controller.abort()
+    }
+  }, [isAddModalOpen])
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", href: "/dashboard" },

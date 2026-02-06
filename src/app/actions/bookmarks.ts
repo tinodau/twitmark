@@ -1,7 +1,6 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import type { BookmarkWithFolder } from "@/types"
 import {
   createBookmark as dbCreateBookmark,
   deleteBookmark as dbDeleteBookmark,
