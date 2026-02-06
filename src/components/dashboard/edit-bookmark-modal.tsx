@@ -314,7 +314,20 @@ function EditBookmarkContent({
                       role="listbox"
                       aria-labelledby="folder-select"
                     >
-                      <div className="flex max-h-60 flex-col overflow-y-auto p-1.5">
+                      {/* Dropdown Header with Close Button */}
+                      <div className="border-border/40 flex items-center justify-between border-b px-3 py-2">
+                        <span className="text-foreground text-sm font-medium">Select Folders</span>
+                        <button
+                          type="button"
+                          onClick={() => setIsFolderDropdownOpen(false)}
+                          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-md p-1 transition-colors focus:ring-2 focus:outline-none"
+                          aria-label="Close folder dropdown"
+                        >
+                          <X className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      </div>
+
+                      <div className="flex max-h-52 flex-col overflow-y-auto p-1.5">
                         {folders.map((folder) => {
                           const isSelected = selectedFolderIds.includes(folder.id)
                           return (
