@@ -7,8 +7,8 @@ import {
   CheckCircle2,
   ExternalLink,
   MoreVertical,
-  Edit2,
   FolderEdit,
+  PenLine,
 } from "lucide-react"
 import { Tweet } from "react-tweet"
 import type { BookmarkWithFolder } from "@/types"
@@ -18,6 +18,7 @@ import { ConfirmModal } from "@/components/ui/confirm-modal"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
 import { ManageFoldersModal } from "@/components/dashboard/manage-folders-modal"
+import { EditBookmarkModal } from "@/components/dashboard/edit-bookmark-modal"
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithFolder
@@ -38,8 +39,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isManagingFolders, setIsManagingFolders] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [isEditingTitle, setIsEditingTitle] = useState(false)
-  const [editedTitle, setEditedTitle] = useState("")
+  const [isEditingBookmark, setIsEditingBookmark] = useState(false)
 
   const handleDeleteConfirm = async () => {
     setIsDeleting(true)
@@ -64,23 +64,6 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
       success(message)
       onUpdate?.()
     }
-  }
-
-  const handleEditTitle = () => {
-    setEditedTitle(
-      (bookmark.metadata?.title as string) ||
-        ((bookmark.metadata?.author_name as string)
-          ? `${bookmark.metadata?.author_name}'s tweet`
-          : "Tweet")
-    )
-    setIsEditingTitle(true)
-  }
-
-  const handleSaveTitle = async () => {
-    // TODO: Implement save title functionality
-    setIsEditingTitle(false)
-    success("Title updated")
-    onUpdate?.()
   }
 
   const handleOpenTweet = () => {
@@ -155,31 +138,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
         <div className="flex items-start justify-between px-4 pt-3">
           {/* Title */}
           <div className="flex-1 pr-4">
-            {isEditingTitle ? (
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
-                  className="border-input focus:ring-primary/50 flex-1 rounded-lg border bg-transparent px-2 py-1 text-lg font-semibold focus:ring-2 focus:outline-none"
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSaveTitle()
-                    if (e.key === "Escape") setIsEditingTitle(false)
-                  }}
-                />
-                <button
-                  onClick={handleSaveTitle}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer rounded-lg px-2 py-1 text-sm font-medium"
-                >
-                  Save
-                </button>
-              </div>
-            ) : (
-              <h3 className="text-foreground line-clamp-2 text-lg font-semibold">
-                {bookmarkTitle}
-              </h3>
-            )}
+            <h3 className="text-foreground line-clamp-2 text-lg font-semibold">{bookmarkTitle}</h3>
           </div>
 
           {/* Dropdown Menu */}
@@ -205,8 +164,11 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
             >
               Manage Folders
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleEditTitle} icon={<Edit2 className="h-4 w-4" />}>
-              Edit Title
+            <DropdownMenuItem
+              onClick={() => setIsEditingBookmark(true)}
+              icon={<PenLine className="h-4 w-4" />}
+            >
+              Edit Bookmark
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleOpenTweet} icon={<ExternalLink className="h-4 w-4" />}>
               Open Tweet
@@ -219,6 +181,13 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
               Delete Bookmark
             </DropdownMenuItem>
           </DropdownMenu>
+
+          <EditBookmarkModal
+            isOpen={isEditingBookmark}
+            onClose={() => setIsEditingBookmark(false)}
+            bookmark={bookmark}
+            onUpdate={onUpdate}
+          />
         </div>
 
         {/* Metadata Bar - Row 1: Time & Reading List */}

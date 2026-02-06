@@ -8,6 +8,7 @@ import {
   getUserBookmarks as dbGetUserBookmarks,
   addBookmarkToFolders as dbAddBookmarkToFolders,
   removeBookmarkFromFolders as dbRemoveBookmarkFromFolders,
+  updateBookmark as dbUpdateBookmark,
 } from "@/lib/supabase/database"
 
 // Create a new bookmark
@@ -81,4 +82,22 @@ export async function toggleReadingList(bookmarkId: string) {
 // Get all bookmarks for user
 export async function getUserBookmarks() {
   return await dbGetUserBookmarks()
+}
+
+// Update bookmark title
+export async function updateBookmark(id: string, formData: FormData) {
+  const title = formData.get("title") as string
+
+  if (!title || title.trim() === "") {
+    return { error: "Title is required" }
+  }
+
+  const result = await dbUpdateBookmark(id, title.trim())
+
+  if (result.error) {
+    return result
+  }
+
+  revalidatePath("/dashboard")
+  return result
 }

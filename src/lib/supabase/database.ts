@@ -140,6 +140,52 @@ export async function createBookmark(url: string, folderIds: string[] | null, ti
   return { success: true, bookmark: data }
 }
 
+// Update a bookmark title
+export async function updateBookmark(id: string, title: string) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { error: "Unauthorized" }
+  }
+
+  // Verify bookmark belongs to user and get current metadata
+  const { data: bookmark } = await supabase
+    .from("bookmarks")
+    .select("metadata, user_id")
+    .eq("id", id)
+    .single()
+
+  if (!bookmark) {
+    return { error: "Bookmark not found" }
+  }
+
+  if (bookmark.user_id !== user.id) {
+    return { error: "Unauthorized" }
+  }
+
+  // Update metadata with new title
+  const updatedMetadata = {
+    ...(bookmark.metadata as Record<string, unknown>),
+    title: title.trim(),
+  }
+
+  const { error } = await supabase
+    .from("bookmarks")
+    .update({ metadata: updatedMetadata })
+    .eq("id", id)
+    .eq("user_id", user.id)
+
+  if (error) {
+    console.error("Error updating bookmark:", error)
+    return { error: "Failed to update bookmark" }
+  }
+
+  return { success: true }
+}
+
 // Delete a bookmark
 export async function deleteBookmark(id: string) {
   const supabase = await createClient()
