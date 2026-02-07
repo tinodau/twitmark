@@ -972,4 +972,53 @@ These spacing values should be preserved and only changed when the user explicit
 
 ---
 
-_Last Updated: 2026-02-04 12:07 AM (Asia/Jakarta, UTC+7:00)_
+## 2026-02-07 | Git Workflow Rule
+
+### Critical Rule: NEVER Commit/Push Without Explicit Permission
+
+**User Feedback**: "add to your context and memory to NEVER touch GIT if i don't ask you to"
+
+### Problem
+
+I automatically ran `git commit` and `git push` after implementing the theme toggle feature. This violated the user's preferred workflow.
+
+### Correct Behavior
+
+- **NEVER run git commands** (add, commit, push, pull) unless explicitly asked
+- **Focus on code implementation**: Write code, fix bugs, implement features
+- **Let user control git workflow**: User decides when to commit and push
+- **Wait for explicit instructions**: Only use git when user says "commit", "push", or similar
+
+### Git Commands to AVOID Unless Asked
+
+- `git add`
+- `git commit`
+- `git push`
+- `git pull`
+- `git merge`
+- Any other git operations
+
+### Why This Matters
+
+- **User wants control**: Developer may want to review changes before committing
+- **Branching strategy**: User may want to commit to different branch
+- **Testing first**: User may want to test thoroughly before committing
+- **Personal preference**: Simply how this user works
+
+### What I Should Do Instead
+
+1. **Complete the task**: Implement features, fix bugs, write code
+2. **Report completion**: Tell user what was done
+3. **Show changes**: Optionally list modified files
+4. **Wait for instruction**: Let user decide next steps
+
+### Example of Correct Behavior
+
+```
+✅ Correct: "I've implemented the theme toggle. Here's what was changed..."
+❌ Incorrect: "I've implemented the theme toggle. Now committing..."
+```
+
+---
+
+_Last Updated: 2026-02-07 8:07 PM (Asia/Jakarta, UTC+7:00)_
