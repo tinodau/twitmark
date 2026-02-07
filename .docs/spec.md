@@ -38,7 +38,7 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content, designe
 - **Bookmark Card**:
   - Uses `react-tweet` for standard rendering at natural dimensions.
   - Shows metadata (Date added, Folder name).
-  - Quick actions: Delete, Toggle Reading List, **Edit Bookmark**.
+  - Dropdown menu with 4 options: Add/Remove Reading List, Edit Bookmark, Open Tweet, Delete
 - **Edit Bookmark Modal**:
   - Allows editing bookmark title (custom naming)
   - Tweet URL field is read-only (disabled)

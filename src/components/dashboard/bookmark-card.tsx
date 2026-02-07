@@ -1,15 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import {
-  Trash2,
-  BookOpen,
-  CheckCircle2,
-  ExternalLink,
-  MoreVertical,
-  FolderEdit,
-  PenLine,
-} from "lucide-react"
+import { Trash2, BookOpen, CheckCircle2, ExternalLink, MoreVertical, PenLine } from "lucide-react"
 import { Tweet } from "react-tweet"
 import type { BookmarkWithFolder } from "@/types"
 import { deleteBookmark, toggleReadingList } from "@/app/actions/bookmarks"
@@ -17,7 +9,6 @@ import { useToast } from "@/contexts/toast-context"
 import { ConfirmModal } from "@/components/ui/confirm-modal"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
-import { ManageFoldersModal } from "@/components/dashboard/manage-folders-modal"
 import { EditBookmarkModal } from "@/components/dashboard/edit-bookmark-modal"
 
 interface BookmarkCardProps {
@@ -37,7 +28,6 @@ function hexToRgba(hex: string, opacity: number): string {
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
   const { success, error: showError } = useToast()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isManagingFolders, setIsManagingFolders] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditingBookmark, setIsEditingBookmark] = useState(false)
 
@@ -102,14 +92,6 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
 
   return (
     <>
-      <ManageFoldersModal
-        isOpen={isManagingFolders}
-        onClose={() => setIsManagingFolders(false)}
-        bookmarkId={bookmark.id}
-        currentFolderIds={bookmark.folders?.map((f) => f.id)}
-        onUpdate={onUpdate}
-      />
-
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
@@ -157,12 +139,6 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
               icon={<BookOpen className="h-4 w-4" />}
             >
               {bookmark.readingList ? "Remove from Reading List" : "Add to Reading List"}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setIsManagingFolders(true)}
-              icon={<FolderEdit className="h-4 w-4" />}
-            >
-              Manage Folders
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => setIsEditingBookmark(true)}

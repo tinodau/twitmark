@@ -85,10 +85,12 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
   - Edit bookmark title (Tweet URL disabled/read-only)
   - Multi-folder selection in dropdown
   - "Add Folder" button in dropdown for creating new folders
-  - Close button in dropdown header
+  - Close button in folder dropdown header
   - Matches AddBookmarkModal UI/UX pattern
   - Full accessibility support (focus trap, keyboard nav, ARIA labels)
   - Loading states, error handling, and toast notifications
+- Bookmark card dropdown menu (4 options): Add/Remove Reading List, Edit Bookmark, Open Tweet, Delete
+  - Removed redundant "Manage Folders" option since Edit Bookmark handles folder management
 - Loading states
 - Pagination for large bookmark lists
 - User dropdown menu (name, email, Sign Out) - visible on both mobile and desktop
@@ -124,6 +126,8 @@ Twitmark is a premium personal bookmark manager for X (Twitter) content. It allo
 - Loading states, error handling, and toast notifications
 - Refresh folder list after creating new folder
 - Synced UI/UX patterns between Add and Edit modals
+- **Cleanup**: Removed "Manage Folders" option from bookmark dropdown (redundant with Edit Bookmark)
+- Deleted unused ManageFoldersModal component
 
 ### Phase 6: Deployment & Infrastructure ✅
 

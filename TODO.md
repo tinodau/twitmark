@@ -351,6 +351,10 @@
 - **Add Bookmark Enhancement**: Added close button to folder dropdown header for consistency
   - Matches EditBookmarkModal UI/UX pattern
   - Improved user experience with better dropdown control
+- **Cleanup**: Removed "Manage Folders" option from bookmark dropdown
+  - Since Edit Bookmark now handles folder management, the dedicated option is redundant
+  - Deleted unused ManageFoldersModal component
+  - Simplified bookmark card dropdown to 4 options: Add/Remove Reading List, Edit Bookmark, Open Tweet, Delete
 
 ### Completed Previously (2026-02-04)
 
@@ -382,4 +386,4 @@
 
 **Note**: Phase 6 (Advanced Reading Mode) has been removed. The app now focuses on tweet bookmarking with `react-tweet` for content display. No metadata scraping or article reader modal needed.
 
-_Last Updated: 2026-02-07 1:46 AM (Asia/Jakarta, UTC+7:00)_
+_Last Updated: 2026-02-07 2:07 PM (Asia/Jakarta, UTC+7:00)_
