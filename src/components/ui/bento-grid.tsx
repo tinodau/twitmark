@@ -37,19 +37,23 @@ const BentoGridItem = ({ className, title, description, icon, children }: BentoG
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 saturate-180 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/10 sm:p-5 md:p-6",
+        "group border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 relative overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all duration-300 sm:p-5 md:p-6 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20 dark:hover:bg-white/10",
         className
       )}
     >
       <div className="flex flex-col gap-2">
         {icon && (
-          <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-blue-400 sm:h-10 sm:w-10">
+          <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-blue-600 sm:h-10 sm:w-10 dark:text-blue-400">
             {icon}
           </div>
         )}
-        {title && <h3 className="text-lg font-semibold text-white sm:text-xl">{title}</h3>}
+        {title && (
+          <h3 className="text-foreground text-lg font-semibold sm:text-xl dark:text-white">
+            {title}
+          </h3>
+        )}
         {description && (
-          <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
+          <p className="text-foreground/70 dark:text-muted-foreground text-sm leading-relaxed sm:text-base">
             {description}
           </p>
         )}

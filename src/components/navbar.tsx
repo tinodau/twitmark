@@ -47,7 +47,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 right-0 left-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-lg"
+      className="border-border/40 bg-background/95 fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-lg dark:border-white/10 dark:bg-black/20"
       aria-label="Main navigation"
     >
       <motion.div
@@ -67,7 +67,7 @@ export default function Navbar() {
           >
             T
           </div>
-          <span className="text-xl font-bold text-white">Twitmark</span>
+          <span className="text-foreground text-xl font-bold dark:text-white">Twitmark</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -80,7 +80,7 @@ export default function Navbar() {
             <li key={link.name}>
               <Link
                 href={link.href}
-                className="text-muted-foreground focus:ring-primary/50 rounded-lg px-2 py-1 text-sm font-medium transition-colors hover:text-white focus:ring-2 focus:outline-none"
+                className="text-foreground/80 focus:ring-primary/50 hover:text-foreground dark:text-muted-foreground rounded-lg px-2 py-1 text-sm font-medium transition-colors focus:ring-2 focus:outline-none dark:hover:text-white"
               >
                 {link.name}
               </Link>
@@ -105,7 +105,7 @@ export default function Navbar() {
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
             aria-label="Toggle mobile menu"
-            className="focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-white transition-colors hover:bg-white/10 focus:ring-2 focus:outline-none"
+            className="focus:ring-primary/50 text-foreground hover:bg-accent/20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors focus:ring-2 focus:outline-none dark:text-white dark:hover:bg-white/10"
           >
             {isOpen ? (
               <X className="h-5 w-5" aria-hidden="true" />
@@ -125,7 +125,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="border-t border-white/10 sm:hidden"
+            className="border-border/40 border-t sm:hidden dark:border-white/10"
             role="navigation"
             aria-label="Mobile navigation"
           >
@@ -135,7 +135,7 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="focus:ring-primary/50 hover:text-muted-foreground block rounded-lg px-2 py-2 text-lg font-medium text-white transition-colors focus:ring-2 focus:outline-none"
+                    className="focus:ring-primary/50 text-foreground hover:text-foreground/80 dark:hover:text-muted-foreground block rounded-lg px-2 py-2 text-lg font-medium transition-colors focus:ring-2 focus:outline-none dark:text-white"
                   >
                     {link.name}
                   </Link>

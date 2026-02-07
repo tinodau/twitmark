@@ -58,12 +58,12 @@ export default function TestimonialsMarquee() {
   const displayTestimonials = isMobile ? testimonials.slice(0, totalCardsMobile) : testimonials
 
   return (
-    <section className="-mx-4 mt-24 overflow-hidden border-y border-white/10 bg-black/20 px-4 py-16 backdrop-blur-sm sm:px-0">
+    <section className="border-border/40 bg-background/95 -mx-4 mt-24 overflow-hidden border-y px-4 py-16 backdrop-blur-sm sm:px-0 dark:border-white/10 dark:bg-black/20">
       <div className="mb-12 px-4 text-center">
         <h2 className="mb-4 text-2xl font-bold sm:text-4xl">
-          Loved by <span className="text-gradient">curators</span>
+          Loved by <span className="text-gradient dark:text-gradient">curators</span>
         </h2>
-        <p className="text-muted-foreground text-sm sm:text-lg">
+        <p className="text-foreground/70 dark:text-muted-foreground text-sm sm:text-lg">
           Join thousands who save tweets daily
         </p>
       </div>
@@ -84,23 +84,27 @@ export default function TestimonialsMarquee() {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="glass rounded-2xl border border-white/10 p-4 backdrop-blur-sm transition-all hover:border-white/20"
+                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
               >
                 <div className="mb-4 flex items-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4 text-sm">
+                <p className="text-foreground/70 dark:text-muted-foreground mb-4 text-sm">
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-600 dark:text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{testimonial.name}</p>
-                    <p className="text-muted-foreground text-xs">{testimonial.username}</p>
+                    <p className="text-foreground font-medium dark:text-white">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-foreground/60 dark:text-muted-foreground text-xs">
+                      {testimonial.username}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -121,23 +125,27 @@ export default function TestimonialsMarquee() {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="glass min-w-70 overflow-hidden rounded-2xl border border-white/10 p-4 backdrop-blur-sm transition-all hover:border-white/20 sm:min-w-[320px] sm:p-6 lg:min-w-87.5"
+                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 min-w-70 overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all sm:min-w-[320px] sm:p-6 lg:min-w-87.5 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
               >
                 <div className="mb-4 flex items-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4 text-wrap">
+                <p className="text-foreground/70 dark:text-muted-foreground mb-4 text-wrap">
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-500/20 to-cyan-500/20 text-sm font-bold text-blue-600 dark:text-blue-400">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{testimonial.name}</p>
-                    <p className="text-muted-foreground text-sm">{testimonial.username}</p>
+                    <p className="text-foreground font-medium dark:text-white">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-foreground/60 dark:text-muted-foreground text-sm">
+                      {testimonial.username}
+                    </p>
                   </div>
                 </div>
               </motion.div>

@@ -53,19 +53,21 @@ export default function Home() {
               className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs backdrop-blur-sm sm:mb-6 sm:px-4 sm:py-2 sm:text-sm"
             >
               <Sparkles className="h-3 w-3 text-blue-400 sm:h-4 sm:w-4" />
-              <span className="text-muted-foreground">Your personal X bookmark manager</span>
+              <span className="text-muted-foreground dark:text-muted-foreground">
+                Your personal X bookmark manager
+              </span>
             </motion.div>
 
             <h1
               id="hero-title"
-              className="mb-4 bg-linear-to-br from-white via-white to-white/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl"
+              className="mb-4 bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl dark:from-white dark:via-white dark:to-white/70"
             >
               Save tweets. Read later.
               <br />
               Never lose gems.
             </h1>
 
-            <p className="text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-xl">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-xl">
               Organize your X bookmarks with folders, search instantly, and build your personal
               knowledge base.
             </p>
@@ -116,9 +118,10 @@ export default function Home() {
               id="features-title"
               className="mb-3 text-2xl font-bold sm:mb-4 sm:text-4xl lg:text-5xl"
             >
-              Everything you need to <span className="text-gradient">curate</span>
+              Everything you need to{" "}
+              <span className="text-gradient dark:text-gradient">curate</span>
             </h2>
-            <p className="text-muted-foreground px-2 text-base sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground px-2 text-base sm:px-0 sm:text-lg">
               Simple, powerful, and beautiful bookmark management
             </p>
           </motion.div>
@@ -162,14 +165,15 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 id="about-title" className="mb-6 text-2xl font-bold sm:text-4xl lg:text-5xl">
-              Built for <span className="text-gradient">curators</span>, by a curator
+              Built for <span className="text-gradient dark:text-gradient">curators</span>, by a
+              curator
             </h2>
-            <p className="text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
               Twitmark was born from a simple frustration: losing track of valuable X content. But
               folders are a premium feature, so as a developer who constantly discovers gems on the
               platform, I needed a better way to save, organize, and actually read what matters.
             </p>
-            <p className="text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
               No more losing tweets to the void. No more scrolling through likes and bookmarks to
               find that one perfect thread. Just clean, simple bookmark management that works the
               way you do.
@@ -179,8 +183,10 @@ export default function Home() {
                 T
               </div>
               <div className="text-left">
-                <p className="font-medium text-white">Built by Tino Dau</p>
-                <p className="text-muted-foreground text-sm">Developer & X User</p>
+                <p className="font-medium text-white dark:text-white">Built by Tino Dau</p>
+                <p className="text-foreground/70 dark:text-muted-foreground text-sm">
+                  Developer & X User
+                </p>
               </div>
             </div>
           </motion.div>
@@ -210,7 +216,7 @@ export default function Home() {
                 <span className="text-gradient">knowledge base</span>?
               </span>
             </h2>
-            <p className="text-muted-foreground mb-6 px-2 text-base sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base sm:mb-8 sm:px-0 sm:text-lg">
               Join thousands of users who save tweets daily. No credit card required.
             </p>
             <Link
@@ -228,7 +234,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer
-          className="text-muted-foreground mx-auto mt-24 border-t border-white/10 px-4 py-6 text-center text-xs sm:mt-32 sm:py-8 sm:text-sm"
+          className="text-foreground/60 border-border/20 dark:text-muted-foreground mx-auto mt-24 border-t px-4 py-6 text-center text-xs sm:mt-32 sm:py-8 sm:text-sm dark:border-white/10"
           role="contentinfo"
         >
           <p>Built by Tino Dau</p>
