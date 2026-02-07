@@ -122,7 +122,7 @@ export function Sidebar({
                       className={`group hover:bg-primary/10 focus:ring-primary/50 relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
                         isActive(item.href)
                           ? "text-foreground bg-secondary hover:text-secondary-foreground"
-                          : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                          : "text-foreground hover:bg-accent hover:text-secondary-foreground"
                       } ${isCollapsed ? "justify-center px-0 lg:justify-start lg:px-3" : ""}`}
                     >
                       <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />

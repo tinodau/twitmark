@@ -127,7 +127,7 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
           <DropdownMenu
             trigger={
               <button
-                className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 transition-colors focus:ring-2 focus:outline-none"
+                className="text-muted-foreground hover:bg-accent hover:text-seconary-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 transition-colors focus:ring-2 focus:outline-none"
                 aria-label="More options"
               >
                 <MoreVertical className="h-5 w-5" />

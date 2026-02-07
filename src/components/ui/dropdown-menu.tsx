@@ -94,7 +94,7 @@ export function DropdownMenuItem({
       className={`focus:ring-primary/50 flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
         variant === "danger"
           ? "text-destructive hover:bg-red-500/10"
-          : "text-foreground hover:bg-gray-900"
+          : "text-foreground hover:bg-muted hover:dark:bg-gray-900"
       }`}
     >
       {icon && <span className="h-4 w-4">{icon}</span>}
