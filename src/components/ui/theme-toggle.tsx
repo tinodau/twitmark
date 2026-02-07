@@ -21,7 +21,7 @@ export function ThemeToggle() {
   // Render placeholder before mount to avoid SSR issues
   if (!mounted || !context) {
     return (
-      <div className="border-border/40 bg-card/50 relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border backdrop-blur-sm">
+      <div className="bg-card/50 relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full backdrop-blur-sm">
         <Moon className="text-foreground h-5 w-5" />
       </div>
     )
@@ -31,7 +31,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       disabled={!context}
-      className="group border-border/40 bg-card/50 hover:bg-accent/20 focus:ring-primary/50 relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border backdrop-blur-sm transition-all hover:scale-105 focus:ring-2 focus:outline-none"
+      className="group hover:bg-muted-foreground focus:ring-primary/50 dark:hover:bg-muted-foreground relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full backdrop-blur-sm transition-all hover:scale-105 hover:cursor-pointer focus:ring-2 focus:outline-none"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >
       <AnimatePresence mode="wait">
