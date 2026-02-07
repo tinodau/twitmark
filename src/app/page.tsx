@@ -93,7 +93,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#features"
-                className="focus:ring-primary/50 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 focus:ring-2 focus:outline-none sm:w-auto sm:px-8"
+                className="focus:ring-primary/50 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/70 bg-white/50 px-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 focus:ring-2 focus:outline-none sm:w-auto sm:px-8 dark:border-white/10 dark:bg-white/10"
               >
                 Learn More
               </Link>
@@ -141,7 +141,7 @@ export default function Home() {
               title={
                 <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
                   <span>Search & Filter</span>
-                  <span className="text-muted-foreground rounded-full bg-white/10 px-2 py-0.5 text-xs">
+                  <span className="text-muted-foreground rounded-full border border-white/50 px-2 py-0.5 text-xs dark:border-white/10 dark:bg-white/10">
                     Coming Soon
                   </span>
                 </div>
@@ -186,7 +186,7 @@ export default function Home() {
                 T
               </div>
               <div className="text-left">
-                <p className="font-medium text-white dark:text-white">Built by Tino Dau</p>
+                <p className="text-foreground/80 font-medium dark:text-white">Built by Tino Dau</p>
                 <p className="text-foreground/70 dark:text-muted-foreground text-sm">
                   Developer & X User
                 </p>
@@ -237,7 +237,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer
-          className="text-foreground/60 border-border/20 dark:text-muted-foreground mx-auto mt-24 border-t px-4 py-6 text-center text-xs sm:mt-32 sm:py-8 sm:text-sm dark:border-white/10"
+          className="text-foreground/80 border-border/40 dark:text-muted-foreground mx-auto mt-24 border-t px-4 py-6 text-center text-xs sm:mt-32 sm:py-8 sm:text-sm dark:border-white/10"
           role="contentinfo"
         >
           <p>Built by Tino Dau</p>

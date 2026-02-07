@@ -37,7 +37,7 @@ const BentoGridItem = ({ className, title, description, icon, children }: BentoG
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "group border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 relative overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all duration-300 sm:p-5 md:p-6 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20 dark:hover:bg-white/10",
+        "group border-border/80 bg-background/65 hover:border-border/60 hover:bg-background relative overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all duration-300 sm:p-5 md:p-6 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20 dark:hover:bg-white/10",
         className
       )}
     >

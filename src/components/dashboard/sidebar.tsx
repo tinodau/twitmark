@@ -121,8 +121,8 @@ export function Sidebar({
                       aria-current={isActive(item.href) ? "page" : undefined}
                       className={`group hover:bg-primary/10 focus:ring-primary/50 relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
                         isActive(item.href)
-                          ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          ? "text-foreground bg-secondary hover:text-secondary-foreground"
+                          : "text-foreground hover:bg-accent hover:text-accent-foreground"
                       } ${isCollapsed ? "justify-center px-0 lg:justify-start lg:px-3" : ""}`}
                     >
                       <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -168,14 +168,14 @@ export function Sidebar({
                   <div className="mb-2 flex items-center justify-between px-3">
                     <Link
                       href="/dashboard/folders"
-                      className="text-muted-foreground hover:text-foreground text-xs font-semibold uppercase transition-colors"
+                      className="text-foreground hover:text-muted-foreground text-xs font-semibold uppercase transition-colors"
                     >
                       Folders
                     </Link>
                     <button
                       onClick={() => setIsAddModalOpen(true)}
                       aria-label="Add new folder"
-                      className="text-muted-foreground hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
+                      className="text-foreground hover:text-muted-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
                     >
                       <Plus className="h-3 w-3" aria-hidden="true" />
                     </button>
@@ -219,8 +219,8 @@ export function Sidebar({
                             href={`/dashboard/folder/${folder.id}`}
                             className={`hover:bg-primary/10 focus:ring-primary/50 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none ${
                               isActive(`/dashboard/folder/${folder.id}`)
-                                ? "bg-accent text-accent-foreground"
-                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                ? "text-foreground bg-secondary hover:text-secondary-foreground"
+                                : "text-foreground hover:bg-accent hover:text-secondary-foreground"
                             }`}
                           >
                             <div

@@ -58,7 +58,7 @@ export default function TestimonialsMarquee() {
   const displayTestimonials = isMobile ? testimonials.slice(0, totalCardsMobile) : testimonials
 
   return (
-    <section className="border-border/40 bg-background/95 -mx-4 mt-24 overflow-hidden border-y px-4 py-16 backdrop-blur-sm sm:px-0 dark:border-white/10 dark:bg-black/20">
+    <section className="border-border/60 bg-background/55 -mx-4 mt-24 overflow-hidden border-y px-4 py-16 backdrop-blur-sm sm:px-0 dark:border-white/10 dark:bg-black/20">
       <div className="mb-12 px-4 text-center">
         <h2 className="mb-4 text-2xl font-bold sm:text-4xl">
           Loved by <span className="text-gradient dark:text-gradient">curators</span>
