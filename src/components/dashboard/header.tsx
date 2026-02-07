@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client"
 import { LogOut, User, PanelLeftClose, PanelRight } from "lucide-react"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface HeaderProps {
   user: {
@@ -51,6 +52,7 @@ export function Header({
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
+          <ThemeToggle />
           <button
             onClick={onMobileMenuToggle}
             aria-expanded={isMobileMenuOpen}
@@ -87,8 +89,9 @@ export function Header({
           </DropdownMenu>
         </div>
 
-        {/* Desktop Header - User Dropdown */}
+        {/* Desktop Header - Theme Toggle & User Dropdown */}
         <div className="hidden lg:flex lg:items-center lg:gap-4">
+          <ThemeToggle />
           <DropdownMenu
             trigger={
               <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">

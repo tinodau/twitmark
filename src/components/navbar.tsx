@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { User } from "@supabase/supabase-js"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,9 +36,6 @@ export default function Navbar() {
   // Close menu on route change
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
-      document.body.style.height = "100vh"
-    } else {
       document.body.style.overflow = ""
       document.body.style.height = ""
     }
@@ -74,6 +72,10 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <ul className="hidden items-center gap-8 sm:flex" role="list">
+          {/* Theme Toggle */}
+          <li>
+            <ThemeToggle />
+          </li>
           {navLinks.map((link) => (
             <li key={link.name}>
               <Link
@@ -95,20 +97,23 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          aria-expanded={isOpen}
-          aria-controls="mobile-menu"
-          aria-label="Toggle mobile menu"
-          className="focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-white transition-colors hover:bg-white/10 focus:ring-2 focus:outline-none sm:hidden"
-        >
-          {isOpen ? (
-            <X className="h-5 w-5" aria-hidden="true" />
-          ) : (
-            <Menu className="h-5 w-5" aria-hidden="true" />
-          )}
-        </button>
+        {/* Theme Toggle & Mobile Menu Button */}
+        <div className="flex items-center gap-2 sm:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            aria-label="Toggle mobile menu"
+            className="focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-white transition-colors hover:bg-white/10 focus:ring-2 focus:outline-none"
+          >
+            {isOpen ? (
+              <X className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </motion.div>
 
       {/* Mobile Navigation */}

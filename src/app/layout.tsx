@@ -4,6 +4,7 @@ import "./globals.css"
 import { ConditionalNavbar } from "@/components/conditional-navbar"
 import { AppToastProvider } from "./toast-provider"
 import { QueryProvider } from "./query-provider"
+import { ThemeProvider } from "@/contexts/theme-context"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,16 +28,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark w-screen max-w-screen overflow-x-hidden">
+    <html lang="en" className="w-screen max-w-screen overflow-x-hidden">
       <body
         className={`${geistSans.variable} ${geistMono.variable} w-screen max-w-screen overflow-x-hidden antialiased`}
       >
-        <QueryProvider>
-          <AppToastProvider>
-            <ConditionalNavbar />
-            {children}
-          </AppToastProvider>
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <AppToastProvider>
+              <ConditionalNavbar />
+              {children}
+            </AppToastProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
