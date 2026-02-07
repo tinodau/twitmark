@@ -60,14 +60,14 @@ export default function Home() {
 
             <h1
               id="hero-title"
-              className="mb-4 bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl lg:text-7xl dark:from-white dark:via-white dark:to-white/70"
+              className="bg-linear-to-r from-cyan-600 to-blue-700 bg-clip-text pb-4 text-3xl leading-tight font-bold tracking-tight text-transparent sm:mb-6 sm:text-4xl sm:leading-tight lg:text-7xl lg:leading-[1.05] dark:from-white dark:via-white dark:to-white/70"
             >
               Save tweets. Read later.
               <br />
               Never lose gems.
             </h1>
 
-            <p className="text-foreground/80 dark:text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-xl">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-8 px-2 text-base leading-relaxed sm:mb-10 sm:px-0 sm:text-xl sm:leading-relaxed">
               Organize your X bookmarks with folders, search instantly, and build your personal
               knowledge base.
             </p>
@@ -116,7 +116,7 @@ export default function Home() {
           >
             <h2
               id="features-title"
-              className="mb-3 text-2xl font-bold sm:mb-4 sm:text-4xl lg:text-5xl"
+              className="mb-3 text-2xl leading-tight font-bold sm:mb-4 sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight"
             >
               Everything you need to{" "}
               <span className="text-gradient dark:text-gradient">curate</span>
@@ -164,16 +164,19 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 id="about-title" className="mb-6 text-2xl font-bold sm:text-4xl lg:text-5xl">
+            <h2
+              id="about-title"
+              className="mb-6 text-2xl leading-tight font-bold sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight"
+            >
               Built for <span className="text-gradient dark:text-gradient">curators</span>, by a
               curator
             </h2>
-            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg sm:leading-relaxed">
               Twitmark was born from a simple frustration: losing track of valuable X content. But
               folders are a premium feature, so as a developer who constantly discovers gems on the
               platform, I needed a better way to save, organize, and actually read what matters.
             </p>
-            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg sm:leading-relaxed">
               No more losing tweets to the void. No more scrolling through likes and bookmarks to
               find that one perfect thread. Just clean, simple bookmark management that works the
               way you do.
@@ -209,14 +212,14 @@ export default function Home() {
           >
             <h2
               id="cta-title"
-              className="mb-4 flex flex-col text-2xl font-bold sm:text-4xl lg:text-5xl"
+              className="mb-4 flex flex-col text-2xl leading-tight font-bold sm:text-4xl sm:leading-tight lg:text-5xl lg:leading-tight"
             >
               <span>Ready to build your</span>
               <span>
                 <span className="text-gradient">knowledge base</span>?
               </span>
             </h2>
-            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base sm:mb-8 sm:px-0 sm:text-lg">
+            <p className="text-foreground/80 dark:text-muted-foreground mb-6 px-2 text-base leading-relaxed sm:mb-8 sm:px-0 sm:text-lg sm:leading-relaxed">
               Join thousands of users who save tweets daily. No credit card required.
             </p>
             <Link
