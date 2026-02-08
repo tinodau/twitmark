@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 import {
   Folder,
   Star,
@@ -103,9 +104,12 @@ export function Sidebar({
           {/* Logo Section */}
           <div className="flex h-16 items-center px-4 pt-2">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
-                <span className="text-primary-foreground text-lg font-bold">T</span>
+              <div className="relative h-8 w-8 overflow-hidden rounded-lg">
+                <Image src="logo.svg" alt="" fill={true}></Image>
               </div>
+              {/* <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+                <span className="text-primary-foreground text-lg font-bold">T</span>
+              </div> */}
               <span className={isCollapsed ? "hidden lg:hidden" : "font-semibold"}>Twitmark</span>
             </Link>
           </div>
