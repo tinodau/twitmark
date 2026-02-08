@@ -52,7 +52,6 @@ export function Header({
 
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between lg:hidden">
-          <ThemeToggle />
           <button
             onClick={onMobileMenuToggle}
             aria-expanded={isMobileMenuOpen}
@@ -65,28 +64,30 @@ export function Header({
               <PanelRight className="h-5 w-5" aria-hidden="true" />
             )}
           </button>
-
-          <DropdownMenu
-            trigger={
-              <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">
-                <User className="text-muted-foreground h-5 w-5" />
-              </div>
-            }
-          >
-            <DropdownMenuItem>
-              <div className="flex flex-col items-start">
-                <p className="font-medium">{user.user_metadata?.full_name || "User"}</p>
-                <p className="text-muted-foreground text-xs">{user.email}</p>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleSignOut}
-              icon={<LogOut className="h-4 w-4" />}
-              variant="danger"
+          <div className="flex gap-4">
+            <ThemeToggle />
+            <DropdownMenu
+              trigger={
+                <div className="bg-muted hover:bg-accent focus:ring-primary/50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors focus:ring-2 focus:outline-none">
+                  <User className="text-muted-foreground h-5 w-5" />
+                </div>
+              }
             >
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenu>
+              <DropdownMenuItem>
+                <div className="flex flex-col items-start">
+                  <p className="font-medium">{user.user_metadata?.full_name || "User"}</p>
+                  <p className="text-muted-foreground text-xs">{user.email}</p>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                icon={<LogOut className="h-4 w-4" />}
+                variant="danger"
+              >
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenu>
+          </div>
         </div>
 
         {/* Desktop Header - Theme Toggle & User Dropdown */}
