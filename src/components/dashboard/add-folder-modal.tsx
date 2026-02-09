@@ -221,30 +221,32 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md"
             >
-              <div className="bg-background/95 supports-backdrop-filter:bg-background/60 relative rounded-2xl border border-white/10 p-6 shadow-2xl backdrop-blur-xl">
+              <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur-xl">
                 {/* Header */}
-                <div className="mb-6 flex items-center justify-between">
+                <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20"
+                      className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-xl"
                       aria-hidden="true"
                     >
-                      <Folder className="h-5 w-5 text-blue-400" />
+                      <Folder className="text-primary h-5 w-5" />
                     </div>
                     <div>
-                      <h2 id="folder-modal-title" className="text-xl font-semibold text-white">
+                      <h2 id="folder-modal-title" className="text-xl font-semibold">
                         New Folder
                       </h2>
-                      <p className="text-sm text-white/60">Create a folder to organize bookmarks</p>
+                      <p className="text-muted-foreground text-sm">
+                        Create a folder to organize bookmarks
+                      </p>
                     </div>
                   </div>
                   <button
                     ref={firstFocusableRef}
                     onClick={onClose}
                     aria-label="Close modal"
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-white/5 transition-colors hover:bg-white/10 focus:ring-2 focus:ring-blue-500/50 focus:outline-none"
+                    className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
                   >
-                    <X className="h-4 w-4 text-white/60" aria-hidden="true" />
+                    <X className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
 
@@ -252,14 +254,11 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Name Input with Icon and Color */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="folder-name"
-                      className="block text-sm font-medium text-white/90"
-                    >
+                    <label htmlFor="folder-name" className="text-sm font-medium">
                       Folder Name
                     </label>
                     <div className="relative">
-                      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2 transition-all focus-within:border-white/20">
+                      <div className="border-input bg-background focus-within:ring-ring flex items-center gap-3 rounded-xl border p-2 transition-all focus-within:ring-2 focus-within:ring-offset-2 focus-within:outline-none">
                         {/* Icon Selector Button */}
                         <button
                           ref={pickerTriggerRef}
@@ -281,7 +280,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="e.g., Tech News, Dev Tips..."
-                          className="flex-1 bg-transparent text-white placeholder:text-white/40 focus:outline-none"
+                          className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none"
                           maxLength={50}
                           aria-describedby="folder-name-counter"
                           aria-invalid={!!error}
@@ -298,13 +297,11 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-background/95 supports-backdrop-filter:bg-background absolute top-full left-0 z-10 mt-2 max-h-96 w-full overflow-x-hidden overflow-y-auto rounded-xl border border-white/10 p-4 shadow-xl backdrop-blur-xl"
+                            className="border-border bg-background/95 absolute top-full left-0 z-10 mt-2 max-h-96 w-full overflow-x-hidden overflow-y-auto rounded-xl border p-4 shadow-xl backdrop-blur-xl"
                           >
                             {/* Icon Picker */}
                             <fieldset className="mb-4">
-                              <legend className="mb-3 block text-sm font-medium text-white/90">
-                                Icon
-                              </legend>
+                              <legend className="mb-3 block text-sm font-medium">Icon</legend>
                               <div
                                 className="grid grid-cols-5 gap-2"
                                 role="radiogroup"
@@ -319,13 +316,16 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                                       onClick={() => setIcon(i.id)}
                                       aria-pressed={icon === i.id}
                                       aria-label={`Icon ${i.name}`}
-                                      className={`flex h-9 w-full cursor-pointer items-center justify-center rounded-lg border transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
+                                      className={`focus:ring-primary/50 flex h-9 w-full cursor-pointer items-center justify-center rounded-lg border transition-all focus:ring-2 focus:outline-none ${
                                         icon === i.id
-                                          ? "border-white bg-white/10"
-                                          : "border-white/10 bg-white/5 hover:border-white/20"
+                                          ? "border-primary bg-primary/10"
+                                          : "border-input hover:bg-accent"
                                       }`}
                                     >
-                                      <Icon className="h-5 w-5 text-white/80" aria-hidden="true" />
+                                      <Icon
+                                        className="text-foreground h-5 w-5"
+                                        aria-hidden="true"
+                                      />
                                     </button>
                                   )
                                 })}
@@ -334,9 +334,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
 
                             {/* Color Picker */}
                             <fieldset>
-                              <legend className="mb-3 block text-sm font-medium text-white/90">
-                                Color
-                              </legend>
+                              <legend className="mb-3 block text-sm font-medium">Color</legend>
                               <div
                                 className="flex flex-wrap gap-2"
                                 role="radiogroup"
@@ -349,9 +347,9 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                                     onClick={() => setColor(c)}
                                     aria-pressed={color === c}
                                     aria-label={`Color ${c}`}
-                                    className={`h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:ring-white/50 focus:outline-none ${
+                                    className={`focus:ring-primary/50 h-9 w-9 cursor-pointer rounded-xl transition-all focus:ring-2 focus:outline-none ${
                                       color === c
-                                        ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-[rgba(18,18,18,0.95)]"
+                                        ? "ring-primary ring-offset-background scale-110 ring-2 ring-offset-2"
                                         : ""
                                     }`}
                                     style={{ backgroundColor: c }}
@@ -371,7 +369,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                             <button
                               type="button"
                               onClick={() => setIsPickerOpen(false)}
-                              className="mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm text-white transition-colors hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                              className="text-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none"
                             >
                               <ChevronUp className="h-4 w-4" aria-hidden="true" />
                               Done
@@ -382,7 +380,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                     </div>
                     <p
                       id="folder-name-counter"
-                      className="mt-1.5 text-xs text-white/40"
+                      className="text-muted-foreground/60 mt-1.5 text-xs"
                       aria-live="polite"
                     >
                       {name.length}/50 characters
@@ -392,7 +390,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                   {/* Error */}
                   {error && (
                     <p
-                      className="rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-400"
+                      className="border-destructive/50 bg-destructive/10 text-destructive rounded-lg border px-3 py-2 text-sm"
                       role="alert"
                     >
                       {error}
@@ -404,7 +402,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 rounded-xl bg-white/5 px-4 py-3 font-medium text-white transition-colors hover:cursor-pointer hover:bg-white/10 focus:ring-2 focus:ring-blue-500/50 focus:outline-none"
+                      className="border-input hover:bg-accent-foreground hover:text-foreground focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center rounded-xl border bg-transparent px-4 py-3 font-medium transition-colors focus:ring-2 focus:outline-none"
                     >
                       Cancel
                     </button>
@@ -412,7 +410,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                       ref={lastFocusableRef}
                       type="submit"
                       disabled={isSubmitting || !name.trim()}
-                      className="bg-primary hover:bg-primary/90 focus:ring-primary/50 flex-1 rounded-xl px-4 py-3 font-medium text-white transition-all hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                      className="bg-primary hover:bg-primary/80 focus:ring-primary/50 text-primary-foreground flex-1 rounded-xl px-4 py-3 font-medium transition-all hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       aria-busy={isSubmitting}
                     >
                       {isSubmitting ? "Creating..." : "Create Folder"}
