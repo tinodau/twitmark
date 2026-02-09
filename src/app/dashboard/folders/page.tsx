@@ -154,7 +154,7 @@ export default function FoldersPage() {
                     trigger={
                       <button
                         type="button"
-                        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+                        className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1.5 transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
                         aria-label="Folder options"
                       >
                         <MoreVertical className="h-4 w-4" aria-hidden="true" />
