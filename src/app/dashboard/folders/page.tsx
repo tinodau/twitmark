@@ -84,7 +84,7 @@ export default function FoldersPage() {
         <button
           onClick={() => setIsAddModalOpen(true)}
           aria-label="Add new folder"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Add Folder
@@ -113,7 +113,7 @@ export default function FoldersPage() {
           <button
             onClick={() => setIsAddModalOpen(true)}
             aria-label="Create your first folder"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             <Plus className="h-4 w-4" />
             Create Folder

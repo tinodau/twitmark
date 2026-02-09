@@ -410,7 +410,7 @@ export function AddFolderModal({ isOpen, onClose }: AddFolderModalProps) {
                       ref={lastFocusableRef}
                       type="submit"
                       disabled={isSubmitting || !name.trim()}
-                      className="bg-primary hover:bg-primary/80 focus:ring-primary/50 text-primary-foreground flex-1 rounded-xl px-4 py-3 font-medium transition-all hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                      className="bg-primary hover:bg-primary-hover focus:ring-primary/50 text-primary-foreground flex-1 rounded-xl px-4 py-3 font-medium transition-all hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       aria-busy={isSubmitting}
                     >
                       {isSubmitting ? "Creating..." : "Create Folder"}

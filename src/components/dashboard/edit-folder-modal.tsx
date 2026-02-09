@@ -382,7 +382,7 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
                   <button
                     ref={lastFocusableRef}
                     type="submit"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={isLoading || !name.trim()}
                     aria-busy={isLoading}
                   >

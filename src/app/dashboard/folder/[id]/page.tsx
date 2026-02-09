@@ -125,7 +125,7 @@ export default function FolderPage() {
         <p className="text-muted-foreground mb-4">This folder may have been deleted</p>
         <button
           onClick={handleBack}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Folders
@@ -155,7 +155,7 @@ export default function FolderPage() {
         <button
           onClick={() => setIsModalOpen(true)}
           aria-label="Add new bookmark"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Add Bookmark
@@ -184,7 +184,7 @@ export default function FolderPage() {
           <button
             onClick={() => setIsModalOpen(true)}
             aria-label="Add your first bookmark"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             <Plus className="h-4 w-4" />
             Add Your First Bookmark
@@ -232,7 +232,7 @@ export default function FolderPage() {
         }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         aria-label="Add new bookmark"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 fixed right-6 bottom-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-lg transition-colors focus:ring-2 focus:outline-none sm:right-8 sm:bottom-8 sm:h-16 sm:w-16"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 fixed right-6 bottom-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-lg transition-colors focus:ring-2 focus:outline-none sm:right-8 sm:bottom-8 sm:h-16 sm:w-16"
       >
         <Plus className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden="true" />
       </motion.button>
