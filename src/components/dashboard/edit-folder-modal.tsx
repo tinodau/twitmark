@@ -218,7 +218,7 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
                   ref={firstFocusableRef}
                   onClick={onClose}
                   aria-label="Close modal"
-                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
+                  className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
                 >
                   <X className="h-5 w-5" aria-hidden="true" />
                 </button>

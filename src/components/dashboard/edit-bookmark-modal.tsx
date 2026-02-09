@@ -204,7 +204,7 @@ function EditBookmarkContent({
             onClick={isLoading ? undefined : onClose}
             aria-label="Close modal"
             disabled={isLoading}
-            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
