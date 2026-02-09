@@ -201,7 +201,7 @@ export function AddBookmarkModal({ isOpen, onClose, onSuccess }: AddBookmarkModa
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 overflow w-full max-w-md rounded-2xl border shadow-2xl backdrop-blur"
+              className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 overflow w-full max-w-md rounded-2xl border shadow-2xl backdrop-blur"
             >
               {/* Header */}
               <div className="border-border/40 flex items-center justify-between border-b p-6">
