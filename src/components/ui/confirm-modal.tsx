@@ -134,23 +134,23 @@ export function ConfirmModal({
               className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur"
             >
               {/* Header */}
-              <div className="border-border/40 flex items-start justify-between border-b p-6">
-                <div className="flex items-start gap-3">
+              <div className="border-border/40 flex items-center justify-between border-b p-6">
+                <div className="flex items-center gap-3">
                   <div
-                    className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg ${getIconBg()}`}
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${getIconBg()}`}
                     aria-hidden="true"
                   >
                     {variant === "danger" ? (
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-5 w-5" />
                     ) : (
-                      <AlertTriangle className="h-4 w-4" />
+                      <AlertTriangle className="h-5 w-5" />
                     )}
                   </div>
                   <div>
-                    <h2 id="confirm-modal-title" className="text-foreground text-xl font-semibold">
+                    <h2 id="confirm-modal-title" className="text-xl font-semibold">
                       {title}
                     </h2>
-                    {description && <p className="text-muted-foreground text-sm">{description}</p>}
+                    <p className="text-muted-foreground text-sm">{description}</p>
                   </div>
                 </div>
                 <button
@@ -158,14 +158,14 @@ export function ConfirmModal({
                   onClick={isLoading ? undefined : onClose}
                   aria-label="Close modal"
                   disabled={isLoading}
-                  className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 flex cursor-pointer items-start rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg p-0 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <X className="h-5 w-5" aria-hidden="true" />
+                  <X className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
 
               {/* Actions */}
-              <div className="items-startgap-3 flex gap-4 p-6">
+              <div className="flex gap-3 p-6">
                 <button
                   type="button"
                   onClick={onClose}
@@ -179,7 +179,7 @@ export function ConfirmModal({
                   type="button"
                   onClick={onConfirm}
                   disabled={isLoading}
-                  className={`focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-all focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${getConfirmBtnClass()}`}
+                  className={`focus:ring-primary/50 text-primary-foreground flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${getConfirmBtnClass()}`}
                   aria-busy={isLoading}
                 >
                   {isLoading ? (
