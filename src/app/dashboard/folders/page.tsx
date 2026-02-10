@@ -53,6 +53,7 @@ export default function FoldersPage() {
     setDeletingFolder,
     isDeleteConfirmOpen,
     setIsDeleteConfirmOpen,
+    folderRefreshTrigger,
   } = useFolder()
 
   async function loadFolders() {
@@ -67,7 +68,7 @@ export default function FoldersPage() {
       await loadFolders()
     }
     fetchFolders()
-  }, [isAddModalOpen, isEditModalOpen, isDeleteConfirmOpen])
+  }, [folderRefreshTrigger])
 
   const totalBookmarks = folders.reduce((sum, folder) => sum + (folder.bookmarkCount || 0), 0)
 

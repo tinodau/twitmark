@@ -36,8 +36,13 @@ function AddFolderModalContent() {
 }
 
 function DeleteFolderModalContent() {
-  const { deletingFolder, setDeletingFolder, isDeleteConfirmOpen, setIsDeleteConfirmOpen } =
-    useFolder()
+  const {
+    deletingFolder,
+    setDeletingFolder,
+    isDeleteConfirmOpen,
+    setIsDeleteConfirmOpen,
+    triggerFolderRefresh,
+  } = useFolder()
   const [isDeleting, setIsDeleting] = useState(false)
   const { success, error: showError } = useToast()
   const router = useRouter()
@@ -53,6 +58,8 @@ function DeleteFolderModalContent() {
       setIsDeleting(false)
     } else {
       success("Folder deleted")
+      // Trigger folder refresh
+      triggerFolderRefresh()
       // Redirect to folders page
       router.push("/dashboard/folders")
       setIsDeleting(false)
