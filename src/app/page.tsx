@@ -182,9 +182,7 @@ export default function Home() {
               way you do.
             </p>
             <div className="flex items-center justify-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-cyan-600 to-blue-700 text-xl font-bold text-white">
-                T
-              </div>
+              <img src="/logo.svg" alt="Twitmark logo" className="h-12 w-12" />
               <div className="text-left">
                 <p className="text-foreground/80 font-medium dark:text-white">Built by Tino Dau</p>
                 <p className="text-foreground/70 dark:text-muted-foreground text-sm">
