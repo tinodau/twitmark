@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import Image from "next/image"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -61,11 +62,8 @@ export default function Navbar() {
           href="/"
           className="focus:ring-primary/50 flex items-center gap-2 rounded-lg focus:ring-2 focus:outline-none"
         >
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-600 to-blue-700 font-bold text-white"
-            aria-hidden="true"
-          >
-            T
+          <div className="relative h-8 w-8 overflow-hidden rounded-lg" aria-hidden="true">
+            <Image src="/logo.svg" alt="" fill={true}></Image>
           </div>
           <span className="text-foreground text-xl font-bold dark:text-white">Twitmark</span>
         </Link>

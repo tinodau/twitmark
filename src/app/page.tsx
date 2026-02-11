@@ -9,6 +9,7 @@ import TestimonialsMarquee from "@/components/testimonials-marquee"
 import { createClient } from "@/lib/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
@@ -182,7 +183,9 @@ export default function Home() {
               way you do.
             </p>
             <div className="flex items-center justify-center gap-3">
-              <img src="/logo.svg" alt="Twitmark logo" className="h-12 w-12" />
+              <div className="relative h-10 w-10 overflow-hidden rounded-lg">
+                <Image src="/logo.svg" alt="" fill={true}></Image>
+              </div>
               <div className="text-left">
                 <p className="text-foreground/80 font-medium dark:text-white">Built by Tino Dau</p>
                 <p className="text-foreground/70 dark:text-muted-foreground text-sm">
