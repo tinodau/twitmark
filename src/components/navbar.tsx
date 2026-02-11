@@ -73,7 +73,7 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <ul className="hidden items-center gap-8 sm:flex" role="list">
           {/* Theme Toggle */}
-          <li>
+          <li className="h-10 w-10">
             <ThemeToggle />
           </li>
           {navLinks.map((link) => (
