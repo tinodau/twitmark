@@ -112,7 +112,7 @@ export default function TestimonialsMarquee() {
           </div>
         ) : (
           <motion.div
-            animate={{ x: ["0%", "-40%"] }}
+            animate={{ x: ["0%", "-50%"] }}
             transition={{
               duration: 40,
               repeat: Number.POSITIVE_INFINITY,
