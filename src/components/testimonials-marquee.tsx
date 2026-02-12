@@ -57,6 +57,9 @@ export default function TestimonialsMarquee() {
   const totalCardsMobile = 3
   const displayTestimonials = isMobile ? testimonials.slice(0, totalCardsMobile) : testimonials
 
+  // Duplicate cards for seamless marquee (3 copies for smooth loop)
+  const marqueeCards = [...displayTestimonials, ...displayTestimonials]
+
   return (
     <section className="border-border/60 bg-background/55 -mx-4 mt-24 overflow-hidden border-y px-4 py-16 backdrop-blur-sm sm:px-0 dark:border-white/10 dark:bg-black/20">
       <div className="mb-12 px-4 text-center">
@@ -114,14 +117,14 @@ export default function TestimonialsMarquee() {
           <motion.div
             animate={{ x: ["0%", "-50%"] }}
             transition={{
-              duration: 40,
+              duration: 20,
               repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
               repeatType: "loop",
             }}
             className="flex gap-4 whitespace-nowrap sm:gap-6"
           >
-            {[...displayTestimonials, ...displayTestimonials].map((testimonial, index) => (
+            {marqueeCards.map((testimonial, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
