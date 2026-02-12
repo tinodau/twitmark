@@ -87,7 +87,7 @@ export default function TestimonialsMarquee() {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
+                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
               >
                 <div className="mb-4 flex items-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -128,7 +128,7 @@ export default function TestimonialsMarquee() {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background/100 min-w-70 overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all sm:min-w-[320px] sm:p-6 lg:min-w-87.5 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
+                className="border-border/40 bg-background/95 hover:border-border/60 hover:bg-background min-w-70 overflow-hidden rounded-2xl border p-4 saturate-180 backdrop-blur-sm transition-all sm:min-w-[320px] sm:p-6 lg:min-w-87.5 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"
               >
                 <div className="mb-4 flex items-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
