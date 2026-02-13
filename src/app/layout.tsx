@@ -5,6 +5,7 @@ import { ConditionalNavbar } from "@/components/conditional-navbar"
 import { AppToastProvider } from "./toast-provider"
 import { QueryProvider } from "./query-provider"
 import { ThemeProvider } from "@/contexts/theme-context"
+import { AppModalProvider } from "./modal-provider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,8 +36,10 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProvider>
             <AppToastProvider>
-              <ConditionalNavbar />
-              {children}
+              <AppModalProvider>
+                <ConditionalNavbar />
+                {children}
+              </AppModalProvider>
             </AppToastProvider>
           </QueryProvider>
         </ThemeProvider>

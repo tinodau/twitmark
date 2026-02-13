@@ -9,9 +9,9 @@ import { EditFolderModal } from "@/components/dashboard/edit-folder-modal"
 import { AddFolderModal } from "@/components/dashboard/add-folder-modal"
 import { FolderProvider } from "@/contexts/folder-context"
 import { useFolder } from "@/contexts/folder-context"
-import { ConfirmModal } from "@/components/ui/confirm-modal"
 import { deleteFolder } from "@/app/actions/folders"
 import { useToast } from "@/contexts/toast-context"
+import { useModalControl } from "@/hooks/use-modal"
 import { User } from "@supabase/supabase-js"
 
 function EditFolderModalContent() {
@@ -43,51 +43,35 @@ function DeleteFolderModalContent() {
     setIsDeleteConfirmOpen,
     triggerFolderRefresh,
   } = useFolder()
-  const [isDeleting, setIsDeleting] = useState(false)
   const { success, error: showError } = useToast()
+  const { openConfirm } = useModalControl()
   const router = useRouter()
 
-  const handleDelete = async () => {
-    if (!deletingFolder) return
+  useEffect(() => {
+    if (isDeleteConfirmOpen && deletingFolder) {
+      openConfirm(
+        "Delete Folder",
+        `This will remove folder "${deletingFolder.name}". Bookmarks in this folder will not be deleted.`,
+        async () => {
+          const result = await deleteFolder(deletingFolder.id)
 
-    setIsDeleting(true)
-    const result = await deleteFolder(deletingFolder.id)
-
-    if ("error" in result) {
-      showError("Failed to delete folder", result.error)
-      setIsDeleting(false)
-    } else {
-      success("Folder deleted")
-      // Trigger folder refresh
-      triggerFolderRefresh()
-      // Redirect to folders page
-      router.push("/dashboard/folders")
-      setIsDeleting(false)
-      setDeletingFolder(null)
-      setIsDeleteConfirmOpen(false)
+          if ("error" in result) {
+            showError("Failed to delete folder", result.error)
+          } else {
+            success("Folder deleted")
+            triggerFolderRefresh()
+            router.push("/dashboard/folders")
+            setDeletingFolder(null)
+            setIsDeleteConfirmOpen(false)
+          }
+        }
+      )
+      // Reset state in next tick to avoid cascading renders
+      requestAnimationFrame(() => setIsDeleteConfirmOpen(false))
     }
-  }
+  }, [isDeleteConfirmOpen, deletingFolder])
 
-  return (
-    <ConfirmModal
-      isOpen={isDeleteConfirmOpen}
-      onClose={() => {
-        setIsDeleteConfirmOpen(false)
-        setDeletingFolder(null)
-      }}
-      onConfirm={handleDelete}
-      title="Delete Folder"
-      description={
-        deletingFolder
-          ? `This will remove folder "${deletingFolder.name}". Bookmarks in this folder will not be deleted.`
-          : ""
-      }
-      confirmText="Delete"
-      cancelText="Cancel"
-      variant="danger"
-      isLoading={isDeleting}
-    />
-  )
+  return null
 }
 
 function DashboardLayoutWithProvider({

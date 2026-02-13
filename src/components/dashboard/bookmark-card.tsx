@@ -6,9 +6,9 @@ import { Tweet } from "react-tweet"
 import type { BookmarkWithFolder } from "@/types"
 import { deleteBookmark, toggleReadingList } from "@/app/actions/bookmarks"
 import { useToast } from "@/contexts/toast-context"
-import { ConfirmModal } from "@/components/ui/confirm-modal"
+import { useModalControl } from "@/hooks/use-modal"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { EditBookmarkModal } from "@/components/dashboard/edit-bookmark-modal"
 
 interface BookmarkCardProps {
@@ -27,23 +27,29 @@ function hexToRgba(hex: string, opacity: number): string {
 
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
   const { success, error: showError } = useToast()
+  const { openConfirm } = useModalControl()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isEditingBookmark, setIsEditingBookmark] = useState(false)
 
-  const handleDeleteConfirm = async () => {
-    setIsDeleting(true)
-    const result = await deleteBookmark(bookmark.id)
-    if (result.error) {
-      showError("Failed to delete bookmark", result.error)
-      setIsDeleting(false)
-    } else {
-      success("Bookmark deleted")
-      setIsDeleteModalOpen(false)
-      setIsDeleting(false)
-      onUpdate?.()
+  useEffect(() => {
+    if (isDeleteModalOpen) {
+      openConfirm(
+        "Delete Bookmark",
+        "This action cannot be undone. Are you sure you want to delete this bookmark?",
+        async () => {
+          const result = await deleteBookmark(bookmark.id)
+          if (result.error) {
+            showError("Failed to delete bookmark", result.error)
+          } else {
+            success("Bookmark deleted")
+            onUpdate?.()
+          }
+        }
+      )
+      // Reset state in next tick to avoid cascading renders
+      requestAnimationFrame(() => setIsDeleteModalOpen(false))
     }
-  }
+  }, [isDeleteModalOpen])
 
   const handleToggleReadingList = async () => {
     const result = await toggleReadingList(bookmark.id)
@@ -92,18 +98,6 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
 
   return (
     <>
-      <ConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Bookmark"
-        description="This action cannot be undone. Are you sure you want to delete this bookmark?"
-        confirmText="Delete"
-        cancelText="Cancel"
-        variant="danger"
-        isLoading={isDeleting}
-      />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

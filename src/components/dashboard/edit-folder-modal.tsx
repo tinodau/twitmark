@@ -21,8 +21,8 @@ import {
 } from "lucide-react"
 import { updateFolder, deleteFolder } from "@/app/actions/folders"
 import { useToast } from "@/contexts/toast-context"
+import { useModalControl } from "@/hooks/use-modal"
 import type { Folder as FolderType } from "@/types"
-import { ConfirmModal } from "@/components/ui/confirm-modal"
 
 interface EditFolderModalProps {
   isOpen: boolean
@@ -66,9 +66,9 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
   const [icon, setIcon] = useState("folder")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isPickerOpen, setIsPickerOpen] = useState(false)
   const { success, error: showError } = useToast()
+  const { openConfirm } = useModalControl()
   const modalRef = useRef<HTMLDivElement>(null)
   const nameInputRef = useRef<HTMLInputElement>(null)
   const pickerTriggerRef = useRef<HTMLButtonElement>(null)
@@ -96,6 +96,27 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
     }
   }, [isOpen, folder])
 
+  useEffect(() => {
+    if (isDeleteModalOpen && folder) {
+      openConfirm(
+        "Delete Folder",
+        `This will remove folder "${folder.name}". Bookmarks in this folder will not be deleted.`,
+        async () => {
+          const result = await deleteFolder(folder.id)
+          if ("error" in result) {
+            showError("Failed to delete folder", result.error)
+          } else {
+            success("Folder deleted")
+            onDelete?.()
+            onClose()
+          }
+        }
+      )
+      // Reset state in next tick to avoid cascading renders
+      requestAnimationFrame(() => setIsDeleteModalOpen(false))
+    }
+  }, [isDeleteModalOpen, folder])
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!folder) return
@@ -110,24 +131,6 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
       success("Folder updated")
       setIsLoading(false)
       setIsPickerOpen(false)
-      onClose()
-    }
-  }
-
-  const handleDelete = async () => {
-    if (!folder) return
-
-    setIsDeleting(true)
-    const result = await deleteFolder(folder.id)
-
-    if ("error" in result) {
-      showError("Failed to delete folder", result.error)
-      setIsDeleting(false)
-    } else {
-      success("Folder deleted")
-      setIsDeleting(false)
-      setIsDeleteModalOpen(false)
-      onDelete?.()
       onClose()
     }
   }
@@ -365,7 +368,7 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
                     type="button"
                     onClick={() => setIsDeleteModalOpen(true)}
                     className="border-destructive/20 bg-destructive/5 text-destructive hover:bg-destructive/10 focus:ring-destructive/50 flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                    disabled={isLoading || isDeleting}
+                    disabled={isLoading}
                   >
                     <Trash2 className="h-4 w-4" aria-hidden="true" />
                     Delete
@@ -402,19 +405,6 @@ export function EditFolderModal({ isOpen, onClose, folder, onDelete }: EditFolde
               </form>
             </motion.div>
           </div>
-
-          {/* Delete Confirm Modal */}
-          <ConfirmModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            onConfirm={handleDelete}
-            title="Delete Folder"
-            description={`This will remove folder "${folder.name}". Bookmarks in this folder will not be deleted.`}
-            confirmText="Delete"
-            cancelText="Cancel"
-            variant="danger"
-            isLoading={isDeleting}
-          />
         </>
       )}
     </AnimatePresence>,
