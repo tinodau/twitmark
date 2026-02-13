@@ -122,7 +122,7 @@ export function AddBookmarkContent() {
   return (
     <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
       {/* Header */}
-      <div className="border-border/40 flex items-center justify-between border-b pb-6">
+      <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
         <div>
           <h2 id="modal-title" className="text-xl font-semibold">
             Add Bookmark
@@ -141,7 +141,7 @@ export function AddBookmarkContent() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="p-6">
+      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
         <div className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="title" className="text-foreground text-sm font-medium">

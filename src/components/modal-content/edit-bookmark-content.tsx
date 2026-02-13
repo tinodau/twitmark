@@ -7,7 +7,7 @@ import { updateBookmark } from "@/app/actions/bookmarks"
 import { getFolders } from "@/app/actions/folders"
 import { useToast } from "@/contexts/toast-context"
 import { useModal } from "@/contexts/modal-context"
-import type { BookmarkWithFolder, Folder as FolderType } from "@/types"
+import type { Folder as FolderType } from "@/types"
 
 export function EditBookmarkContent() {
   const { modal, closeModal, openModal } = useModal()
@@ -24,17 +24,23 @@ export function EditBookmarkContent() {
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
   const lastFocusableRef = useRef<HTMLButtonElement>(null)
 
-  // Type guard: ensure modal is edit-bookmark type
-  if (modal?.type !== "edit-bookmark") return null
+  // Initialize bookmark data when component mounts
+  useEffect(() => {
+    if (modal?.type === "edit-bookmark" && modal.bookmark?.metadata) {
+      const initialTitle =
+        (modal.bookmark.metadata.title as string) ||
+        ((modal.bookmark.metadata.author_name as string)
+          ? `${modal.bookmark.metadata.author_name}'s tweet`
+          : "Tweet")
+      const initialFolderIds = modal.bookmark.folders?.map((f) => f.id) || []
 
-  // Initialize state after type guard
-  const initialTitle =
-    (modal.bookmark?.metadata?.title as string) ||
-    ((modal.bookmark?.metadata?.author_name as string)
-      ? `${modal.bookmark?.metadata?.author_name}'s tweet`
-      : "Tweet")
-
-  const initialFolderIds = modal.bookmark?.folders?.map((f) => f.id) || []
+      // Wrap in setTimeout to avoid cascading renders
+      setTimeout(() => {
+        setTitle(initialTitle)
+        setSelectedFolderIds(initialFolderIds)
+      }, 0)
+    }
+  }, [modal])
 
   // Close folder dropdown when clicking outside
   useEffect(() => {
@@ -49,7 +55,7 @@ export function EditBookmarkContent() {
     }
   }, [isFolderDropdownOpen])
 
-  // Load folders when component mounts
+  // Load folders and manage focus when component mounts
   useEffect(() => {
     const loadFoldersAsync = async () => {
       setIsFoldersLoading(true)
@@ -58,15 +64,16 @@ export function EditBookmarkContent() {
       setIsFoldersLoading(false)
     }
 
-    if (modal?.type === "edit-bookmark") {
-      loadFoldersAsync()
-      setTimeout(() => {
-        firstFocusableRef.current?.focus()
-      }, 100)
-    }
-  }, [modal?.type])
+    loadFoldersAsync()
+    setTimeout(() => {
+      firstFocusableRef.current?.focus()
+    }, 100)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
+    // Type guard - ensure modal is edit-bookmark type
+    if (modal?.type !== "edit-bookmark") return
+
     e.preventDefault()
     setError("")
 
@@ -92,17 +99,18 @@ export function EditBookmarkContent() {
       setIsLoading(false)
       setIsFolderDropdownOpen(false)
       closeModal()
-      if (modal?.type === "edit-bookmark" && modal.onSuccess) {
+      if (modal?.onSuccess) {
         modal.onSuccess()
       }
     }
   }
 
+  // Type guard - modal must be edit-bookmark type to render
   if (modal?.type !== "edit-bookmark") return null
 
   return (
     <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
-      <div className="border-border/40 flex items-center justify-between border-b pb-6">
+      <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
         <div>
           <h2 id="modal-title" className="text-xl font-semibold">
             Edit Bookmark
@@ -120,7 +128,7 @@ export function EditBookmarkContent() {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6">
+      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
         <div className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="title" className="text-foreground text-sm font-medium">

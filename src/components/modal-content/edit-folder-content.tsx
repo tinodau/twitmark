@@ -21,7 +21,6 @@ import {
 import { updateFolder, deleteFolder } from "@/app/actions/folders"
 import { useToast } from "@/contexts/toast-context"
 import { useModal } from "@/contexts/modal-context"
-import type { Folder as FolderType } from "@/types"
 
 const FOLDER_COLORS = [
   "#1D9BF0", // Blue
@@ -160,7 +159,7 @@ export function EditFolderContent() {
   return (
     <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
       {/* Header */}
-      <div className="border-border/40 flex items-center justify-between border-b pb-6">
+      <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
         <div>
           <h2 id="modal-title" className="text-xl font-semibold">
             Edit Folder
@@ -179,7 +178,7 @@ export function EditFolderContent() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleUpdate} className="space-y-4 p-6">
+      <form onSubmit={handleUpdate} className="space-y-4 pt-2">
         {/* Name Input with Icon and Color */}
         <div className="space-y-2">
           <label htmlFor="folder-name" className="text-foreground block text-sm font-medium">
