@@ -6,50 +6,26 @@ import { Tweet } from "react-tweet"
 import type { BookmarkWithFolder } from "@/types"
 import { deleteBookmark, toggleReadingList } from "@/app/actions/bookmarks"
 import { useToast } from "@/contexts/toast-context"
-import { useModalControl } from "@/hooks/use-modal"
+import { useModal } from "@/contexts/modal-context"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { useState, useEffect } from "react"
-import { EditBookmarkModal } from "@/components/dashboard/edit-bookmark-modal"
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithFolder
   onUpdate?: () => void
 }
 
-// Helper function to convert hex to rgba with opacity
-function hexToRgba(hex: string, opacity: number): string {
-  const cleanHex = hex.replace("#", "")
-  const r = Number.parseInt(cleanHex.substring(0, 2), 16)
-  const g = Number.parseInt(cleanHex.substring(2, 4), 16)
-  const b = Number.parseInt(cleanHex.substring(4, 6), 16)
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`
-}
-
 export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
   const { success, error: showError } = useToast()
-  const { openConfirm } = useModalControl()
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isEditingBookmark, setIsEditingBookmark] = useState(false)
+  const { confirmModal, openModal } = useModal()
 
-  useEffect(() => {
-    if (isDeleteModalOpen) {
-      openConfirm(
-        "Delete Bookmark",
-        "This action cannot be undone. Are you sure you want to delete this bookmark?",
-        async () => {
-          const result = await deleteBookmark(bookmark.id)
-          if (result.error) {
-            showError("Failed to delete bookmark", result.error)
-          } else {
-            success("Bookmark deleted")
-            onUpdate?.()
-          }
-        }
-      )
-      // Reset state in next tick to avoid cascading renders
-      requestAnimationFrame(() => setIsDeleteModalOpen(false))
-    }
-  }, [isDeleteModalOpen])
+  // Helper function to convert hex to rgba with opacity
+  function hexToRgba(hex: string, opacity: number): string {
+    const cleanHex = hex.replace("#", "")
+    const r = Number.parseInt(cleanHex.substring(0, 2), 16)
+    const g = Number.parseInt(cleanHex.substring(2, 4), 16)
+    const b = Number.parseInt(cleanHex.substring(4, 6), 16)
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`
+  }
 
   const handleToggleReadingList = async () => {
     const result = await toggleReadingList(bookmark.id)
@@ -60,6 +36,30 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
       success(message)
       onUpdate?.()
     }
+  }
+
+  const handleEditBookmark = () => {
+    openModal({
+      type: "edit-bookmark",
+      bookmark,
+      onSuccess: onUpdate,
+    })
+  }
+
+  const handleDeleteBookmark = () => {
+    confirmModal(
+      "Delete Bookmark",
+      "This action cannot be undone. Are you sure you want to delete this bookmark?",
+      async () => {
+        const result = await deleteBookmark(bookmark.id)
+        if (result.error) {
+          showError("Failed to delete bookmark", result.error)
+        } else {
+          success("Bookmark deleted")
+          onUpdate?.()
+        }
+      }
+    )
   }
 
   const handleOpenTweet = () => {
@@ -134,30 +134,20 @@ export function BookmarkCard({ bookmark, onUpdate }: BookmarkCardProps) {
             >
               {bookmark.readingList ? "Remove from Reading List" : "Add to Reading List"}
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setIsEditingBookmark(true)}
-              icon={<PenLine className="h-4 w-4" />}
-            >
+            <DropdownMenuItem onClick={handleEditBookmark} icon={<PenLine className="h-4 w-4" />}>
               Edit Bookmark
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleOpenTweet} icon={<ExternalLink className="h-4 w-4" />}>
               Open Tweet
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => setIsDeleteModalOpen(true)}
+              onClick={handleDeleteBookmark}
               icon={<Trash2 className="h-4 w-4" />}
               variant="danger"
             >
               Delete Bookmark
             </DropdownMenuItem>
           </DropdownMenu>
-
-          <EditBookmarkModal
-            isOpen={isEditingBookmark}
-            onClose={() => setIsEditingBookmark(false)}
-            bookmark={bookmark}
-            onUpdate={onUpdate}
-          />
         </div>
 
         {/* Metadata Bar - Row 1: Time & Reading List */}

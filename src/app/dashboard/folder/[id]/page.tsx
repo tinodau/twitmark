@@ -6,10 +6,10 @@ import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Plus, ChevronDown, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
-import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal"
 import { BookmarkCard } from "@/components/dashboard/bookmark-card"
 import { getUserBookmarks } from "@/app/actions/bookmarks"
 import { getFolderById } from "@/app/actions/folders"
+import { useModal } from "@/contexts/modal-context"
 import type { BookmarkWithFolder } from "@/types"
 
 const ITEMS_PER_PAGE = 12
@@ -19,8 +19,8 @@ export default function FolderPage() {
   const router = useRouter()
   const params = useParams()
   const folderId = params.id as string
+  const { openModal } = useModal()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [allBookmarks, setAllBookmarks] = useState<BookmarkWithFolder[]>([])
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(true)
@@ -60,10 +60,6 @@ export default function FolderPage() {
     }
   }, [folderId])
 
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-
   const handleBookmarkAdded = () => {
     fetchBookmarks()
   }
@@ -81,28 +77,6 @@ export default function FolderPage() {
     router.push("/dashboard/folders")
   }
 
-  // Accessibility keyboard handler
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape" && isModalOpen) {
-      handleModalClose()
-    }
-  }
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isModalOpen) {
-        setIsModalOpen(false)
-      }
-    }
-
-    if (isModalOpen) {
-      document.addEventListener("keydown", handleEscape)
-    }
-    return () => {
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [isModalOpen])
-
   // Track scroll to show/hide floating button
   useEffect(() => {
     const handleScroll = () => {
@@ -117,6 +91,13 @@ export default function FolderPage() {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  const handleAddBookmark = () => {
+    openModal({
+      type: "add-bookmark",
+      onSuccess: handleBookmarkAdded,
+    })
+  }
 
   if (!folderExists) {
     return (
@@ -135,7 +116,7 @@ export default function FolderPage() {
   }
 
   return (
-    <div className="space-y-6" onKeyDown={handleKeyDown}>
+    <div className="space-y-6">
       <header className="flex items-center justify-between" role="banner">
         <div className="flex items-center gap-4">
           <button
@@ -153,7 +134,7 @@ export default function FolderPage() {
           </div>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddBookmark}
           aria-label="Add new bookmark"
           className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
@@ -182,7 +163,7 @@ export default function FolderPage() {
             Start saving your favorite tweets and articles
           </p>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleAddBookmark}
             aria-label="Add your first bookmark"
             className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
@@ -215,15 +196,9 @@ export default function FolderPage() {
         </>
       )}
 
-      <AddBookmarkModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSuccess={handleBookmarkAdded}
-      />
-
       {/* Floating Add Bookmark Button */}
       <motion.button
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleAddBookmark}
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{
           opacity: showFloatingButton ? 1 : 0,

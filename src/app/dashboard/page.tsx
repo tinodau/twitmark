@@ -3,16 +3,16 @@
 import { useState, useEffect } from "react"
 import { Plus, ChevronDown } from "lucide-react"
 import { motion } from "framer-motion"
-import { AddBookmarkModal } from "@/components/dashboard/add-bookmark-modal"
 import { BookmarkCard } from "@/components/dashboard/bookmark-card"
 import { getUserBookmarks } from "@/app/actions/bookmarks"
+import { useModal } from "@/contexts/modal-context"
 import type { BookmarkWithFolder } from "@/types"
 
 const ITEMS_PER_PAGE = 12
 const SCROLL_THRESHOLD = 80
 
 export default function DashboardPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { openModal } = useModal()
   const [bookmarks, setBookmarks] = useState<BookmarkWithFolder[]>([])
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(true)
@@ -45,10 +45,6 @@ export default function DashboardPage() {
     }
   }, [])
 
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-
   const handleBookmarkAdded = () => {
     fetchBookmarks()
   }
@@ -59,28 +55,6 @@ export default function DashboardPage() {
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + ITEMS_PER_PAGE)
   }
-
-  // Accessibility keyboard handler
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape" && isModalOpen) {
-      handleModalClose()
-    }
-  }
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isModalOpen) {
-        setIsModalOpen(false)
-      }
-    }
-
-    if (isModalOpen) {
-      document.addEventListener("keydown", handleEscape)
-    }
-    return () => {
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [isModalOpen])
 
   // Track scroll to show/hide floating button
   useEffect(() => {
@@ -98,7 +72,7 @@ export default function DashboardPage() {
   }, [])
 
   return (
-    <div className="space-y-6" onKeyDown={handleKeyDown}>
+    <div className="space-y-6">
       <header className="flex items-center justify-between" role="banner">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">All Bookmarks</h1>
@@ -107,7 +81,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => openModal({ type: "add-bookmark", onSuccess: handleBookmarkAdded })}
           aria-label="Add new bookmark"
           className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
@@ -136,7 +110,7 @@ export default function DashboardPage() {
             Start saving your favorite tweets and articles
           </p>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => openModal({ type: "add-bookmark", onSuccess: handleBookmarkAdded })}
             aria-label="Add your first bookmark"
             className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
@@ -173,15 +147,9 @@ export default function DashboardPage() {
         </>
       )}
 
-      <AddBookmarkModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSuccess={handleBookmarkAdded}
-      />
-
       {/* Floating Add Bookmark Button */}
       <motion.button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => openModal({ type: "add-bookmark", onSuccess: handleBookmarkAdded })}
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{
           opacity: showFloatingButton ? 1 : 0,

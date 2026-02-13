@@ -21,9 +21,8 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
-import { AddFolderModal } from "@/components/dashboard/add-folder-modal"
-import { EditFolderModal } from "@/components/dashboard/edit-folder-modal"
 import { useFolder } from "@/contexts/folder-context"
+import { useModal } from "@/contexts/modal-context"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 // Map icon IDs to Lucide components
@@ -43,18 +42,8 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export default function FoldersPage() {
   const [folders, setFolders] = useState<FolderType[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const {
-    editingFolder,
-    setEditingFolder,
-    isEditModalOpen,
-    setIsEditModalOpen,
-    isAddModalOpen,
-    setIsAddModalOpen,
-    setDeletingFolder,
-    isDeleteConfirmOpen,
-    setIsDeleteConfirmOpen,
-    folderRefreshTrigger,
-  } = useFolder()
+  const { folderRefreshTrigger } = useFolder()
+  const { openModal, confirmModal } = useModal()
 
   async function loadFolders() {
     setIsLoading(true)
@@ -72,6 +61,37 @@ export default function FoldersPage() {
 
   const totalBookmarks = folders.reduce((sum, folder) => sum + (folder.bookmarkCount || 0), 0)
 
+  const handleAddFolder = () => {
+    openModal({
+      type: "add-folder",
+      onSuccess: loadFolders,
+    })
+  }
+
+  const handleEditFolder = (folder: FolderType) => {
+    openModal({
+      type: "edit-folder",
+      folder,
+      onSuccess: loadFolders,
+    })
+  }
+
+  const handleDeleteFolder = (folder: FolderType) => {
+    confirmModal(
+      "Delete Folder",
+      `This will remove folder "${folder.name}". Bookmarks in this folder will not be deleted.`,
+      async () => {
+        const { deleteFolder } = await import("@/app/actions/folders")
+        const result = await deleteFolder(folder.id)
+        if ("error" in result) {
+          console.error("Failed to delete folder:", result.error)
+        } else {
+          loadFolders()
+        }
+      }
+    )
+  }
+
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between" role="banner">
@@ -83,7 +103,7 @@ export default function FoldersPage() {
           </p>
         </div>
         <button
-          onClick={() => setIsAddModalOpen(true)}
+          onClick={handleAddFolder}
           aria-label="Add new folder"
           className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
         >
@@ -112,7 +132,7 @@ export default function FoldersPage() {
             Create folders to organize your bookmarks
           </p>
           <button
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={handleAddFolder}
             aria-label="Create your first folder"
             className="bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-primary/50 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
           >
@@ -163,19 +183,13 @@ export default function FoldersPage() {
                     }
                   >
                     <DropdownMenuItem
-                      onClick={() => {
-                        setEditingFolder(folder)
-                        setIsEditModalOpen(true)
-                      }}
+                      onClick={() => handleEditFolder(folder)}
                       icon={<Edit2 className="h-4 w-4" />}
                     >
                       Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => {
-                        setDeletingFolder(folder)
-                        setIsDeleteConfirmOpen(true)
-                      }}
+                      onClick={() => handleDeleteFolder(folder)}
                       icon={<Trash2 className="h-4 w-4" />}
                       variant="danger"
                     >
@@ -188,13 +202,6 @@ export default function FoldersPage() {
           })}
         </section>
       )}
-
-      <AddFolderModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
-      <EditFolderModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        folder={editingFolder}
-      />
     </div>
   )
 }

@@ -22,6 +22,7 @@ import Link from "next/link"
 import { getFolders } from "@/app/actions/folders"
 import type { Folder as FolderType } from "@/types"
 import { useFolder } from "@/contexts/folder-context"
+import { useModal } from "@/contexts/modal-context"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Map icon IDs to Lucide components
@@ -48,7 +49,8 @@ export function Sidebar({
   isCollapsed: boolean
 }) {
   const pathname = usePathname()
-  const { isAddModalOpen, setIsAddModalOpen, bookmarkAddedTrigger } = useFolder()
+  const { bookmarkAddedTrigger } = useFolder()
+  const { openModal } = useModal()
   const [folders, setFolders] = useState<FolderType[]>([])
   const prevPathnameRef = useRef(pathname)
 
@@ -71,7 +73,7 @@ export function Sidebar({
     return () => {
       controller.abort()
     }
-  }, [isAddModalOpen, bookmarkAddedTrigger])
+  }, [bookmarkAddedTrigger])
 
   const navItems = [
     { icon: LayoutDashboard, label: "All Bookmarks", href: "/dashboard" },
@@ -153,7 +155,7 @@ export function Sidebar({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <button
-                          onClick={() => setIsAddModalOpen(true)}
+                          onClick={() => openModal({ type: "add-folder" })}
                           className="group hover:bg-primary/10 focus:ring-primary/50 mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:cursor-pointer focus:ring-2 focus:outline-none"
                           aria-label="Add new folder"
                         >
@@ -174,7 +176,7 @@ export function Sidebar({
                       Folders
                     </Link>
                     <button
-                      onClick={() => setIsAddModalOpen(true)}
+                      onClick={() => openModal({ type: "add-folder" })}
                       aria-label="Add new folder"
                       className="text-foreground hover:text-muted-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-1 focus:ring-2 focus:outline-none"
                     >
