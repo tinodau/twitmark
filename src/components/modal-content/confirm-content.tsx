@@ -1,7 +1,6 @@
 "use client"
 
 import { useModal } from "@/contexts/modal-context"
-import { Button } from "@/components/ui/button"
 
 export function ConfirmContent() {
   const { modal, closeModal } = useModal()
@@ -14,18 +13,30 @@ export function ConfirmContent() {
   }
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h2 className="text-foreground text-xl font-semibold">{modal.title}</h2>
-        <p className="text-muted-foreground mt-2 text-sm">{modal.description}</p>
-      </div>
-      <div className="flex justify-end gap-3">
-        <Button variant="ghost" onClick={closeModal}>
-          {modal.cancelText || "Cancel"}
-        </Button>
-        <Button variant={modal.isDestructive ? "destructive" : "default"} onClick={handleConfirm}>
-          {modal.confirmText || "Confirm"}
-        </Button>
+    <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-foreground text-xl font-semibold">{modal.title}</h2>
+          <p className="text-muted-foreground mt-2 text-sm">{modal.description}</p>
+        </div>
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            onClick={closeModal}
+            className="border-input hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex cursor-pointer items-center justify-center rounded-lg border bg-transparent px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none"
+          >
+            {modal.cancelText || "Cancel"}
+          </button>
+          <button
+            onClick={handleConfirm}
+            className={`focus:ring-destructive/50 flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none ${
+              modal.isDestructive
+                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                : "bg-primary text-primary-foreground hover:bg-primary-hover"
+            }`}
+          >
+            {modal.confirmText || "Confirm"}
+          </button>
+        </div>
       </div>
     </div>
   )

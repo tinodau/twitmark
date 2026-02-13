@@ -101,8 +101,8 @@ export function EditBookmarkContent() {
   if (modal?.type !== "edit-bookmark") return null
 
   return (
-    <>
-      <div className="border-border/40 flex items-center justify-between border-b p-6">
+    <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
+      <div className="border-border/40 flex items-center justify-between border-b pb-6">
         <div>
           <h2 id="modal-title" className="text-xl font-semibold">
             Edit Bookmark
@@ -341,6 +341,6 @@ export function EditBookmarkContent() {
           </button>
         </div>
       </form>
-    </>
+    </div>
   )
 }
