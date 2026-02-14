@@ -325,7 +325,7 @@ export function EditBookmarkContent() {
             type="button"
             onClick={closeModal}
             disabled={isLoading}
-            className="border-input hover:bg-accent hover:text-accent-foreground focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border bg-transparent px-4 py-2.5 text-sm font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="border-input hover:bg-accent-foreground dark:hover:bg-muted focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center rounded-xl border bg-transparent px-4 py-3 font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             Cancel
           </button>

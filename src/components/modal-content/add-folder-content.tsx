@@ -310,7 +310,7 @@ export function AddFolderContent() {
           <button
             type="button"
             onClick={closeModal}
-            className="border-input hover:bg-accent-foreground hover:text-foreground focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center rounded-xl border bg-transparent px-4 py-3 font-medium transition-colors focus:ring-2 focus:outline-none"
+            className="border-input hover:bg-accent-foreground dark:hover:bg-muted focus:ring-primary/50 flex flex-1 cursor-pointer items-center justify-center rounded-xl border bg-transparent px-4 py-3 font-medium transition-colors focus:ring-2 focus:outline-none"
           >
             Cancel
           </button>
