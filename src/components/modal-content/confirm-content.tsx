@@ -13,7 +13,7 @@ export function ConfirmContent() {
   }
 
   return (
-    <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
+    <div className="border-border/30 bg-background/75 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
       <div className="space-y-4">
         <div>
           <h2 className="text-foreground text-xl font-semibold">{modal.title}</h2>

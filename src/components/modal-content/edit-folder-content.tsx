@@ -157,7 +157,7 @@ export function EditFolderContent() {
   if (modal?.type !== "edit-folder") return null
 
   return (
-    <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
+    <div className="border-border/30 bg-background/75 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
       {/* Header */}
       <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
         <div>
