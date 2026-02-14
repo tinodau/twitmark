@@ -110,7 +110,8 @@ export function EditBookmarkContent() {
 
   return (
     <div className="border-border/30 bg-background/75 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
-      <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
+      {/* Header */}
+      <div className="border-border/40 -mx-6 mb-6 flex items-center justify-between border-b px-6 pb-6">
         <div>
           <h2 id="modal-title" className="text-xl font-semibold">
             Edit Bookmark
@@ -122,16 +123,16 @@ export function EditBookmarkContent() {
           onClick={closeModal}
           aria-label="Close modal"
           disabled={isLoading}
-          className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 -mt-4 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         >
           <X className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-        <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-5">
           <div className="space-y-2">
-            <label htmlFor="title" className="text-foreground text-sm font-medium">
+            <label htmlFor="title" className="text-foreground block text-sm font-medium">
               Title
             </label>
             <input
@@ -148,7 +149,7 @@ export function EditBookmarkContent() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="url" className="text-foreground text-sm font-medium">
+            <label htmlFor="url" className="text-foreground block text-sm font-medium">
               Tweet URL
             </label>
             <div className="relative">
@@ -169,7 +170,7 @@ export function EditBookmarkContent() {
           </div>
 
           <div className="space-y-2" ref={folderDropdownRef}>
-            <label htmlFor="folder-select" className="text-foreground text-sm font-medium">
+            <label htmlFor="folder-select" className="text-foreground block text-sm font-medium">
               Folders
             </label>
             <div className="relative">

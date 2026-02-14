@@ -139,7 +139,7 @@ export function AddFolderContent() {
   return (
     <div className="border-border/30 bg-background/75 supports-backdrop-filter:bg-background/90 relative rounded-2xl border p-6 shadow-2xl backdrop-blur">
       {/* Header */}
-      <div className="border-border/40 mb-6 flex items-center justify-between border-b pb-6">
+      <div className="border-border/40 -mx-6 mb-6 flex items-center justify-between border-b px-6 pb-6">
         <div className="flex items-center gap-3">
           <div
             className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-xl"
@@ -158,17 +158,17 @@ export function AddFolderContent() {
           ref={firstFocusableRef}
           onClick={closeModal}
           aria-label="Close modal"
-          className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
+          className="text-muted-foreground hover:bg-accent-foreground/50 hover:text-foreground focus:ring-primary/50 -mt-4 cursor-pointer rounded-lg p-2 transition-colors focus:ring-2 focus:outline-none"
         >
           <X className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name Input with Icon and Color */}
         <div className="space-y-2">
-          <label htmlFor="folder-name" className="text-sm font-medium">
+          <label htmlFor="folder-name" className="text-foreground block text-sm font-medium">
             Folder Name
           </label>
           <div className="relative">
